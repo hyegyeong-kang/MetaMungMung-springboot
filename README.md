@@ -1,6 +1,6 @@
 # MetaMungMung-springboot
 
-## 메타넷 FINAL 프로젝트 - 메타멍멍입니다.
+## 메타넷 SpringBoot FINAL 프로젝트  - 메타멍멍입니다.
 
 
 참여자: 강혜경, 손정아, 이현주, 신예빈 <br/>
