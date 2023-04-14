@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 @Configuration
@@ -22,20 +21,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-        http.authorizeRequests()
-            .antMatchers("/").permitAll()
-            .antMatchers("/members/signup").permitAll()
-//            .antMatchers("/member/**").hasAnyRole("MEMBER", "DOGOWNER")
-            .and()
+        http.csrf().disable()
+            .authorizeRequests()
+                .antMatchers("/", "/members/signup", "/members/login", "/members/idCheck", "/members/modify/{memberIdx}").permitAll()
+                //.antMatchers("/members/modify/{memberIdx}").hasAnyRole("MEMBER", "DOGOWNER")
+                .anyRequest().authenticated()
+                .and()
             .formLogin()
-            .loginPage("/members/login")
-            .permitAll()
-            .and()
+                .loginPage("/members/login")
+                .loginProcessingUrl("/members/loginProc")
+                .defaultSuccessUrl("/")
+                .permitAll()
+                .and()
             .logout()
-            .logoutSuccessUrl("/")
-            .permitAll()
-            .and()
+                .logoutUrl("/members/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .clearAuthentication(true)
+                .permitAll()
+                .and()
             .sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
     }
@@ -47,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
