@@ -17,7 +17,7 @@ spring:
     driver-class-name: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:meta-final.cfj95decnpve.ap-northeast-2.rds.amazonaws.com:1521:XE
     username: admin
-    password: Hcu4He65xzDYjlbRTbJh
+    password: {암호를 입력해주세요!!!!!!!!!!!!!!!!!!!!!!!}
 
 ## MyBatis
 mybatis:
