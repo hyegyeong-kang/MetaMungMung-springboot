@@ -10,4 +10,6 @@ public interface OffMeetingMapper {
     public List<OffMeetingDTO> getOffMeetingList();
 
     public OffMeetingDTO getOffMeeting(Long offMeetingIdx);
+
+    public void registerOffMeeting(OffMeetingDTO offMeetingDTO);
 }
