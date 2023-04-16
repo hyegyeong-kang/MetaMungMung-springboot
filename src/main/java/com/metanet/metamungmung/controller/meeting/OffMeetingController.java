@@ -26,6 +26,16 @@ public class OffMeetingController {
     }
 
     /**
+     * OFF 모임 등록 API
+     * [POST] /offMeetings
+     * @return OffMeetingDTO
+     **/
+    @PostMapping("")
+    public void createOffMeeting(@RequestBody OffMeetingDTO offMeetingDTO) {
+        offMeetingService.registerOffMeeting(offMeetingDTO);
+    }
+
+    /**
      * OFF 모임 상세 조회
      * [GET] /offMeetings/:offMeetingIdx
      * @return OffMeetingDTO

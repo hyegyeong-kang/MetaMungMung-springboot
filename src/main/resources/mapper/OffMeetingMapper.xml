@@ -10,4 +10,10 @@
     <select id="getOffMeeting" resultType="com.metanet.metamungmung.dto.meeting.OffMeetingDTO">
         select * from offMeeting where offMeetingIdx = #{offMeetingIdx}
     </select>
+
+    <insert id="registerOffMeeting">
+        insert into offMeeting
+            values (#{offMeetingIdx}, #{memberIdx}, #{offMeetingMemIdx}, #{onMeetingIdx}, #{title}, sysdate, #{limit},
+                #{contents},sysdate, sysdate,#{latitude}, #{longitude}, #{locationAddress}, #{startTime}, #{status})
+    </insert>
 </mapper>

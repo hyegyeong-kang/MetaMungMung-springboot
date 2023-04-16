@@ -21,4 +21,9 @@ public class OffMeetingServiceImpl implements OffMeetingService {
     public OffMeetingDTO getOffMeeting(Long offMeetingIdx) {
         return offMeetingMapper.getOffMeeting(offMeetingIdx);
     }
+
+    @Override
+    public void registerOffMeeting(OffMeetingDTO offMeetingDTO) {
+        offMeetingMapper.registerOffMeeting(offMeetingDTO);
+    }
 }
