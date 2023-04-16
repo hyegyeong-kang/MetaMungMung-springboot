@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface OffMeetingService {
     public List<OffMeetingDTO> getOffMeetingList();
+
+    public OffMeetingDTO getOffMeeting(Long offMeetingIdx);
 }

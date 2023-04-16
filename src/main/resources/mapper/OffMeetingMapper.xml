@@ -6,4 +6,8 @@
     <select id="getOffMeetingList" resultType="com.metanet.metamungmung.dto.meeting.OffMeetingDTO">
         select * from offMeeting where status = 'ACTIVE'
     </select>
+
+    <select id="getOffMeeting" resultType="com.metanet.metamungmung.dto.meeting.OffMeetingDTO">
+        select * from offMeeting where offMeetingIdx = #{offMeetingIdx}
+    </select>
 </mapper>
