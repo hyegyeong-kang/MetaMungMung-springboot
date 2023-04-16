@@ -12,14 +12,14 @@ public class OffMeetingDTO {
     private Long offMeetingMemIdx;
     private Long onMeetingIdx;
     private String title;
+    private Date meetingDate;
     private int limit;
     private String contents;
     private Date createDate;
     private Date updateDate;
-    private String status;
     private double latitude;
     private double longitude;
     private String locationAddress;
-    private Timestamp startTime;
-    private Date meetingDate;
+    private String startTime;
+    private String status;
 }
