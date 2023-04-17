@@ -10,5 +10,5 @@ public class OnMeetingMemDTO {
     private Long onMeetingIdx;
     private Long memberIdx;
     private Date joinDate;
-    private Boolean isHost;
+    private String isHost;
 }
