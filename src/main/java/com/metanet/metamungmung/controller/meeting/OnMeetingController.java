@@ -1,6 +1,8 @@
 package com.metanet.metamungmung.controller.meeting;
 
 import com.metanet.metamungmung.dto.meeting.OnMeetingDTO;
+import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
+import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,14 +33,22 @@ public class OnMeetingController {
         return map;
     }
 
+    @GetMapping("/{id}")
+    public OnMeetingDTO getOnMeeting(@PathVariable("id") Long id){
+        return service.getOnMeetingById(id);
+    }
+
     @PostMapping("")
     public OnMeetingDTO createOnMeeting(@RequestBody OnMeetingDTO onMeetingDTO){
-        service.createOnMeeting(onMeetingDTO);
-
-        OnMeetingDTO newOnMeeting = service.getOnMeetingById(onMeetingDTO.getOnMeetingIdx());
-
-        return newOnMeeting;
+        OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
+        onMeetingMemDTO.setMemberIdx(1L);
+        return service.createOnMeeting(onMeetingDTO, onMeetingMemDTO);
     }
+
+//    @PostMapping("/{id}/join")
+//    public OnMeetingDTO joinOnMeeting(@RequestBody MemberDTO memberDTO){
+//
+//    }
 
     @PutMapping("/{id}")
     public OnMeetingDTO modifyOnMeeting(@PathVariable("id") Long id,
@@ -53,6 +63,25 @@ public class OnMeetingController {
 //
 //        return ResponseEntity.status(status).body(onMeetingDTO);
         return service.modifyOnMeeting(onMeetingDTO) == 1 ? onMeetingDTO : null;
+    }
+
+    @PatchMapping("/{id}")
+    public OnMeetingDTO modifyOnMeetingPersonnel(@PathVariable("id") Long id,
+                                                 @RequestBody OnMeetingDTO onMeetingDTO){
+        onMeetingDTO.setOnMeetingIdx(id);
+
+        return service.modifyOnMeetingPersonnel(onMeetingDTO) == 1 ? service.getOnMeetingById(id) : null;
+    }
+
+    @DeleteMapping("/{id}/withdraw")
+    public int withdrawOnMeeting(@PathVariable("id") Long id){
+        OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
+        onMeetingMemDTO.setOnMeetingIdx(id);
+        onMeetingMemDTO.setMemberIdx(1L);
+
+        onMeetingMemDTO = service.getOnMeetingMemById(onMeetingMemDTO);
+
+        return service.removeOnMeetingMem(onMeetingMemDTO);
     }
 
     @DeleteMapping("/{id}")

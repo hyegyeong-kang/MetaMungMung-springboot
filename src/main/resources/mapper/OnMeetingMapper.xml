@@ -9,13 +9,29 @@
         insert into onMeeting
         values
             (#{onMeetingIdx}, #{onMeetName}, #{category}, #{introduction, jdbcType=VARCHAR}, #{thumbnail, jdbcType=VARCHAR},
-             #{isPublic, jdbcType=VARCHAR}, #{onMeetingAddr, jdbcType=VARCHAR}, sysdate, sysdate, #{personnel, jdbcType=INTEGER})
+             #{isPublic, jdbcType=VARCHAR}, #{onMeetingAddr, jdbcType=VARCHAR}, sysdate, sysdate, 50)
         <selectKey keyProperty="onMeetingIdx" order="BEFORE" resultType="long">
             select onMeeting_seq.nextval from dual
         </selectKey>
     </insert>
+<!--    On모임 회원 생성-->
+    <insert id="createOnMeetingMem">
+        insert into onMeetingMem
+        values (onMeetingMem_seq.nextval, #{onMeetingIdx}, #{memberIdx}, sysdate, #{isHost, jdbcType=VARCHAR})
+        <selectKey keyProperty="onMeetingIdx" order="BEFORE" resultType="long">
+            select onMeeting_seq.currval from dual
+        </selectKey>
+    </insert>
 
-<!--    On모임 정보 수정-->
+<!--    On모임 회원 탈퇴-->
+    <delete id="removeOnMeetingMem">
+        delete
+        from onMeetingMem
+        where onMeetingIdx = #{onMeetingIdx}
+        and onMeetingMemIdx = #{onMeetingMemIdx}
+    </delete>
+
+<!--    On모임 수정-->
     <update id="modifyOnMeeting">
         update onMeeting
         set
@@ -26,60 +42,86 @@
             onMeetingIdx = #{onMeetingIdx}
     </update>
 
+<!--    On모임 수정(최대인원 변경)-->
+    <update id="modifyOnMeetingPersonnel">
+        update onMeeting
+        set
+            personnel = #{personnel}
+        where
+            onMeetingIdx = #{onMeetingIdx}
+    </update>
+
 <!--    On모임 삭제-->
+<!--    아예 날릴건지?-->
+<!--    on delete cascade 설정?!?!?!?!-->
     <delete id="removeOnMeeting">
         delete
         from onMeeting
         where onMeetingIdx = #{onMeetingIdx}
     </delete>
 
-<!--    On모임 상세 (+ 멤버수, 호스트 이름!!!)-->
-    <select id="getOnMeetingById" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
---         select meet.*,
---                (select count(*)
---                     from onMeeting meet
---                         join onMeetingMem mem
---                             on meet.onMeetingIdx = mem.onMeetingIdx
---                         where meet.onMeetingIdx = #{onMeetingIdx})
---         from onMeeting meet
---         join onMeetingMem mem on meet.onMeetingIdx = mem.onMeetingIdx
---         where onMeetingIdx = #{onMeetingIdx}
+<!--    On모임 하나 조회-->
+    <select id="getOnMeetingById" resultMap="onMeetingMap">
         select meet.*,
-            (select count(*)
-                from onMeeting meet
-                    join onMeetingMem mem
-                        on meet.onMeetingIdx = mem.onMeetingIdx
-                where meet.onMeetingIdx = meet.onMeetingIdx) as memberCnt,
-            (SELECT m.memberIdx
+               (SELECT memberIdx
                 FROM onMeetingMem mem
-                    JOIN member m
-                        ON mem.memberIdx = m.memberIdx
                 WHERE onMeetingIdx = meet.onMeetingIdx
-                    AND isHost = '1') as hostIdx,
-            (SELECT memberName
+                  AND isHost = '1') as hostIdx,
+               (SELECT memberName
                 FROM onMeetingMem mem
-                    JOIN member m
-                        ON mem.memberIdx = m.memberIdx
+                         JOIN member m
+                              ON mem.memberIdx = m.memberIdx
                 WHERE onMeetingIdx = meet.onMeetingIdx
-                    AND isHost = '1') as hostName
+                  AND isHost = '1') as hostName,
+               (SELECT COUNT(*)
+                FROM onMeetingMem
+                WHERE onMeetingIdx = meet.onMeetingIdx) as memberCnt
         from onMeeting meet
-                 join onMeetingMem mem
-                     on meet.onMeetingIdx = mem.onMeetingIdx
-        where meet.onMeetingIdx = #{onMeetingIdx}
+
+        where onMeetingIdx = #{onMeetingIdx}
     </select>
 
-<!--&lt;!&ndash;    호스트&ndash;&gt;-->
+<!--    On모임 회원 하나 조회-->
+    <select id="getOnMeetingMemById" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO">
+        select *
+        from onMeetingMem mem
+        join member m on mem.memberIdx = m.memberIdx
+        where mem.onMeetingIdx = #{onMeetingIdx}
+            and m.memberIdx = #{memberIdx}
+    </select>
+<!--    호스트-->
 <!--    <select id="getOnMeetingHost" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">-->
-<!--        select *-->
-<!--        from onMeeting-->
-<!--        join onMeetingMem mem on meet.onMeetingIdx = mem.onMeetingIdx-->
-<!--        join member m on mem.memberIdx = m.memberIdx-->
-<!--        where memberIdx = #{memberIdx}-->
+<!--        select  onMeetingIdx, onMeetName,-->
+<!--               (SELECT memberIdx-->
+<!--                FROM onMeetingMem mem-->
+<!--                WHERE onMeetingIdx = meet.onMeetingIdx-->
+<!--                  AND isHost = '1') as hostIdx,-->
+<!--               (SELECT memberName-->
+<!--                FROM onMeetingMem mem-->
+<!--                         JOIN member m-->
+<!--                              ON mem.memberIdx = m.memberIdx-->
+<!--                WHERE onMeetingIdx = meet.onMeetingIdx-->
+<!--                  AND isHost = '1') as hostName-->
+<!--        from onMeeting meet-->
+<!--        where onMeetingIdx = #{onMeetingIdx}-->
 <!--    </select>-->
 
 <!--    My On모임 리스트-->
-    <select id="getOnMeetingListByMember" resultMap="onMeetingMap">
-        select *
+    <select id="getOnMeetingListByMember" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
+        select meet.*,
+               (SELECT memberIdx
+                FROM onMeetingMem mem
+                WHERE onMeetingIdx = meet.onMeetingIdx
+                  AND isHost = '1') as hostIdx,
+               (SELECT memberName
+                FROM onMeetingMem mem
+                         JOIN member m
+                              ON mem.memberIdx = m.memberIdx
+                WHERE onMeetingIdx = meet.onMeetingIdx
+                  AND isHost = '1') as hostName,
+               (SELECT COUNT(*)
+                FROM onMeetingMem
+                WHERE onMeetingIdx = meet.onMeetingIdx) as memberCnt
         from onMeeting meet
             join onMeetingMem mem on meet.onMeetingIdx = mem.onMeetingIdx
             join member m on mem.memberIdx = m.memberIdx
@@ -87,12 +129,10 @@
     </select>
 
 <!--    추천 On모임 리스트-->
-    <select id="getRecommendOnMeetingList" resultMap="onMeetingMap">
-        SELECT meet.*,
-               (SELECT m.memberIdx
-                FROM onMeetingMem mem
-                         JOIN member m
-                              ON mem.memberIdx = m.memberIdx
+    <select id="getRecommendOnMeetingList" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
+        SELECT distinct meet.*,
+               (SELECT memberIdx
+                FROM onMeetingMem
                 WHERE onMeetingIdx = meet.onMeetingIdx
                   AND isHost = '1') as hostIdx,
                (SELECT memberName

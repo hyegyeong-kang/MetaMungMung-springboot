@@ -13,10 +13,10 @@ public class OnMeetingDTO {
     private String introduction;
     private String thumbnail;
     private String isPublic;
-    private int personnel;
     private String onMeetingAddr;
     private Date createDate;
     private Date updateDate;
+    private int personnel;
 
     private int memberCnt;
     private Long hostIdx;
