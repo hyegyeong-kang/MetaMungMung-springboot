@@ -106,6 +106,20 @@
 <!--        where onMeetingIdx = #{onMeetingIdx}-->
 <!--    </select>-->
 
+<!--    On모임 검색-->
+<!--    <select id="searchOnMeeting" parameterType="Search" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">-->
+<!--        select * from board-->
+<!--        <if test="area != null">-->
+<!--            <where>-->
+<!--                &lt;!&ndash; where (title LIKE %Java% OR writer LIKE %Java%) &ndash;&gt;-->
+<!--                <foreach collection="area" item="item" open="(" close=")" separator="OR">-->
+<!--                    ${item} LIKE #{searchKey}-->
+<!--                </foreach>-->
+<!--            </where>-->
+<!--        </if>-->
+<!--        order by seq desc-->
+<!--    </select>-->
+
 <!--    My On모임 리스트-->
     <select id="getOnMeetingListByMember" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
         select meet.*,
