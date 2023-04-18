@@ -3,6 +3,7 @@ package com.metanet.metamungmung.dto.meeting;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class OnMeetingDTO {
@@ -12,7 +13,15 @@ public class OnMeetingDTO {
     private String introduction;
     private String thumbnail;
     private String isPublic;
+    private int personnel;
     private String onMeetingAddr;
     private Date createDate;
     private Date updateDate;
+
+    private int memberCnt;
+    private Long hostIdx;
+    private String hostName;
+
+
+    private List<OnMeetingMemDTO> onMeetingMemList;
 }

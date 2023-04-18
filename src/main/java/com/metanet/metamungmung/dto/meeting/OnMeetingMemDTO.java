@@ -1,5 +1,6 @@
 package com.metanet.metamungmung.dto.meeting;
 
+import com.metanet.metamungmung.dto.member.MemberDTO;
 import lombok.Data;
 
 import java.util.Date;
@@ -11,4 +12,6 @@ public class OnMeetingMemDTO {
     private Long memberIdx;
     private Date joinDate;
     private String isHost;
+
+    private MemberDTO memberDTO;
 }
