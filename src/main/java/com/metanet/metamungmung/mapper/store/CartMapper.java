@@ -1,5 +1,6 @@
 package com.metanet.metamungmung.mapper.store;
 
+import com.metanet.metamungmung.dto.store.CartDTO;
 import com.metanet.metamungmung.dto.store.CartProductDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -9,11 +10,12 @@ import java.util.List;
 @Mapper
 public interface CartMapper {
     // 해당 회원 장바구니 리스트 출력
-    List<CartProductDTO> getMyCartList(Long memberIdx);
+    public List<CartDTO> getMyCartList(Long memberIdx);
 
-//    // 해당 회원 장바구니 물건추가
-//    public void addCart(CartDTO cart);
-//
+    // 해당 회원 장바구니 물건추가
+    public void addCart(CartDTO cart);
+
+
 //    // 장바구니 중복 상품 확인
 //    public int checkCart(@Param("p_id")Long p_id, @Param("m_id")Long m_id);
 //

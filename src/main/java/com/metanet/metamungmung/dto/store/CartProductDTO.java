@@ -8,4 +8,5 @@ public class CartProductDTO {
     private Long productIdx;
     private Long cartIdx;
     private Long quantity;
+    private ProductDTO productDTO;
 }
