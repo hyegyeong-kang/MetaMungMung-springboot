@@ -70,4 +70,16 @@
                 #{startTime}
         )
     </insert>
+
+    <!-- 오프 모임 수정 -->
+    <update id="updateOffMeeting">
+        update offMeeting set
+            title = #{title},
+            meetingDate = #{meetingDate},
+            limit = #{limit},
+            contents = #{contents},
+            updateDate = sysdate,
+            startTime = #{startTime}
+        where offMeetingIdx = #{offMeetingIdx}
+    </update>
 </mapper>

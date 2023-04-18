@@ -1,6 +1,7 @@
 package com.metanet.metamungmung.service.meeting;
 
 import com.metanet.metamungmung.dto.meeting.OffMeetingDTO;
+import com.metanet.metamungmung.dto.meeting.PatchOffMeetingDTO;
 import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 import com.metanet.metamungmung.mapper.meeting.OffMeetingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,10 @@ public class OffMeetingServiceImpl implements OffMeetingService {
     @Override
     public List<GetOffMeetingVO> getOffMeetingMembers(Long offMeetingIdx) {
         return offMeetingMapper.getOffMeetingMembers(offMeetingIdx);
+    }
+
+    @Override
+    public int updateOffMeeting(PatchOffMeetingDTO patchOffMeetingDTO) {
+        return offMeetingMapper.updateOffMeeting(patchOffMeetingDTO);
     }
 }
