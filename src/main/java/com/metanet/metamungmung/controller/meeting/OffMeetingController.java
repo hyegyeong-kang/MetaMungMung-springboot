@@ -1,6 +1,7 @@
 package com.metanet.metamungmung.controller.meeting;
 
 import com.metanet.metamungmung.dto.meeting.OffMeetingDTO;
+import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 import com.metanet.metamungmung.service.meeting.OffMeetingService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +45,16 @@ public class OffMeetingController {
     public OffMeetingDTO showOffMeetingDetail(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
         OffMeetingDTO offMeeting = offMeetingService.getOffMeeting(offMeetingIdx);
         return offMeeting;
+    }
+
+    /**
+     * OFF 모임 참여자 조회
+     * [GET] /offMeetings/:offMeetingIdx/offMeetingMembers
+     * @return List<GetOffMeetingVO>
+     **/
+    @GetMapping("/{offMeetingIdx}/offMeetingMembers")
+    public List<GetOffMeetingVO> showOffMeetingMembers(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
+        List<GetOffMeetingVO> offMeetingMembers = offMeetingService.getOffMeetingMembers(offMeetingIdx);
+        return offMeetingMembers;
     }
 }
