@@ -6,29 +6,38 @@
 
         <!-- 해당 회원 장바구니 리스트 출력 -->
         <select id="getMyCartList"  resultMap="cartResultMap">
-            select c.cartIdx, c.memberIdx, cp.productIdx, cp.quantity, p.productName, p.price, p.productImg
+            select c.cartIdx, c.memberIdx, cp.cartproductIdx, cp.productIdx, cp.quantity, p.productName, p.price, p.productImg
             from cart c, cartproduct cp, product p
-            where c.memberIdx = #{memberIdx}
-            and  c.cartIdx = cp.cardIdx
+            where c.memberIdx = 1
+            and  c.cartIdx = cp.cartIdx
             and cp.productIdx = p.productIdx
         </select>
 
         <resultMap id="cartResultMap" type="com.metanet.metamungmung.dto.store.CartDTO">
-            <id column="cartIdx" property="cartIdx"/>
+            <result column="cartIdx" property="cartIdx"/>
             <result column="memberIdx" property="memberIdx"/>
-            <collection property="cartItems" javaType="com.metanet.metamungmung.dto.store.CartProductDTO">
-                <id column="cartProductIdx" property="cartProductIdx"/>
+            <collection property="cartProductDTOList" resultMap="cartProductMap"/>
+        </resultMap>
+
+        <resultMap type="com.metanet.metamungmung.dto.store.CartProductDTO" id="cartProductMap" >
+                <result column="cartProductIdx" property="cartProductIdx"/>
                 <result column="productIdx" property="productIdx"/>
                 <result column="cartIdx" property="cartIdx"/>
                 <result column="quantity" property="quantity"/>
-                <association property="product" javaType="com.metanet.metamungmung.dto.store.CartProductDTO">
-                    <id column="productIdx" property="productIdx"/>
-                    <result column="productName" property="productName"/>
-                    <result column="price" property="price"/>
-                    <result column="productImg" property="productImg"/>
-                </association>
-            </collection>
+                <association property="productDTO" resultMap="productMap" javaType="com.metanet.metamungmung.dto.store.ProductDTO"/>
         </resultMap>
+
+        <resultMap type="com.metanet.metamungmung.dto.store.ProductDTO" id="productMap">
+                <result column="productIdx" property="productIdx"/>
+                <result column="category" property="category"/>
+                <result column="productName" property="productName"/>
+                <result column="brand" property="brand"/>
+                <result column="price" property="price"/>
+                <result column="productImg" property="productImg"/>
+                <result column="productDetail" property="productDetail"/>
+                <result column="volume" property="volume"/>
+        </resultMap>
+
 
 
 
