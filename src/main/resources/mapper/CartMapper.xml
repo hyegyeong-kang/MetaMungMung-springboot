@@ -5,7 +5,7 @@
 <mapper namespace="com.metanet.metamungmung.mapper.store.CartMapper">
 
         <!-- 해당 회원 장바구니 리스트 출력 -->
-        <select id="getMyCartList"  resultMap="cartDTO">
+        <select id="getMyCartList"  resultMap="cartResultMap">
             select c.cartIdx, c.memberIdx, cp.productIdx, cp.quantity, p.productName, p.price, p.productImg
             from cart c, cartproduct cp, product p
             where c.memberIdx = #{memberIdx}
@@ -13,28 +13,53 @@
             and cp.productIdx = p.productIdx
         </select>
 
-        <resultMap type="com.metanet.metamungmung.dto.store.CartDTO" id="cartDTO">
-            <result property="cartIdx" column="cartIdx"/>
-            <result property="memberIdx" column="memberIdx"/>
-            <collection property="productList" resultMap="cartProductDTO">
+        <resultMap id="cartResultMap" type="com.metanet.metamungmung.dto.store.CartDTO">
+            <id column="cartIdx" property="cartIdx"/>
+            <result column="memberIdx" property="memberIdx"/>
+            <collection property="cartItems" javaType="com.metanet.metamungmung.dto.store.CartProductDTO">
+                <id column="cartProductIdx" property="cartProductIdx"/>
+                <result column="productIdx" property="productIdx"/>
+                <result column="cartIdx" property="cartIdx"/>
+                <result column="quantity" property="quantity"/>
+                <association property="product" javaType="com.metanet.metamungmung.dto.store.CartProductDTO">
+                    <id column="productIdx" property="productIdx"/>
+                    <result column="productName" property="productName"/>
+                    <result column="price" property="price"/>
+                    <result column="productImg" property="productImg"/>
+                </association>
             </collection>
         </resultMap>
 
 
-        <resultMap type="com.metanet.metamungmung.dto.store.CartProductDTO" id="cartProductDTO">
-            <result property="cartProductIdx" column="cartProductIdx"/>
-            <result property="productIdx" column="productIdx"/>
-            <result property="cartIdx" column="cartIdx"/>
-            <result property="quantity" column="quantity"/>
-            <association property="productDTO" javaType="ProductDTO" resultMap="productMap"/>
-        </resultMap>
 
-        <resultMap type="com.metanet.metamungmung.dto.store.ProductDTO" id="productMap">
-            <result property="productIdx" column="productIdx"/>
-            <result property="productName" column="productName"/>
-            <result property="price" column="price"/>
-            <result property="productImg" column="productImg"/>
-        </resultMap>
+<!--        <resultMap type="com.metanet.metamungmung.dto.store.CartDTO" id="cartDTO">-->
+<!--            <result property="cartIdx" column="cartIdx"/>-->
+<!--            <result property="memberIdx" column="memberIdx"/>-->
+<!--            <collection property="productList" resultMap="cartProductDTO">-->
+<!--            </collection>-->
+<!--        </resultMap>-->
+
+
+<!--        <resultMap type="com.metanet.metamungmung.dto.store.CartProductDTO" id="cartProductDTO">-->
+<!--            <result property="cartProductIdx" column="cartProductIdx"/>-->
+<!--            <result property="productIdx" column="productIdx"/>-->
+<!--            <result property="cartIdx" column="cartIdx"/>-->
+<!--            <result property="quantity" column="quantity"/>-->
+<!--            <association property="productDTO" javaType="ProductDTO" resultMap="productMap"/>-->
+<!--        </resultMap>-->
+
+<!--        <resultMap type="com.metanet.metamungmung.dto.store.ProductDTO" id="productMap">-->
+<!--            <result property="productIdx" column="productIdx"/>-->
+<!--            <result property="productName" column="productName"/>-->
+<!--            <result property="price" column="price"/>-->
+<!--            <result property="productImg" column="productImg"/>-->
+<!--        </resultMap>-->
+
+
+
+
+
+
 
 
         <!--  장바구니에 물건 추가 -->
@@ -42,4 +67,6 @@
             insert into cart
             values (cart_seq.nextval, #{m_id}, #{p_id}, #{quantity})
         </insert>
+
+
 </mapper>
