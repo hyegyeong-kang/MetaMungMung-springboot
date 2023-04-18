@@ -38,44 +38,33 @@
                 <result column="volume" property="volume"/>
         </resultMap>
 
-
-
-
-<!--        <resultMap type="com.metanet.metamungmung.dto.store.CartDTO" id="cartDTO">-->
-<!--            <result property="cartIdx" column="cartIdx"/>-->
-<!--            <result property="memberIdx" column="memberIdx"/>-->
-<!--            <collection property="productList" resultMap="cartProductDTO">-->
-<!--            </collection>-->
-<!--        </resultMap>-->
-
-
-<!--        <resultMap type="com.metanet.metamungmung.dto.store.CartProductDTO" id="cartProductDTO">-->
-<!--            <result property="cartProductIdx" column="cartProductIdx"/>-->
-<!--            <result property="productIdx" column="productIdx"/>-->
-<!--            <result property="cartIdx" column="cartIdx"/>-->
-<!--            <result property="quantity" column="quantity"/>-->
-<!--            <association property="productDTO" javaType="ProductDTO" resultMap="productMap"/>-->
-<!--        </resultMap>-->
-
-<!--        <resultMap type="com.metanet.metamungmung.dto.store.ProductDTO" id="productMap">-->
-<!--            <result property="productIdx" column="productIdx"/>-->
-<!--            <result property="productName" column="productName"/>-->
-<!--            <result property="price" column="price"/>-->
-<!--            <result property="productImg" column="productImg"/>-->
-<!--        </resultMap>-->
-
-
-
-
-
-
-
+        <!--  장바구니생성  -->
+        <insert id="createCart">
+            insert into cart
+            values (cart_seq.nextval, #{memberIdx})
+        </insert>
 
         <!--  장바구니에 물건 추가 -->
         <insert id="addCart">
-            insert into cart
-            values (cart_seq.nextval, #{m_id}, #{p_id}, #{quantity})
+            insert into cartproduct
+            values (cartproduct_seq.nextval, #{cartIdx}, #{productIdx}, #{quantity})
         </insert>
+
+        <!-- 장바구니 중복 상품 확인 -->
+        <select id="checkCart" resultType="int">
+            select count(*)
+            from cartproduct
+            where productIdx = #{productIdx}
+              and memberIdx = #{memberIdx}
+        </select>
+
+        <!-- 중복된 상품이 있다면 넣지말고 수량 더해주기 -->
+        <update id="updateCount">
+            update cart c
+            set c.quantity = c.quantity + #{quantity}
+            where c.m_id = #{m_id}
+              and c.p_id = #{p_id}
+        </update>
 
 
 </mapper>
