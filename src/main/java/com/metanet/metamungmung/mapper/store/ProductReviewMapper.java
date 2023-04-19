@@ -1,5 +1,6 @@
 package com.metanet.metamungmung.mapper.store;
 
+import com.metanet.metamungmung.dto.store.PatchProductReviewDTO;
 import com.metanet.metamungmung.dto.store.ProductReviewDTO;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,4 +14,6 @@ public interface ProductReviewMapper {
     public ProductReviewDTO getReview(Long productIdx, Long reviewIdx);
 
     public int registerReview(ProductReviewDTO productReviewDTO);
+
+    public int updateReview(PatchProductReviewDTO patchProductReviewDTO);
 }

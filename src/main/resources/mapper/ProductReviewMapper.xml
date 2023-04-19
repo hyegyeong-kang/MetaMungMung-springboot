@@ -47,4 +47,15 @@
                 default
             )
     </insert>
+
+    <!-- 리뷰 수정 -->
+    <update id="updateReview">
+        update productReview set
+            title = #{title},
+            content = #{content},
+            updateDate = sysdate
+        where productIdx = #{productIdx}
+        and productReviewIdx = #{productReviewIdx}
+        and status = 'ACTIVE'
+    </update>
 </mapper>

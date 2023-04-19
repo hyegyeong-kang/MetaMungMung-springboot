@@ -1,5 +1,6 @@
 package com.metanet.metamungmung.controller.store;
 
+import com.metanet.metamungmung.dto.store.PatchProductReviewDTO;
 import com.metanet.metamungmung.dto.store.ProductReviewDTO;
 import com.metanet.metamungmung.security.JwtFilter;
 import com.metanet.metamungmung.service.store.ProductReviewService;
@@ -15,7 +16,7 @@ public class ProductReviewController {
     @Autowired
     private final ProductReviewService reviewService;
     @Autowired
-    private final JwtFilter jwtFilter;
+    public JwtFilter jwtFilter;
 
     public ProductReviewController(ProductReviewService reviewService, JwtFilter jwtFilter) {
         this.reviewService = reviewService;
@@ -24,7 +25,7 @@ public class ProductReviewController {
 
     /**
      * 리뷰 조회 API
-     * [GET] /products/{productIdx}/reviews
+     * [GET] /products/:productIdx/reviews
      * @return List<ProductReviewDTO>
      **/
     @GetMapping("/{productIdx}/reviews")
@@ -35,7 +36,7 @@ public class ProductReviewController {
 
     /**
      * 리뷰 상세 조회(특정 리뷰 조회) API
-     * [GET] /products/{productIdx}/reviews/{reviewIdx}
+     * [GET] /products/:productIdx/reviews/:reviewIdx
      * @return List<ProductReviewDTO>
      **/
     @GetMapping("/{productIdx}/reviews/{reviewIdx}")
@@ -48,7 +49,7 @@ public class ProductReviewController {
 
     /**
      * 리뷰 작성 API
-     * [POST] /products/{productIdx}/reviews
+     * [POST] /products/:productIdx}/reviews
      * @return String
      **/
     @PostMapping("/{productIdx}/reviews")
@@ -77,5 +78,31 @@ public class ProductReviewController {
         }
 
         return result;
+    }
+
+    /**
+     * 리뷰 수정 API
+     * [PATCH] /products/:productIdx/reviews/:reviewIdx
+     * @return String
+     **/
+    @PatchMapping("/{productIdx}/reviews/{reviewIdx}")
+    public ProductReviewDTO modifyReview(
+            @PathVariable("productIdx") Long productIdx,
+            @PathVariable("reviewIdx") Long reviewIdx,
+            @RequestBody PatchProductReviewDTO patchProductReviewDTO) {
+
+        ProductReviewDTO productReviewDTO = new ProductReviewDTO();
+
+        patchProductReviewDTO.setProductReviewIdx(reviewIdx);
+        patchProductReviewDTO.setProductIdx(productIdx);
+
+        /* 작성자인지 확인하는 로직 필요 */
+
+        int idx = reviewService.updateReview(patchProductReviewDTO);
+
+        if (idx == 1) {
+            productReviewDTO = reviewService.getReview(productIdx, reviewIdx);
+        }
+        return productReviewDTO;
     }
  }

@@ -1,5 +1,6 @@
 package com.metanet.metamungmung.service.store;
 
+import com.metanet.metamungmung.dto.store.PatchProductReviewDTO;
 import com.metanet.metamungmung.dto.store.ProductReviewDTO;
 import com.metanet.metamungmung.mapper.store.ProductReviewMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,10 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     @Override
     public int registerReview(ProductReviewDTO productReviewDTO) {
         return reviewMapper.registerReview(productReviewDTO);
+    }
+
+    @Override
+    public int updateReview(PatchProductReviewDTO patchProductReviewDTO) {
+        return reviewMapper.updateReview(patchProductReviewDTO);
     }
 }
