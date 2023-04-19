@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class OffMeetingServiceImpl implements OffMeetingService {
@@ -53,5 +54,15 @@ public class OffMeetingServiceImpl implements OffMeetingService {
     @Override
     public int registerOffMeetingHost(OffMeetingMemDTO offMeetingMemDTO) {
         return offMeetingMapper.registerOffMeetingHost(offMeetingMemDTO);
+    }
+
+    @Override
+    public OffMeetingMemDTO checkMemberByMemberIdx(Map<String, Long> map) {
+        return offMeetingMapper.checkMemberByMemberIdx(map);
+    }
+
+    @Override
+    public int cancelJoinOffMeeting(Map<String, Long> map) {
+        return offMeetingMapper.cancelJoinOffMeeting(map);
     }
 }
