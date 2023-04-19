@@ -69,6 +69,9 @@
                 #{locationAddress},
                 #{startTime}
         )
+        <selectKey keyProperty="offMeetingIdx" order="BEFORE" resultType="Long">
+            select offMeeting_seq.nextval from dual
+        </selectKey>
     </insert>
 
     <!-- 오프 모임 수정 -->
