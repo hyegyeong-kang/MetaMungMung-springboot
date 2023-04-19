@@ -8,6 +8,7 @@ import java.util.Date;
 public class ProductReviewDTO {
     private Long productReviewIdx;
     private Long productIdx;
+    private Long memberIdx;
     private String title;
     private String content;
     private Date createDate;

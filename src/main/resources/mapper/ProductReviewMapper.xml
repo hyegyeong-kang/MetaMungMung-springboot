@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.metanet.metamungmung.mapper.store.ProductReviewMapper">
+
     <!-- 리뷰 조회 -->
     <select id="getReviewList" resultType="com.metanet.metamungmung.dto.store.ProductReviewDTO">
         select *
@@ -13,4 +14,37 @@
         and pr.status = 'ACTIVE'
         order by createDate DESC
     </select>
+
+    <!-- 리뷰 상세 조회 (특정 리뷰 조회) -->
+    <select id="getReview" resultType="com.metanet.metamungmung.dto.store.ProductReviewDTO">
+        select *
+        from productReview
+        where productIdx = #{productIdx}
+        and productReviewIdx = #{reviewIdx}
+        and status = 'ACTIVE'
+    </select>
+
+    <!-- 리뷰 등록 -->
+    <insert id="registerReview">
+        insert into
+            productReview(
+                productReviewIdx,
+                productIdx,
+                memberIdx,
+                title,
+                content,
+                createDate,
+                updateDate,
+                status
+            ) values(
+                productReview_seq.nextval,
+                #{productIdx},
+                #{memberIdx},
+                #{title},
+                #{content},
+                sysdate,
+                sysdate,
+                default
+            )
+    </insert>
 </mapper>
