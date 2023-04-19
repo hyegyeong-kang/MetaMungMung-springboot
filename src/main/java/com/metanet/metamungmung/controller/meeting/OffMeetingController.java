@@ -1,6 +1,8 @@
 package com.metanet.metamungmung.controller.meeting;
 
 import com.metanet.metamungmung.dto.meeting.OffMeetingDTO;
+import com.metanet.metamungmung.dto.meeting.PatchOffMeetingDTO;
+import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 import com.metanet.metamungmung.service.meeting.OffMeetingService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -44,5 +46,53 @@ public class OffMeetingController {
     public OffMeetingDTO showOffMeetingDetail(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
         OffMeetingDTO offMeeting = offMeetingService.getOffMeeting(offMeetingIdx);
         return offMeeting;
+    }
+
+    /**
+     * OFF 모임 참여자 조회
+     * [GET] /offMeetings/:offMeetingIdx/offMeetingMembers
+     * @return List<GetOffMeetingVO>
+     **/
+    @GetMapping("/{offMeetingIdx}/offMeetingMembers")
+    public List<GetOffMeetingVO> showOffMeetingMembers(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
+        List<GetOffMeetingVO> offMeetingMembers = offMeetingService.getOffMeetingMembers(offMeetingIdx);
+        return offMeetingMembers;
+    }
+
+    /**
+     * OFF 모임 수정
+     * [PATCh] /offMeetings/:offMeetingIdx
+     * @return OffMeetingDTO
+     **/
+    @PatchMapping("/{offMeetingIdx}")
+    public OffMeetingDTO modifyOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody PatchOffMeetingDTO patchOffMeetingDTO) {
+        OffMeetingDTO newOffMeeting = null;
+        patchOffMeetingDTO.setOffMeetingIdx(offMeetingIdx);
+        int idx = offMeetingService.updateOffMeeting(patchOffMeetingDTO);
+
+        if (idx == 1) {
+            newOffMeeting = offMeetingService.getOffMeeting(offMeetingIdx) ;
+        }
+
+        return newOffMeeting;
+    }
+
+    /**
+     * OFF 모임 삭제
+     * [PATCh] /offMeetings/:offMeetingIdx
+     * @return String
+     **/
+    @PostMapping("/{offMeetingIdx}")
+    public String deleteOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
+        int idx = offMeetingService.deleteOffMeeting(offMeetingIdx);
+        String result = "";
+
+        if (idx == 1) {
+            result = "삭제되었습니다.";
+        } else {
+            result = "존재하지 않는 모임 게시글입니다.";
+        }
+
+        return result;
     }
 }

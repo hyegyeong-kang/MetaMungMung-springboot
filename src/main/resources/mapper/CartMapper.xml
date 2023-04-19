@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metanet.metamungmung.mapper.store.CartMapper">
+
+        <!-- 해당 회원 장바구니 리스트 출력 -->
+        <select id="getMyCartList"  resultMap="cartResultMap">
+            select c.cartIdx, c.memberIdx, cp.cartproductIdx, cp.productIdx, cp.quantity, p.productName, p.price, p.productImg
+            from cart c, cartproduct cp, product p
+            where c.memberIdx = 1
+            and  c.cartIdx = cp.cartIdx
+            and cp.productIdx = p.productIdx
+        </select>
+
+        <resultMap id="cartResultMap" type="com.metanet.metamungmung.dto.store.CartDTO">
+            <result column="cartIdx" property="cartIdx"/>
+            <result column="memberIdx" property="memberIdx"/>
+            <collection property="cartProductDTOList" resultMap="cartProductMap"/>
+        </resultMap>
+
+        <resultMap type="com.metanet.metamungmung.dto.store.CartProductDTO" id="cartProductMap" >
+                <result column="cartProductIdx" property="cartProductIdx"/>
+                <result column="productIdx" property="productIdx"/>
+                <result column="cartIdx" property="cartIdx"/>
+                <result column="quantity" property="quantity"/>
+                <association property="productDTO" resultMap="productMap" javaType="com.metanet.metamungmung.dto.store.ProductDTO"/>
+        </resultMap>
+
+        <resultMap type="com.metanet.metamungmung.dto.store.ProductDTO" id="productMap">
+                <result column="productIdx" property="productIdx"/>
+                <result column="category" property="category"/>
+                <result column="productName" property="productName"/>
+                <result column="brand" property="brand"/>
+                <result column="price" property="price"/>
+                <result column="productImg" property="productImg"/>
+                <result column="productDetail" property="productDetail"/>
+                <result column="volume" property="volume"/>
+        </resultMap>
+
+        <!--  장바구니생성  -->
+        <insert id="createCart">
+            insert into cart
+            values (cart_seq.nextval, #{memberIdx})
+        </insert>
+
+        <!--  장바구니에 물건 추가 -->
+        <insert id="addCart">
+            insert into cartproduct
+            values (cartproduct_seq.nextval, #{cartIdx}, #{productIdx}, #{quantity})
+        </insert>
+
+        <!-- 장바구니 중복 상품 확인 -->
+        <select id="checkCart" resultType="int">
+            select count(*)
+            from cartproduct
+            where productIdx = #{productIdx}
+              and memberIdx = #{memberIdx}
+        </select>
+
+        <!-- 중복된 상품이 있다면 넣지말고 수량 더해주기 -->
+        <update id="updateCount">
+            update cart c
+            set c.quantity = c.quantity + #{quantity}
+            where c.m_id = #{m_id}
+              and c.p_id = #{p_id}
+        </update>
+
+
+</mapper>
