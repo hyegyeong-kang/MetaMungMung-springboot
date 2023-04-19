@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/products")
@@ -83,7 +85,7 @@ public class ProductReviewController {
     /**
      * 리뷰 수정 API
      * [PATCH] /products/:productIdx/reviews/:reviewIdx
-     * @return String
+     * @return ProductReviewDTO
      **/
     @PatchMapping("/{productIdx}/reviews/{reviewIdx}")
     public ProductReviewDTO modifyReview(
@@ -104,5 +106,34 @@ public class ProductReviewController {
             productReviewDTO = reviewService.getReview(productIdx, reviewIdx);
         }
         return productReviewDTO;
+    }
+
+    /**
+     * 리뷰 삭제 API
+     * [POST] /products/:productIdx/reviews/:reviewIdx
+     * @return String
+     **/
+    @PostMapping("/{productIdx}/reviews/{reviewIdx}")
+    public String deleteReview(
+            @PathVariable("productIdx") Long productIdx,
+            @PathVariable("reviewIdx") Long reviewIdx) {
+
+        /* 임시 회원 */
+        Long memberIdx = 10L;
+
+        Map<String, Long> map = new HashMap<>();
+        map.put("productIdx", productIdx);
+        map.put("reviewIdx", reviewIdx);
+        map.put("memberIdx", memberIdx);
+
+        String result = "";
+
+        int idx = reviewService.deleteReview(map);
+
+        if(idx == 1) {
+            result = "정상적으로 삭제되었습니다.";
+        }
+
+        return result;
     }
  }

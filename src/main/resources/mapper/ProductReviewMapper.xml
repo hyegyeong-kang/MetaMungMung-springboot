@@ -58,4 +58,14 @@
         and productReviewIdx = #{productReviewIdx}
         and status = 'ACTIVE'
     </update>
+
+    <!-- 리뷰 삭제 -->
+    <update id="deleteReview" parameterType="map">
+        update productReview set
+        status = 'DELETED'
+        where productIdx = #{productIdx}
+        and productReviewIdx = #{reviewIdx}
+        and memberIdx = #{memberIdx}
+        and status = 'ACTIVE'
+    </update>
 </mapper>

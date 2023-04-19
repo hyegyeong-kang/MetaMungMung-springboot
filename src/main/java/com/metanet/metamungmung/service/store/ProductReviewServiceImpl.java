@@ -33,4 +33,9 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     public int updateReview(PatchProductReviewDTO patchProductReviewDTO) {
         return reviewMapper.updateReview(patchProductReviewDTO);
     }
+
+    @Override
+    public int deleteReview(Map<String, Long> map) {
+        return reviewMapper.deleteReview(map);
+    }
 }

@@ -16,4 +16,6 @@ public interface ProductReviewMapper {
     public int registerReview(ProductReviewDTO productReviewDTO);
 
     public int updateReview(PatchProductReviewDTO patchProductReviewDTO);
+
+    public int deleteReview(Map<String, Long> map);
 }
