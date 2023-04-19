@@ -6,10 +6,7 @@ import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingBoardService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,5 +30,29 @@ public class OnMeetingBoardController {
         return service.getOnMeetingMembers(onMeetingIdx);
     }
 
+    // 게시글 작성
+    @PostMapping("{onMeetingIdx}/board")
+    public String registerBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardDTO boardDTO) {
+        service.registerBoard(onMeetingIdx, boardDTO);
+        return "register ok";
+    }
+
+    // 게시글 수정
+    @PatchMapping("{onMeetingIdx}/board/{onMeetingBoardIdx}")
+    public String updateBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardDTO boardDTO){
+        service.updateBoard(onMeetingIdx, boardDTO);
+        return "update ok";
+    }
+
+    // 게시글 삭제
+    @DeleteMapping("{onMeetingIdx}/board/{onMeetingBoardIdx}")
+    public String deleteBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingBoardIdx")Long onMeetingBoardIdx){
+        service.delete(onMeetingIdx, onMeetingBoardIdx);
+        return "delete ok";
+    }
+
+    // 게시금 검색
+
+    
 
 }

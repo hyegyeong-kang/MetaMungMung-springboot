@@ -19,11 +19,15 @@ public interface OnMeetingBoardMapper {
 
     // 게시글 상세 조회
 
+
     // 게시글 작성
+    public String registerBoard(Long onMeetingIdx, OnMeetingBoardDTO board);
 
     // 게시글 수정
+    public String updateBoard(Long onMeetingIdx, OnMeetingBoardDTO board);
 
     // 게시글 삭제
+    public String deleteBoard(Long onMeetingIdx, Long onMeetingBoardIdx);
 
     // 게시글 검색
 }
