@@ -105,8 +105,10 @@ public class OffMeetingController {
      * @return OffMeetingDTO
      **/
     @PatchMapping("/{offMeetingIdx}")
-    public OffMeetingDTO modifyOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody PatchOffMeetingDTO patchOffMeetingDTO) {
-        OffMeetingDTO newOffMeeting = null;
+    public OffMeetingDTO modifyOffMeeting(
+            @PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody PatchOffMeetingDTO patchOffMeetingDTO) {
+
+        OffMeetingDTO newOffMeeting = new OffMeetingDTO();
         patchOffMeetingDTO.setOffMeetingIdx(offMeetingIdx);
         int idx = offMeetingService.updateOffMeeting(patchOffMeetingDTO);
 
