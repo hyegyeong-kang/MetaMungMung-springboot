@@ -16,10 +16,6 @@ public interface OnMeetingBoardMapper {
     // 온 모임 가입한 사람 리스트
     public List<OnMeetingMemDTO> getOnMeetingMembers(Long onMeetingIdx);
 
-    // 온 모임 가입한 전체 인원 수
-    public int getOnMeetingMembersCnt(Long onMeetingIdx);
-
-
 
     // 게시글 상세 조회
 

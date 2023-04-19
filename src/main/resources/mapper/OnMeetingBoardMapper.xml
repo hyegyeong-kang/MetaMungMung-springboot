@@ -92,13 +92,5 @@
         <result column="updateDate" property="updateDate"/>
     </resultMap>
 
-    <!--모임 전체 가입자 수  -->
-    <select id="getOnMeetingMembersCnt" resultMap="memberListMap">
-        select count(*)
-        from onMeeting o, onMeetingMem om, member m
-        where om.memberIdx = m.memberIdx
-          and o.onMeetingIdx = #{onMeetingIdx}
-    </select>
-
 
 </mapper>
