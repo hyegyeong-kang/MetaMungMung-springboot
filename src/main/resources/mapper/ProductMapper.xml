@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.metanet.metamungmung.mapper.store.ProductMapper">
+
     <!-- 상품 조회 (상품 가나다순 정렬) -->
     <select id="getProductList" resultType="com.metanet.metamungmung.dto.store.ProductDTO">
         <![CDATA[
@@ -12,6 +13,13 @@
             where productIdx > 0
             order by productName
         ]]>
+    </select>
+
+    <!-- 상품 상세 조회 (리뷰 개수 포함) -->
+    <select id="getProduct" resultType="com.metanet.metamungmung.dto.store.ProductDTO">
+        select *
+        from product
+        where productIdx = #{productIdx}
     </select>
 
 </mapper>

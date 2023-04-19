@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface ProductMapper {
     public List<ProductDTO> getProductList();
+
+    public ProductDTO getProduct(Long productIdx);
 }

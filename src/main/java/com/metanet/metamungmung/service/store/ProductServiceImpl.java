@@ -16,4 +16,9 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getProductList() {
         return productMapper.getProductList();
     }
+
+    @Override
+    public ProductDTO getProduct(Long productIdx) {
+        return productMapper.getProduct(productIdx);
+    }
 }
