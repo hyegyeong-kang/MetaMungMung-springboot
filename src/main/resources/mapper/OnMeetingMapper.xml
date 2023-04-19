@@ -107,6 +107,18 @@
 <!--    </select>-->
 
 <!--    On모임 검색-->
+    <select id="searchOnMeeting" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
+        select *
+        from onMeeting
+        where (onMeetName LIKE %#{searchKeyword}% OR introduction LIKE %#{searchKeyword}%)
+    </select>
+
+<!--    On모임 검색(+카테고리)-->
+    <select id="searchOnMeetingWithCategory" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
+        select *
+        from onMeeting
+        where (onMeetName LIKE %#{searchKeyword}% OR introduction LIKE %#{searchKeyword}%) AND category = #{category}
+    </select>
 <!--    <select id="searchOnMeeting" parameterType="Search" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">-->
 <!--        select * from board-->
 <!--        <if test="area != null">-->

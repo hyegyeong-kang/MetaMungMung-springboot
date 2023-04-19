@@ -73,6 +73,12 @@ public class OnMeetingController {
         return service.modifyOnMeetingPersonnel(onMeetingDTO) == 1 ? service.getOnMeetingById(id) : null;
     }
 
+    @GetMapping("/search")
+    public List<OnMeetingDTO> searchOnMeeting(@RequestParam String keyword){
+        System.out.println(keyword);
+        return service.searchOnMeeting(keyword);
+    }
+
     @DeleteMapping("/{id}/withdraw")
     public int withdrawOnMeeting(@PathVariable("id") Long id){
         OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();

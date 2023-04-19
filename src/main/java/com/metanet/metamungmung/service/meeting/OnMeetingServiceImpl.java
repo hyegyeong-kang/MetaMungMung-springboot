@@ -45,6 +45,11 @@ public class OnMeetingServiceImpl implements OnMeetingService {
     }
 
     @Override
+    public List<OnMeetingDTO> searchOnMeeting(String searchKeyword) {
+        return mapper.searchOnMeeting(searchKeyword);
+    }
+
+    @Override
     public List<OnMeetingDTO> getRecommendOnMeetingList(Long memberIdx) {
         return mapper.getRecommendOnMeetingList(memberIdx);
     }

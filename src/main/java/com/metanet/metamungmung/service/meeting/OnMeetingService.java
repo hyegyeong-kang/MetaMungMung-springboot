@@ -16,6 +16,8 @@ public interface OnMeetingService {
 
     public int removeOnMeeting(Long id);
 
+    public List<OnMeetingDTO> searchOnMeeting(String searchKeyword);
+
     public List<OnMeetingDTO> getRecommendOnMeetingList(Long memberIdx);
 
     public List<OnMeetingDTO> getOnMeetingListByMember(Long memberIdx);
