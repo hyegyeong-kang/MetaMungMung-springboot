@@ -12,10 +12,10 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductReviewController {
     @Autowired
-    private final ProductReviewService reivewService;
+    private final ProductReviewService reviewService;
 
-    public ProductReviewController(ProductReviewService reivewService) {
-        this.reivewService = reivewService;
+    public ProductReviewController(ProductReviewService reviewService) {
+        this.reviewService = reviewService;
     }
 
     /**

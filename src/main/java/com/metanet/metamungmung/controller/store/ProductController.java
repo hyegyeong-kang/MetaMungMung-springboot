@@ -3,10 +3,7 @@ package com.metanet.metamungmung.controller.store;
 import com.metanet.metamungmung.dto.store.ProductDTO;
 import com.metanet.metamungmung.service.store.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,5 +37,16 @@ public class ProductController {
     public ProductDTO showProductDetail(@PathVariable Long productIdx) {
         ProductDTO product = productService.getProduct(productIdx);
         return product;
+    }
+
+    /**
+     * 상품 검색 API
+     * [POST] /products/search?keyword={keyword}
+     * @return List<ProductDTO>
+     **/
+    @GetMapping("/search")
+    public List<ProductDTO> searchProductList(@RequestParam(name = "keyword") String keyword) {
+        List<ProductDTO> productList = productService.getSearchProductList(keyword);
+        return productList;
     }
 }

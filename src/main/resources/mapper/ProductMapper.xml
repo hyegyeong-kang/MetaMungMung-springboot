@@ -15,11 +15,18 @@
         ]]>
     </select>
 
-    <!-- 상품 상세 조회 (리뷰 개수 포함) -->
+    <!-- 상품 상세 조회 -->
     <select id="getProduct" resultType="com.metanet.metamungmung.dto.store.ProductDTO">
         select *
         from product
         where productIdx = #{productIdx}
     </select>
 
+    <!-- 상품 검색 -->
+    <select id="getSearchProductList" resultType="com.metanet.metamungmung.dto.store.ProductDTO">
+        select *
+        from product
+        where productName LIKE '%'||TRIM(#{keyword})||'%'
+        OR brand LIKE '%'||TRIM(#{keyword})||'%'
+    </select>
 </mapper>
