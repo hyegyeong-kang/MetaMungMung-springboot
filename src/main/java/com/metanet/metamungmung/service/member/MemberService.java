@@ -22,11 +22,11 @@ public interface MemberService extends UserDetailsService {
 
     public void signUp(MemberDTO member);
 
-    public MemberDTO login(MemberDTO member);
-
     public int idCheck(String memberId);
 
     public int modify(MemberDTO member);
+
+    public MemberDTO getUserEmail(String email);
 
     //Pet 부분
     public List<PetDTO> getPetList();

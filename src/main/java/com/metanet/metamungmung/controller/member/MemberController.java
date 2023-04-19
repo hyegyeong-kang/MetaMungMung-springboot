@@ -1,13 +1,16 @@
 package com.metanet.metamungmung.controller.member;
 
 import com.metanet.metamungmung.dto.member.MemberDTO;
+import com.metanet.metamungmung.dto.member.PetDTO;
 import com.metanet.metamungmung.service.member.MemberService;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -44,40 +47,25 @@ public class MemberController {
         return result;
     }
 
-    @GetMapping("/login")
-    public void login() {
-
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<MemberDTO> login(@RequestBody MemberDTO member, HttpSession session) {
-        System.out.println(member);
-        MemberDTO loginMember = service.login(member);
-        System.out.println(loginMember);
-
-        if (loginMember == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(loginMember);
-        }
-
-        session.setAttribute("memberId", loginMember.getMemberId());
-        session.setAttribute("authority", loginMember.getAuthority());
-
-        return ResponseEntity.status(HttpStatus.OK).body(loginMember);
-    }
-
     @GetMapping("/modify")
     public void modify() {}
 
     @PatchMapping("/modify/{memberIdx}")
     public void modify(@PathVariable("memberIdx") Long memberIdx, @RequestBody MemberDTO member) {
-        System.out.println("Ddddddddddddddddd");
         member.setMemberIdx(memberIdx);
         service.modify(member);
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/";
+    @GetMapping("/pets")
+    public List<PetDTO> getPetList() {
+        return service.getPetList();
     }
+
+    @PostMapping("/pets/register")
+    public ResponseEntity<Void> register(@RequestBody PetDTO pet) {
+        System.out.println(pet);
+        service.register(pet);
+        return ResponseEntity.ok().build();
+    }
+
 }

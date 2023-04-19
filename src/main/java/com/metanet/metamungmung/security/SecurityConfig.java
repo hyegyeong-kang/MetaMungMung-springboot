@@ -1,54 +1,70 @@
 package com.metanet.metamungmung.security;
 
+import com.metanet.metamungmung.mapper.member.MemberMapper;
 import com.metanet.metamungmung.service.member.MemberService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private MemberService service;
+    private MemberService memberService;
+    private MemberMapper memberMapper;
+
+    public SecurityConfig(MemberMapper memberMapper, MemberService memberService) {
+        this.memberMapper = memberMapper;
+        this.memberService = memberService;
+    }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring()
+//                        .antMatchers("/**")
+                .antMatchers("/members")
+                .antMatchers("/members/signup")
+                .antMatchers("/members/idCheck");
+        // 이 요청들에 대해서는 spring security 필터 체인을 적용하지 않겠다
+    }
+
+    @Override
+
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
-                .antMatchers("/", "/members/signup", "/members/login", "/members/idCheck", "/members/modify/{memberIdx}").permitAll()
-                //.antMatchers("/members/modify/{memberIdx}").hasAnyRole("MEMBER", "DOGOWNER")
-                .anyRequest().authenticated()
-                .and()
+            .antMatchers("/**").permitAll()
+            .antMatchers("/members").permitAll()
+            .antMatchers("/members/idCheck").permitAll()
+            .antMatchers("/members/modify/{memberIdx}", "/members/pets/register").hasAnyRole("MEMBER", "DOGOWNER")
+            .anyRequest().authenticated()
+            .and()
+            .addFilter(getAuthenticationFilter())
+            .addFilter(JwtFilter()).authorizeRequests()
+            .and()
             .formLogin()
-                .loginPage("/members/login")
-                .loginProcessingUrl("/members/loginProc")
-                .defaultSuccessUrl("/")
-                .permitAll()
-                .and()
-            .logout()
-                .logoutUrl("/members/logout")
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .clearAuthentication(true)
-                .permitAll()
-                .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.ALWAYS);
+            .and()
+            .logout();
+
     }
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(service)
-            .passwordEncoder(passwordEncoder());
+
+    public JwtFilter JwtFilter() throws Exception {
+        return new JwtFilter(authenticationManager(), memberMapper);
+    }
+
+    private AuthenticationFilter getAuthenticationFilter() throws Exception{
+        return new AuthenticationFilter(authenticationManager(), memberMapper);
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(memberService).passwordEncoder(passwordEncoder());
     }
 
     @Bean
@@ -56,8 +72,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
-        return new HttpSessionSecurityContextRepository();
-    }
 }
