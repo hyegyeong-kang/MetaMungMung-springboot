@@ -54,23 +54,66 @@
 
     <!-- 오프 모임 등록 -->
     <insert id="registerOffMeeting">
-        insert into offMeeting
+        insert into
+        offMeeting (
+            offMeetingIdx,
+            title,
+            meetingDate,
+            limit,
+            contents,
+            createDate,
+            updateDate,
+            status,
+            latitude,
+            longitude,
+            locationAddress,
+            startTime
+        )
         values (
                 #{offMeetingIdx},
                 #{title},
-                sysdate,
+                #{meetingDate},
                 #{limit},
                 #{contents},
                 sysdate,
                 sysdate,
-                #{status},
-                #{latitude},
-                #{longitude},
-                #{locationAddress},
+                DEFAULT,
+                #{latitude, jdbcType=VARCHAR},
+                #{longitude, jdbcType=VARCHAR},
+                #{locationAddress, jdbcType=VARCHAR},
                 #{startTime}
         )
         <selectKey keyProperty="offMeetingIdx" order="BEFORE" resultType="Long">
             select offMeeting_seq.nextval from dual
+        </selectKey>
+    </insert>
+
+    <!-- 오프 모임 생성 시 해당 회원을 호스트로 지정하여 오프 모임 회원 등록 -->
+    <insert id="registerOffMeetingHost">
+        insert into offMeetingMem (
+            offMeetingMemIdx,
+            onMeetingMemIdx,
+            onMeetingIdx,
+            offMeetingIdx,
+            memberIdx,
+            createDate,
+            updateDate,
+            status,
+            isHost
+        )
+        values (
+            #{offMeetingMemIdx},
+            #{onMeetingMemIdx},
+            #{onMeetingIdx},
+            #{offMeetingIdx},
+            #{memberIdx},
+            sysdate,
+            sysdate,
+            DEFAULT,
+            1
+        )
+        <selectKey keyProperty="offMeetingMemIdx" order="BEFORE" resultType="Long">
+            select offMeetingMem_seq.nextval from dual
         </selectKey>
     </insert>
 
@@ -97,30 +140,30 @@
 
     <!-- 오프 모임 참여 하기 -->
     <insert id="joinOffMeeting">
-        insert into offMeeting
+            insert into offMeetingMem (
+            offMeetingMemIdx,
+            onMeetingMemIdx,
+            onMeetingIdx,
+            offMeetingIdx,
+            memberIdx,
+            createDate,
+            updateDate,
+            status,
+            isHost
+        )
         values (
-        #{offMeetingMemIdx},
-        #{onMeetingMemIdx},
-        #{onMeetingIdx},
-        #{offMeetingIdx},
-        #{memberIdx},
-        sysdate,
-        sysdate,
-        #{status},
-        #{isHost},
+            #{offMeetingMemIdx},
+            #{onMeetingMemIdx},
+            #{onMeetingIdx},
+            #{offMeetingIdx},
+            #{memberIdx},
+            sysdate,
+            sysdate,
+            DEFAULT,
+            DEFAULT
         )
         <selectKey keyProperty="offMeetingMemIdx" order="BEFORE" resultType="Long">
             select offMeetingMem_seq.nextval from dual
         </selectKey>
     </insert>
-
-
-<!--    <update id="joinOffMeeting">-->
-<!--        update offMeetingMem set-->
-<!--        status = 'ACTIVE'-->
-<!--        where offMeetingIdx = #{offMeetingIdx}-->
-<!--        and status = NULL-->
-<!--        or status = 'DELETED'-->
-<!--        and isHost = '0'-->
-<!--    </update>-->
 </mapper>

@@ -1,6 +1,7 @@
 package com.metanet.metamungmung.service.meeting;
 
 import com.metanet.metamungmung.dto.meeting.OffMeetingDTO;
+import com.metanet.metamungmung.dto.meeting.OffMeetingMemDTO;
 import com.metanet.metamungmung.dto.meeting.PatchOffMeetingDTO;
 import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 
@@ -18,4 +19,8 @@ public interface OffMeetingService {
     public int updateOffMeeting(PatchOffMeetingDTO patchOffMeetingDTO);
 
     public int deleteOffMeeting(Long offMeetingIdx);
+
+    public int joinOffMeeting(OffMeetingMemDTO offMeetingMemDTO);
+
+    public int registerOffMeetingHost(OffMeetingMemDTO offMeetingMemDTO);
 }
