@@ -1,8 +1,10 @@
 package com.metanet.metamungmung.controller.meeting;
 
 
+import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingBoardReplyService;
+import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +20,9 @@ public class OnMeetingBoardReplyController {
     private OnMeetingBoardReplyService service;
     // 해당 게시물 댓글 조회
     ///onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply
-    @GetMapping("{onMeetingIdx}/board/reply")
-    public List<OnMeetingBoardReplyDTO> getReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx){
-        return service.replyList(onMeetingIdx);
+    @GetMapping("{onMeetingIdx}/board/{onMeetingBoardIdx}/reply")
+    public GetOnMeetingBoardVO getReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingBoardIdx")Long onMeetingBoardIdx){
+        return service.replyList(onMeetingIdx, onMeetingBoardIdx);
     }
 
 

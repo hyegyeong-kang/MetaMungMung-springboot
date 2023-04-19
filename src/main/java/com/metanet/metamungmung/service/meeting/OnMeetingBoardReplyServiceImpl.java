@@ -1,7 +1,9 @@
 package com.metanet.metamungmung.service.meeting;
 
+import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO;
 import com.metanet.metamungmung.mapper.meeting.OnMeetingBoardReplyMapper;
+import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +17,8 @@ public class OnMeetingBoardReplyServiceImpl implements OnMeetingBoardReplyServic
 
     // 해당 게시물 댓글 조회
     @Override
-    public List<OnMeetingBoardReplyDTO> replyList(Long onMeetingIdx) {
-        return mapper.replyList(onMeetingIdx);
+    public GetOnMeetingBoardVO replyList(Long onMeetingIdx, Long onMeetingBoardIdx) {
+        return mapper.getBoardReply(onMeetingIdx, onMeetingBoardIdx);
     }
 
 
