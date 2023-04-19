@@ -4,67 +4,151 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.metanet.metamungmung.mapper.store.CartMapper">
 
-        <!-- 해당 회원 장바구니 리스트 출력 -->
-        <select id="getMyCartList"  resultMap="cartResultMap">
-            select c.cartIdx, c.memberIdx, cp.cartproductIdx, cp.productIdx, cp.quantity, p.productName, p.price, p.productImg
-            from cart c, cartproduct cp, product p
-            where c.memberIdx = 1
-            and  c.cartIdx = cp.cartIdx
-            and cp.productIdx = p.productIdx
-        </select>
+<!--        &lt;!&ndash; 해당 회원 장바구니 리스트 출력 &ndash;&gt;-->
+<!--        <select id="getMyCartList"  resultMap="cartResultMap">-->
+<!--            select c.cartIdx, c.memberIdx, cp.cartproductIdx, cp.productIdx, cp.quantity, p.productName, p.price, p.productImg-->
+<!--            from cart c, cartproduct cp, product p-->
+<!--            where c.memberIdx = 1-->
+<!--            and  c.cartIdx = cp.cartIdx-->
+<!--            and cp.productIdx = p.productIdx-->
+<!--        </select>-->
 
-        <resultMap id="cartResultMap" type="com.metanet.metamungmung.dto.store.CartDTO">
-            <result column="cartIdx" property="cartIdx"/>
-            <result column="memberIdx" property="memberIdx"/>
-            <collection property="cartProductDTOList" resultMap="cartProductMap"/>
-        </resultMap>
+<!--        <resultMap id="cartResultMap" type="com.metanet.metamungmung.dto.store.CartDTO">-->
+<!--            <result column="cartIdx" property="cartIdx"/>-->
+<!--            <result column="memberIdx" property="memberIdx"/>-->
+<!--            <collection property="cartProductDTOList" resultMap="cartProductMap"/>-->
+<!--        </resultMap>-->
 
-        <resultMap type="com.metanet.metamungmung.dto.store.CartProductDTO" id="cartProductMap" >
-                <result column="cartProductIdx" property="cartProductIdx"/>
-                <result column="productIdx" property="productIdx"/>
-                <result column="cartIdx" property="cartIdx"/>
-                <result column="quantity" property="quantity"/>
-                <association property="productDTO" resultMap="productMap" javaType="com.metanet.metamungmung.dto.store.ProductDTO"/>
-        </resultMap>
+<!--        <resultMap type="com.metanet.metamungmung.dto.store.CartProductDTO" id="cartProductMap" >-->
+<!--                <result column="cartProductIdx" property="cartProductIdx"/>-->
+<!--                <result column="productIdx" property="productIdx"/>-->
+<!--                <result column="cartIdx" property="cartIdx"/>-->
+<!--                <result column="quantity" property="quantity"/>-->
+<!--                <association property="productDTO" resultMap="productMap" javaType="com.metanet.metamungmung.dto.store.ProductDTO"/>-->
+<!--        </resultMap>-->
 
-        <resultMap type="com.metanet.metamungmung.dto.store.ProductDTO" id="productMap">
-                <result column="productIdx" property="productIdx"/>
-                <result column="category" property="category"/>
-                <result column="productName" property="productName"/>
-                <result column="brand" property="brand"/>
-                <result column="price" property="price"/>
-                <result column="productImg" property="productImg"/>
-                <result column="productDetail" property="productDetail"/>
-                <result column="volume" property="volume"/>
-        </resultMap>
+<!--        <resultMap type="com.metanet.metamungmung.dto.store.ProductDTO" id="productMap">-->
+<!--                <result column="productIdx" property="productIdx"/>-->
+<!--                <result column="category" property="category"/>-->
+<!--                <result column="productName" property="productName"/>-->
+<!--                <result column="brand" property="brand"/>-->
+<!--                <result column="price" property="price"/>-->
+<!--                <result column="productImg" property="productImg"/>-->
+<!--                <result column="productDetail" property="productDetail"/>-->
+<!--                <result column="volume" property="volume"/>-->
+<!--        </resultMap>-->
 
-        <!--  장바구니생성  -->
-        <insert id="createCart">
-            insert into cart
-            values (cart_seq.nextval, #{memberIdx})
-        </insert>
+<!--        &lt;!&ndash;  장바구니생성  &ndash;&gt;-->
+<!--        <insert id="createCart">-->
+<!--            insert into cart-->
+<!--            values (cart_seq.nextval, #{memberIdx})-->
+<!--        </insert>-->
 
-        <!--  장바구니에 물건 추가 -->
-        <insert id="addCart">
-            insert into cartproduct
-            values (cartproduct_seq.nextval, #{cartIdx}, #{productIdx}, #{quantity})
-        </insert>
+<!--        &lt;!&ndash;  장바구니에 물건 추가 &ndash;&gt;-->
+<!--        <insert id="addCart">-->
+<!--            insert into cartproduct-->
+<!--            values (cartproduct_seq.nextval, #{productIdx}, #{cartIdx}, #{quantity})-->
+<!--        </insert>-->
 
-        <!-- 장바구니 중복 상품 확인 -->
-        <select id="checkCart" resultType="int">
-            select count(*)
-            from cartproduct
-            where productIdx = #{productIdx}
-              and memberIdx = #{memberIdx}
-        </select>
+<!--        &lt;!&ndash; 장바구니 중복 상품 확인 &ndash;&gt;-->
+<!--        <select id="checkCart" resultType="int">-->
+<!--            select count(*)-->
+<!--            from cartproduct-->
+<!--            where productIdx = #{productIdx}-->
+<!--              and memberIdx = #{memberIdx}-->
+<!--        </select>-->
 
-        <!-- 중복된 상품이 있다면 넣지말고 수량 더해주기 -->
-        <update id="updateCount">
-            update cart c
-            set c.quantity = c.quantity + #{quantity}
-            where c.m_id = #{m_id}
-              and c.p_id = #{p_id}
-        </update>
+<!--        &lt;!&ndash; 중복된 상품이 있다면 넣지말고 수량 더해주기 &ndash;&gt;-->
+<!--        <update id="updateCount">-->
+<!--            update cartproduct c-->
+<!--            set c.quantity = c.quantity + #{quantity}-->
+<!--            where c.memberIdx = #{memberIdx}-->
+<!--              and c.productIdx = #{productIdx}-->
+<!--        </update>-->
 
+
+    <!-- 해당 회원 장바구니 리스트 출력 -->
+    <select id="getMyCartList"
+            resultType="com.metanet.metamungmung.dto.store.CartDTO"
+            resultMap="cartDTO">
+        select c.cartIdx, c.memberIdx, c.productIdx, c.quantity, p.productName, p.price, p.productImg
+        from cart c, product p
+        where c.productIdx = p.productIdx
+          and c.memberIdx = #{memberIdx}
+    </select>
+
+    <resultMap type="com.metanet.metamungmung.dto.store.CartDTO" id="cartDTO">
+        <result property="cartIdx" column="cartIdx"/>
+        <result property="memberIdx" column="memberIdx"/>
+        <result property="productIdx" column="productIdx"/>
+        <result property="quantity" column="quantity"/>
+        <collection property="productList" resultMap="productDTO">
+        </collection>
+    </resultMap>
+
+
+    <resultMap type="com.metanet.metamungmung.dto.store.ProductDTO" id="productDTO">
+        <result property="productIdx" column="productIdx"/>
+        <result property="category" column="category"/>
+        <result property="productName" column="productName"/>
+        <result property="brand" column="brand"/>
+        <result property="price" column="price"/>
+        <result property="productImg" column="productImg"/>
+        <result property="productDetail" column="productDetail"/>
+        <result property="productDetailImg" column="productDetailImg"/>
+        <result property="volume" column="volume"/>
+    </resultMap>
+
+
+    <!--  장바구니에 물건 추가 -->
+    <insert id="addCart">
+        insert into cart
+        values (cart_seq.nextval, #{memberIdx}, #{productIdx}, #{quantity})
+    </insert>
+
+    <!-- 장바구니 중복 상품 확인 -->
+    <select id="checkCart" resultType="int">
+        select count(*)
+        from cart
+        where productIdx = #{productIdx}
+          and memberIdx = #{memberIdx}
+    </select>
+
+    <!-- 중복된 상품이 있다면 넣지말고 수량 더해주기 -->
+    <update id="updateCount">
+        update cart c
+        set c.quantity = c.quantity + #{quantity}
+        where c.memberIdx = #{memberIdx}
+          and c.productIdx = #{productIdx}
+    </update>
+
+    <!-- 장바구니 물건 삭제 -->
+    <delete id="deleteCart">
+        delete from cart
+        where productIdx = #{productIdx}
+          and memberIdx = #{memberIdx}
+    </delete>
+
+    <!-- 장바구니 전체 비우기 -->
+    <delete id="deleteAllCart">
+        delete from cart
+        where memberIdx = #{memberIdx}
+    </delete>
+
+    <!-- 장바구니 물건 업데이트 (장바구니에서 수량변경하는 것) -->
+    <update id="updateCart" parameterType="com.metanet.metamungmung.dto.store.CartDTO">
+        update cart
+        set quantity = #{quantity}
+        where memberIdx = #{memberIdx}
+          and productIdx = #{productIdx}
+    </update>
+
+    <!-- 해당 회원의 장바구니 전체 금액 출력 -->
+    <select id="getTotalPrice" resultType="Long">
+        select nvl(sum(p.price * quantity), 0) as TOTAL_PRICE
+        from cart c, product p
+        where c.productIdx = p.productIdx
+          and memberIdx = #{memberIdx}
+    </select>
 
 </mapper>
