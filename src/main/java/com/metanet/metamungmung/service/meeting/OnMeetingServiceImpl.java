@@ -31,6 +31,7 @@ public class OnMeetingServiceImpl implements OnMeetingService {
 
     @Override
     public int modifyOnMeeting(OnMeetingDTO onMeetingDTO) {
+
         return mapper.modifyOnMeeting(onMeetingDTO);
     }
 
@@ -40,8 +41,11 @@ public class OnMeetingServiceImpl implements OnMeetingService {
     }
 
     @Override
-    public int removeOnMeeting(Long id) {
-        return mapper.removeOnMeeting(id);
+    public int removeOnMeeting(Long id, Long memberIdx) {
+        if(mapper.getOnMeetingById(id).getHostIdx() == memberIdx) {
+            return mapper.removeOnMeeting(id);
+        }
+        return 0;
     }
 
     @Override
@@ -70,7 +74,7 @@ public class OnMeetingServiceImpl implements OnMeetingService {
     }
 
     @Override
-    public OnMeetingDTO joinOnMeeting(Long onMeetingIdx) {
+    public OnMeetingDTO joinOnMeeting(Long onMeetingIdx, Long memberIdx) {
 //        OnMeetingDTO onMeetingDTO = new OnMeetingDTO();
 //        onMeetingDTO.setOnMeetingIdx(onMeetingIdx);
 //        if(onMeetingDTO.getPersonnel() > onMeetingDTO.getMemberCnt()){
@@ -86,7 +90,7 @@ public class OnMeetingServiceImpl implements OnMeetingService {
 //        return null;
         OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
         onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
-        onMeetingMemDTO.setMemberIdx(1L);
+        onMeetingMemDTO.setMemberIdx(memberIdx);
         onMeetingMemDTO.setIsHost("0");
 
         mapper.joinOnMeeting(onMeetingMemDTO);
@@ -101,10 +105,10 @@ public class OnMeetingServiceImpl implements OnMeetingService {
 
     @Override
     @Transactional
-    public int removeOnMeetingMem(Long onMeetingIdx) {
+    public int removeOnMeetingMem(Long onMeetingIdx, Long memberIdx) {
         OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
         onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
-        onMeetingMemDTO.setMemberIdx(1L);
+        onMeetingMemDTO.setMemberIdx(memberIdx);
 
         onMeetingMemDTO = mapper.getOnMeetingMemById(onMeetingMemDTO);
         if(mapper.getOnMeetingById(onMeetingMemDTO.getOnMeetingIdx()).getMemberCnt() == 1){

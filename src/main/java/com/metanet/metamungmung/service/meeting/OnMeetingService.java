@@ -14,7 +14,7 @@ public interface OnMeetingService {
     public int modifyOnMeeting(OnMeetingDTO onMeetingDTO);
     public int modifyOnMeetingPersonnel(OnMeetingDTO onMeetingDTO);
 
-    public int removeOnMeeting(Long id);
+    public int removeOnMeeting(Long id, Long memberIdx);
 
     public List<OnMeetingDTO> searchOnMeeting(String searchKeyword);
 
@@ -24,9 +24,9 @@ public interface OnMeetingService {
 
     public List<OnMeetingDTO> getOnMeetingListByMember(Long memberIdx);
 
-    public OnMeetingDTO joinOnMeeting(Long onMeetingIdx);
+    public OnMeetingDTO joinOnMeeting(Long onMeetingIdx, Long memberIdx);
 
     public OnMeetingMemDTO getOnMeetingMemById(OnMeetingMemDTO onMeetingMemDTO);
 
-    public int removeOnMeetingMem(Long onMeetingIdx);
+    public int removeOnMeetingMem(Long onMeetingIdx, Long memberIdx);
 }
