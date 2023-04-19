@@ -94,4 +94,33 @@
         and status = 'ACTIVE'
         or status = 'REACTIVE'
     </update>
+
+    <!-- 오프 모임 참여 하기 -->
+    <insert id="joinOffMeeting">
+        insert into offMeeting
+        values (
+        #{offMeetingMemIdx},
+        #{onMeetingMemIdx},
+        #{onMeetingIdx},
+        #{offMeetingIdx},
+        #{memberIdx},
+        sysdate,
+        sysdate,
+        #{status},
+        #{isHost},
+        )
+        <selectKey keyProperty="offMeetingMemIdx" order="BEFORE" resultType="Long">
+            select offMeetingMem_seq.nextval from dual
+        </selectKey>
+    </insert>
+
+
+<!--    <update id="joinOffMeeting">-->
+<!--        update offMeetingMem set-->
+<!--        status = 'ACTIVE'-->
+<!--        where offMeetingIdx = #{offMeetingIdx}-->
+<!--        and status = NULL-->
+<!--        or status = 'DELETED'-->
+<!--        and isHost = '0'-->
+<!--    </update>-->
 </mapper>
