@@ -26,4 +26,9 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getSearchProductList(String keyword) {
         return productMapper.getSearchProductList(keyword);
     }
+
+    @Override
+    public List<ProductDTO> getCategoryProductList(String keyword) {
+        return productMapper.getCategoryProductList(keyword);
+    }
 }
