@@ -3,4 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.metanet.metamungmung.mapper.store.ProductReviewMapper">
+    <!-- 리뷰 조회 -->
+    <select id="getReviewList" resultType="com.metanet.metamungmung.dto.store.ProductReviewDTO">
+        select *
+        from productReview pr
+        left join product p
+        on pr.productIdx = p.productIdx
+        where pr.productIdx = #{productIdx}
+        and pr.status = 'ACTIVE'
+        order by createDate DESC
+    </select>
 </mapper>
