@@ -7,6 +7,7 @@ import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface OffMeetingMapper {
@@ -25,4 +26,8 @@ public interface OffMeetingMapper {
     public int joinOffMeeting(OffMeetingMemDTO offMeetingMemDTO);
 
     public int registerOffMeetingHost(OffMeetingMemDTO offMeetingMemDTO);
+
+    public OffMeetingMemDTO checkMemberByMemberIdx(Map<String, Long> map);
+
+    public int cancelJoinOffMeeting(Map<String, Long> map);
 }

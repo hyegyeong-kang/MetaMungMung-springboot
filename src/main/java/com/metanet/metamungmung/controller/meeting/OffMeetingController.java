@@ -7,7 +7,9 @@ import com.metanet.metamungmung.service.meeting.OffMeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/offMeetings")
@@ -141,36 +143,66 @@ public class OffMeetingController {
      **/
     @PostMapping("/{offMeetingIdx}/join")
     public String joinOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody OffMeetingMemDTO offMeetingMemDTO) {
-        offMeetingMemDTO.setOffMeetingIdx(offMeetingIdx);
-        offMeetingMemDTO.setMemberIdx(10L);
-        offMeetingMemDTO.setOnMeetingMemIdx(44L);
-        offMeetingMemDTO.setOnMeetingIdx(14L);
+        /* 임시 회원 */
+        Long findMemberIdx = 10L;
 
-        int idx = offMeetingService.joinOffMeeting(offMeetingMemDTO);
+        offMeetingMemDTO.setOffMeetingIdx(offMeetingIdx);
+
+        Map<String, Long> map = new HashMap<>();
+        map.put("offMeetingIdx", offMeetingIdx);
+        map.put("findMemberIdx", findMemberIdx);
+
         String result = "";
 
-        if(idx == 1) {
-           result = "참여가 완료되었습니다.";
+        /* 이미 참여한 멤버인지 조회*/
+        OffMeetingMemDTO findOffMeetingMem = offMeetingService.checkMemberByMemberIdx(map);
+
+        if(findOffMeetingMem != null) {
+            result = "이미 참여한 회원입니다.";
+        } else if(findOffMeetingMem == null) {
+            /* offMeetingMemDTO에 해당하는 값 저장*/
+            offMeetingMemDTO.setMemberIdx(findMemberIdx);
+            offMeetingMemDTO.setOnMeetingMemIdx(44L);
+            offMeetingMemDTO.setOnMeetingIdx(14L);
+
+            /* offMeetingMemDTO 참여하는 코드 (오프 모임 회원 등록)*/
+            int idx2 = offMeetingService.joinOffMeeting(offMeetingMemDTO);
+
+            if(idx2 == 1) {
+                result = "참여가 완료되었습니다.";
+            }
         }
 
         return result;
     }
 
-//    /**
-//     * OFF 모임 참여 취소
-//     * [POST] /offMeetings/:offMeetingIdx/join
-//     * @return String
-//     **/
-//    @PostMapping("/{offMeetingIdx}/join")
-//    public String cancelJoinOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
-//        int idx = offMeetingService.cancelJoinOffMeeting(offMeetingIdx);
-//        String result = "";
-//
-//        if(idx == 1) {
-//            result = "참여가 취소되었습니다.";
-//        } else {
-//            joinOffMeeting(offMeetingIdx);
-//        }
-//        return result;
-//    }
+    /**
+     * OFF 모임 참여 취소
+     * [DELETE] /offMeetings/:offMeetingIdx/join
+     * @return String
+     **/
+    @DeleteMapping("/{offMeetingIdx}/join")
+    public String cancelJoinOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
+        /* 임시 회원 */
+        Long findMemberIdx = 10L;
+
+        Map<String, Long> map = new HashMap<>();
+        map.put("offMeetingIdx", offMeetingIdx);
+        map.put("findMemberIdx", findMemberIdx);
+
+        String result = "";
+
+        /* 이미 참여한 멤버인지 조회*/
+        OffMeetingMemDTO findOffMeetingMem = offMeetingService.checkMemberByMemberIdx(map);
+
+        if(findOffMeetingMem != null) {
+            int idx = offMeetingService.cancelJoinOffMeeting(map);
+
+            if(idx == 1) {
+                result = "참여가 취소되었습니다.";
+            }
+        }
+
+        return result;
+    }
 }

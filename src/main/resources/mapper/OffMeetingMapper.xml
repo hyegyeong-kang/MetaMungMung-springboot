@@ -138,6 +138,16 @@
         or status = 'REACTIVE'
     </update>
 
+    <!-- 오프 모임 참여 회원인지 체크 -->
+    <select id="checkMemberByMemberIdx" parameterType="map" resultType="com.metanet.metamungmung.dto.meeting.OffMeetingMemDTO">
+        select *
+        from
+            offMeetingMem
+        where memberIdx = #{findMemberIdx}
+        and offMeetingIdx = #{offMeetingIdx}
+        and status = 'ACTIVE'
+    </select>
+
     <!-- 오프 모임 참여 하기 -->
     <insert id="joinOffMeeting">
             insert into offMeetingMem (
@@ -166,4 +176,12 @@
             select offMeetingMem_seq.nextval from dual
         </selectKey>
     </insert>
+
+    <!-- 오프 모임 참여 취소 -->
+    <delete id="cancelJoinOffMeeting" parameterType="map">
+        delete offMeetingMem
+        where memberIdx = #{findMemberIdx}
+        and offMeetingIdx = #{offMeetingIdx}
+        and status = 'ACTIVE'
+    </delete>
 </mapper>

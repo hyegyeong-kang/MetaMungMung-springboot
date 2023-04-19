@@ -6,6 +6,7 @@ import com.metanet.metamungmung.dto.meeting.PatchOffMeetingDTO;
 import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface OffMeetingService {
     public List<OffMeetingDTO> getOffMeetingList();
@@ -23,4 +24,8 @@ public interface OffMeetingService {
     public int joinOffMeeting(OffMeetingMemDTO offMeetingMemDTO);
 
     public int registerOffMeetingHost(OffMeetingMemDTO offMeetingMemDTO);
+
+    public OffMeetingMemDTO checkMemberByMemberIdx(Map<String, Long> map);
+
+    public int cancelJoinOffMeeting(Map<String, Long> map);
 }
