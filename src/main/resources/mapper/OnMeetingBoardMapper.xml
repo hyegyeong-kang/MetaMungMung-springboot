@@ -4,4 +4,101 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.metanet.metamungmung.mapper.meeting.OnMeetingBoardMapper">
 
+    <!--하나의 모임에 있는 게시글 목록 출력-->
+    <select id="getBoardList"  resultMap="boardResultMap">
+        select *
+        from onMeeting o, onMeetingBoard ob, onMeetingMem om, member m
+        where ob.onMeetingMemIdx = om.onMeetingMemIdx
+          and om.memberIdx = m.memberIdx
+          and o.onMeetingIdx = #{onMeetingIdx}
+    </select>
+
+    <resultMap id="boardResultMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingVO">
+        <result column="onMeetingIdx" property="onMeetingIdx"/>
+        <result column="onMeetName" property="onMeetName"/>
+        <result column="createDate" property="createDate"/>
+        <result column="updateDate" property="updateDate"/>
+        <result column="introduction" property="introduction"/>
+        <result column="thumbnail" property="thumbnail"/>
+        <result column="personnel" property="personnel"/>
+        <collection property="boardList" resultMap="boardMap"/>
+<!--        <collection property="onMeetingMembers" resultMap="onMeetingMemMap"/>-->
+    </resultMap>
+
+    <resultMap type="com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO" id="boardMap">
+        <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
+        <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
+        <result column="onMeetingIdx" property="onMeetingIdx"/>
+        <result column="memberIdx" property="memberIdx"/>
+        <result column="writer" property="writer"/>
+        <result column="contents" property="contents"/>
+        <result column="onMeetingBoardAddr" property="onMeetingBoardAddr"/>
+        <result column="createDate" property="createDate"/>
+        <result column="updateDate" property="updateDate"/>
+        <association property="onMeetingMember" resultMap="OnMemMap" javaType="com.metanet.metamungmung.vo.meeting.GetOnMeetingMemVO"/>
+    </resultMap>
+
+    <resultMap type="com.metanet.metamungmung.dto.member.MemberDTO" id="OnMemMap" >
+        <result column="memberIdx" property="memberIdx"/>
+        <result column="memberId" property="memberId"/>
+        <result column="password" property="password"/>
+        <result column="memberName" property="memberName"/>
+        <result column="sex" property="sex"/>
+        <result column="birth" property="birth"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="address1" property="address1"/>
+        <result column="address2" property="address2"/>
+        <result column="authority" property="authority"/>
+        <result column="status" property="status"/>
+        <result column="point" property="point"/>
+        <result column="memberImg" property="memberImg"/>
+        <result column="createDate" property="createDate"/>
+        <result column="updateDate" property="updateDate"/>
+    </resultMap>
+
+
+    <!--해당 모임 멤버 리스트 출력-->
+    <select id="getOnMeetingMembers" resultMap="memberListMap">
+        select *
+        from onMeeting o, onMeetingMem om, member m
+        where om.memberIdx = m.memberIdx
+        and o.onMeetingIdx = #{onMeetingIdx}
+    </select>
+
+    <resultMap id="memberListMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeeting2VO">
+        <result column="memberIdx" property="memberIdx"/>
+<!--        <result column="memberName" property="memberName"/>-->
+<!--        <result column="memberImg" property="memberImg"/>-->
+        <collection property="memberList" resultMap="memberMap"/>
+    </resultMap>
+
+    <resultMap type="com.metanet.metamungmung.dto.member.MemberDTO" id="memberMap">
+        <result column="memberIdx" property="memberIdx"/>
+        <result column="memberId" property="memberId"/>
+        <result column="password" property="password"/>
+        <result column="memberName" property="memberName"/>
+        <result column="sex" property="sex"/>
+        <result column="birth" property="birth"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="address1" property="address1"/>
+        <result column="address2" property="address2"/>
+        <result column="authority" property="authority"/>
+        <result column="status" property="status"/>
+        <result column="point" property="point"/>
+        <result column="memberImg" property="memberImg"/>
+        <result column="createDate" property="createDate"/>
+        <result column="updateDate" property="updateDate"/>
+    </resultMap>
+
+    <!--모임 전체 가입자 수  -->
+    <select id="getOnMeetingMembersCnt" resultMap="memberListMap">
+        select count(*)
+        from onMeeting o, onMeetingMem om, member m
+        where om.memberIdx = m.memberIdx
+          and o.onMeetingIdx = #{onMeetingIdx}
+    </select>
+
+
 </mapper>
