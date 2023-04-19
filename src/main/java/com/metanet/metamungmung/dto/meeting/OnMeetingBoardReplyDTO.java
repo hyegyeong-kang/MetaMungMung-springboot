@@ -14,4 +14,5 @@ public class OnMeetingBoardReplyDTO {
     private String contents;
     private Date createDate;
     private Date updateDate;
+    private String writer;
 }
