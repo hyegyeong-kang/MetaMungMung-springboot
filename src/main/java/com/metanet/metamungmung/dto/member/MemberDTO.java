@@ -1,11 +1,23 @@
 package com.metanet.metamungmung.dto.member;
 
+import io.swagger.models.auth.In;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
-public class MemberDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class MemberDTO implements UserDetails {
     private Long memberIdx;
     private String memberId;
     private String password;
@@ -22,5 +34,44 @@ public class MemberDTO {
     private String memberImg;
     private Date createDate;
     private Date updateDate;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singletonList(new SimpleGrantedAuthority(authority));
+    }
+
+    @Override
+    public String getUsername() {
+        return memberId;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return status.equals("ACTIVE");
+    }
+
+//    public List<SimpleGrantedAuthority> getAuthorities() {
+//        return authority.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+//    }
 
 }
