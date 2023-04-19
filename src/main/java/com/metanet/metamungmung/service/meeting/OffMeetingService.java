@@ -17,4 +17,5 @@ public interface OffMeetingService {
 
     public int updateOffMeeting(PatchOffMeetingDTO patchOffMeetingDTO);
 
+    public int deleteOffMeeting(Long offMeetingIdx);
 }

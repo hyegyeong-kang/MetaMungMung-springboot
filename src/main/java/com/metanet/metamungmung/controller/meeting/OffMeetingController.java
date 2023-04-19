@@ -5,7 +5,6 @@ import com.metanet.metamungmung.dto.meeting.PatchOffMeetingDTO;
 import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 import com.metanet.metamungmung.service.meeting.OffMeetingService;
 import lombok.AllArgsConstructor;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -69,12 +68,31 @@ public class OffMeetingController {
     public OffMeetingDTO modifyOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody PatchOffMeetingDTO patchOffMeetingDTO) {
         OffMeetingDTO newOffMeeting = null;
         patchOffMeetingDTO.setOffMeetingIdx(offMeetingIdx);
-        int idx =offMeetingService.updateOffMeeting(patchOffMeetingDTO);
+        int idx = offMeetingService.updateOffMeeting(patchOffMeetingDTO);
 
         if (idx == 1) {
             newOffMeeting = offMeetingService.getOffMeeting(offMeetingIdx) ;
         }
 
         return newOffMeeting;
+    }
+
+    /**
+     * OFF 모임 삭제
+     * [PATCh] /offMeetings/:offMeetingIdx
+     * @return String
+     **/
+    @PostMapping("/{offMeetingIdx}")
+    public String deleteOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
+        int idx = offMeetingService.deleteOffMeeting(offMeetingIdx);
+        String result = "";
+
+        if (idx == 1) {
+            result = "삭제되었습니다.";
+        } else {
+            result = "존재하지 않는 모임 게시글입니다.";
+        }
+
+        return result;
     }
 }

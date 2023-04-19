@@ -82,4 +82,13 @@
             startTime = #{startTime}
         where offMeetingIdx = #{offMeetingIdx}
     </update>
+
+    <!-- 오프 모임 삭제 -->
+    <update id="deleteOffMeeting">
+        update offMeeting set
+        status = 'DELETED'
+        where offMeetingIdx = #{offMeetingIdx}
+        and status = 'ACTIVE'
+        or status = 'REACTIVE'
+    </update>
 </mapper>

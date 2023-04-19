@@ -18,4 +18,6 @@ public interface OffMeetingMapper {
     public List<GetOffMeetingVO> getOffMeetingMembers(Long offMeetingIdx);
 
     public int updateOffMeeting(PatchOffMeetingDTO patchOffMeetingDTO);
+
+    public int deleteOffMeeting(Long offMeetingIdx);
 }

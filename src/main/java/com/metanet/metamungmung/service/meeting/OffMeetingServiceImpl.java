@@ -38,4 +38,9 @@ public class OffMeetingServiceImpl implements OffMeetingService {
     public int updateOffMeeting(PatchOffMeetingDTO patchOffMeetingDTO) {
         return offMeetingMapper.updateOffMeeting(patchOffMeetingDTO);
     }
+
+    @Override
+    public int deleteOffMeeting(Long offMeetingIdx) {
+        return offMeetingMapper.deleteOffMeeting(offMeetingIdx);
+    }
 }
