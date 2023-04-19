@@ -11,5 +11,6 @@ public class ProductDTO {
     private Long price;
     private String productImg;
     private String productDetail;
+    private String productDetailImg;
     private String volume;
 }

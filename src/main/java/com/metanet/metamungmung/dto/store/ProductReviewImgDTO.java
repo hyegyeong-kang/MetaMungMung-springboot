@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class ProductReviewImg {
+public class ProductReviewImgDTO {
     private Long productReviewImgIdx;
     private Long productReviewIdx;
     private String fileName;

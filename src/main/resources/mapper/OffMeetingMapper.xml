@@ -3,17 +3,92 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.metanet.metamungmung.mapper.meeting.OffMeetingMapper">
+    <!-- 오프 모임 목록 조회 -->
     <select id="getOffMeetingList" resultType="com.metanet.metamungmung.dto.meeting.OffMeetingDTO">
-        select * from offMeeting where status = 'ACTIVE'
+        select *
+        from
+            offMeeting
+        where
+            status = 'ACTIVE' or status = 'REACTIVE'
+        order by createDate desc
     </select>
 
+    <!--오프 모임 상세 조회-->
     <select id="getOffMeeting" resultType="com.metanet.metamungmung.dto.meeting.OffMeetingDTO">
-        select * from offMeeting where offMeetingIdx = #{offMeetingIdx}
+        select *
+        from
+            offMeeting
+        where
+            offMeetingIdx = #{offMeetingIdx}
+            and status = 'ACTIVE'
+        order by createDate desc
     </select>
 
+    <!--오프 모임 참여자 목록 조회-->
+    <resultMap id="GetOffMeetingMemVO" type="com.metanet.metamungmung.vo.meeting.GetOffMeetingMemVO">
+        <result column="memberIdx" property="memberIdx"></result>
+        <result column="memberId" property="memberId"></result>
+        <result column="sex" property="sex"></result>
+        <result column="birth" property="birth"></result>
+        <result column="memberImg" property="memberImg"></result>
+    </resultMap>
+
+    <resultMap id="GetOffMeetingVO" type="com.metanet.metamungmung.vo.meeting.GetOffMeetingVO">
+        <result column="offMeetingIdx" property="offMeetingIdx"></result>
+        <collection property="offMeetingMembers" resultMap="GetOffMeetingMemVO"></collection>
+    </resultMap>
+
+    <select id="getOffMeetingMembers" parameterType="com.metanet.metamungmung.vo.meeting.GetOffMeetingVO" resultMap="GetOffMeetingVO">
+        select *
+        from
+            offMeetingMem a
+        left join
+            member b
+            on a.memberIdx = b.memberIdx
+        where
+            a.offMeetingIdx = #{offMeetingIdx}
+            and a.status = 'ACTIVE'
+            and b.status = 'ACTIVE'
+        order by b.memberId
+    </select>
+
+    <!-- 오프 모임 등록 -->
     <insert id="registerOffMeeting">
         insert into offMeeting
-            values (#{offMeetingIdx}, #{memberIdx}, #{offMeetingMemIdx}, #{onMeetingIdx}, #{title}, sysdate, #{limit},
-                #{contents},sysdate, sysdate,#{latitude}, #{longitude}, #{locationAddress}, #{startTime}, #{status})
+        values (
+                #{offMeetingIdx},
+                #{title},
+                sysdate,
+                #{limit},
+                #{contents},
+                sysdate,
+                sysdate,
+                #{status},
+                #{latitude},
+                #{longitude},
+                #{locationAddress},
+                #{startTime}
+        )
     </insert>
+
+    <!-- 오프 모임 수정 -->
+    <update id="updateOffMeeting">
+        update offMeeting set
+            title = #{title},
+            meetingDate = #{meetingDate},
+            limit = #{limit},
+            contents = #{contents},
+            updateDate = sysdate,
+            startTime = #{startTime}
+        where offMeetingIdx = #{offMeetingIdx}
+    </update>
+
+    <!-- 오프 모임 삭제 -->
+    <update id="deleteOffMeeting">
+        update offMeeting set
+        status = 'DELETED'
+        where offMeetingIdx = #{offMeetingIdx}
+        and status = 'ACTIVE'
+        or status = 'REACTIVE'
+    </update>
 </mapper>
