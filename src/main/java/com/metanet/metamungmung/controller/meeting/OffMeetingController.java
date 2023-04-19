@@ -1,22 +1,31 @@
 package com.metanet.metamungmung.controller.meeting;
 
-import com.metanet.metamungmung.dto.meeting.OffMeetingDTO;
-import com.metanet.metamungmung.dto.meeting.PatchOffMeetingDTO;
+import com.metanet.metamungmung.dto.meeting.*;
+import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 import com.metanet.metamungmung.service.meeting.OffMeetingService;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/offMeetings")
-@AllArgsConstructor
 public class OffMeetingController {
-    private OffMeetingService offMeetingService;
+
+    @Autowired
+    private final OffMeetingService offMeetingService;
+
+    @Autowired
+    private final OnMeetingService onMeetingService;
+
+    public OffMeetingController(OffMeetingService offMeetingService, OnMeetingService onMeetingService) {
+        this.offMeetingService = offMeetingService;
+        this.onMeetingService = onMeetingService;
+    }
 
     /**
-     * OFF 모임 등록 API
+     * OFF 모임 조회 API
      * [GET] /offMeetings
      * @return List<OffMeetingDTO>
      **/
@@ -33,8 +42,37 @@ public class OffMeetingController {
      * @return OffMeetingDTO
      **/
     @PostMapping("")
-    public void createOffMeeting(@RequestBody OffMeetingDTO offMeetingDTO) {
+    public String createOffMeeting(@RequestBody OffMeetingDTO offMeetingDTO) {
+        /* 오프모임을 생성한다. */
         offMeetingService.registerOffMeeting(offMeetingDTO);
+
+        /* 생성된 오프모임의 offMeetingIdx를 가져온다. */
+        Long newOffMeetingIdx = offMeetingDTO.getOffMeetingIdx();
+
+        /* OffMeetingMemDTO 객체 생성 */
+        OffMeetingMemDTO offMeetingMemDTO = new OffMeetingMemDTO();
+
+        /* 생성된 오프모임의 offMeetingIdx를 넣어서 오프 모임 회원을 호스트로 생성한다. */
+        offMeetingMemDTO.setOffMeetingIdx(newOffMeetingIdx);
+
+        /* 임시 onMeetingMemIdx, onMeetingIdx */
+        offMeetingMemDTO.setOnMeetingMemIdx(45L);
+        offMeetingMemDTO.setOnMeetingIdx(14L);
+        offMeetingMemDTO.setMemberIdx(11L);
+
+        /* 등록과 동시에 호스트가 된다. */
+        int idx = offMeetingService.registerOffMeetingHost(offMeetingMemDTO);
+
+        /* 결과 */
+        String result = "";
+
+        if(idx == 1) {
+            result = "오프 모임이 생성되었습니다. 호스트로 지정되었습니다.";
+        } else {
+            result = "오프 모임 생성에 실패하였습니다.";
+        }
+
+        return result;
     }
 
     /**
@@ -61,7 +99,7 @@ public class OffMeetingController {
 
     /**
      * OFF 모임 수정
-     * [PATCh] /offMeetings/:offMeetingIdx
+     * [PATCH] /offMeetings/:offMeetingIdx
      * @return OffMeetingDTO
      **/
     @PatchMapping("/{offMeetingIdx}")
@@ -79,7 +117,7 @@ public class OffMeetingController {
 
     /**
      * OFF 모임 삭제
-     * [PATCh] /offMeetings/:offMeetingIdx
+     * [POST] /offMeetings/:offMeetingIdx
      * @return String
      **/
     @PostMapping("/{offMeetingIdx}")
@@ -95,4 +133,44 @@ public class OffMeetingController {
 
         return result;
     }
+
+    /**
+     * OFF 모임 참여하기
+     * [POST] /offMeetings/:offMeetingIdx/join
+     * @return String
+     **/
+    @PostMapping("/{offMeetingIdx}/join")
+    public String joinOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody OffMeetingMemDTO offMeetingMemDTO) {
+        offMeetingMemDTO.setOffMeetingIdx(offMeetingIdx);
+        offMeetingMemDTO.setMemberIdx(10L);
+        offMeetingMemDTO.setOnMeetingMemIdx(44L);
+        offMeetingMemDTO.setOnMeetingIdx(14L);
+
+        int idx = offMeetingService.joinOffMeeting(offMeetingMemDTO);
+        String result = "";
+
+        if(idx == 1) {
+           result = "참여가 완료되었습니다.";
+        }
+
+        return result;
+    }
+
+//    /**
+//     * OFF 모임 참여 취소
+//     * [POST] /offMeetings/:offMeetingIdx/join
+//     * @return String
+//     **/
+//    @PostMapping("/{offMeetingIdx}/join")
+//    public String cancelJoinOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
+//        int idx = offMeetingService.cancelJoinOffMeeting(offMeetingIdx);
+//        String result = "";
+//
+//        if(idx == 1) {
+//            result = "참여가 취소되었습니다.";
+//        } else {
+//            joinOffMeeting(offMeetingIdx);
+//        }
+//        return result;
+//    }
 }

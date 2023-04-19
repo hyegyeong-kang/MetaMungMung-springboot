@@ -4,7 +4,6 @@ import com.metanet.metamungmung.dto.member.MemberDTO;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 public class OffMeetingMemDTO {
@@ -17,5 +16,4 @@ public class OffMeetingMemDTO {
     private Date updateDate;
     private String status;
     private String isHost;
-    private List<MemberDTO> offMeetingMemberList;
 }
