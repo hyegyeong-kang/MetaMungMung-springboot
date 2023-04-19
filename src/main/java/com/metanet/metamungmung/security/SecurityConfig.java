@@ -54,11 +54,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+    @Bean
     public JwtFilter JwtFilter() throws Exception {
         return new JwtFilter(authenticationManager(), memberMapper);
     }
 
-    private AuthenticationFilter getAuthenticationFilter() throws Exception{
+    @Bean
+    public AuthenticationFilter getAuthenticationFilter() throws Exception{
         return new AuthenticationFilter(authenticationManager(), memberMapper);
     }
 

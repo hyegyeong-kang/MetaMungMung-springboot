@@ -1,5 +1,8 @@
 package com.metanet.metamungmung.security;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.mapper.member.MemberMapper;
 import io.jsonwebtoken.Jwts;
@@ -18,7 +21,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Collections;
+import java.util.Map;
+
 
 public class JwtFilter extends BasicAuthenticationFilter {
 
@@ -83,4 +89,24 @@ public class JwtFilter extends BasicAuthenticationFilter {
         }
         return returnValue;
     }
+
+    public long getMemberIdxFromToken(String token) {
+        String[] tokenArr = token.split("\\.");
+        String payload = tokenArr[1];
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+        String decodedPayload = new String(decoder.decode(payload));
+
+        // JSON 형태의 문자열을 Map으로 변환합니다.
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> payloadMap = null;
+        try {
+            payloadMap = objectMapper.readValue(decodedPayload, new TypeReference<Map<String, Object>>(){});
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        // "memberIdx" 키의 값을 Long 타입으로 반환합니다.
+        return ((Number)payloadMap.get("memberIdx")).longValue();
+    }
+
 }
