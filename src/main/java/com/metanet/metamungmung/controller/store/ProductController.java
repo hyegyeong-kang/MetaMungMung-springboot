@@ -60,4 +60,16 @@ public class ProductController {
         List<ProductDTO> productList = productService.getCategoryProductList(keyword);
         return productList;
     }
+
+    /**
+     * 카테고리 및 상품 검색 API
+     * [GET] /products/categorySearch?category={category}&keyword={keyword}
+     * @return List<ProductDTO>
+     **/
+    @GetMapping("/categorySearch")
+    public List<ProductDTO> categorySearchProductList(@RequestParam(name = "category") String category ,@RequestParam(name = "keyword") String keyword) {
+
+        List<ProductDTO> productList = productService.getCategorySearchProductList(category, keyword);
+        return productList;
+    }
 }

@@ -38,4 +38,14 @@
         where category LIKE '%'||TRIM(#{keyword})||'%'
         order by productName
     </select>
+
+    <!-- 카테고리안에서 상품 검색 (상품 가나다순 정렬) -->
+    <select id="getCategorySearchProductList" resultType="com.metanet.metamungmung.dto.store.ProductDTO">
+        select *
+        from product
+        where category LIKE '%'||TRIM(#{category})||'%'
+        and productName LIKE '%'||TRIM(#{keyword})||'%'
+        OR brand LIKE '%'||TRIM(#{keyword})||'%'
+        order by productName
+    </select>
 </mapper>

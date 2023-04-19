@@ -14,4 +14,6 @@ public interface ProductMapper {
     public List<ProductDTO> getSearchProductList(String keyword);
 
     public List<ProductDTO> getCategoryProductList(String keyword);
+
+    public List<ProductDTO> getCategorySearchProductList(String category, String keyword);
 }
