@@ -3,4 +3,30 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.metanet.metamungmung.mapper.store.ProductMapper">
+
+    <!-- 상품 조회 (상품 가나다순 정렬) -->
+    <select id="getProductList" resultType="com.metanet.metamungmung.dto.store.ProductDTO">
+        <![CDATA[
+            select *
+            from
+                product
+            where productIdx > 0
+            order by productName
+        ]]>
+    </select>
+
+    <!-- 상품 상세 조회 -->
+    <select id="getProduct" resultType="com.metanet.metamungmung.dto.store.ProductDTO">
+        select *
+        from product
+        where productIdx = #{productIdx}
+    </select>
+
+    <!-- 상품 검색 -->
+    <select id="getSearchProductList" resultType="com.metanet.metamungmung.dto.store.ProductDTO">
+        select *
+        from product
+        where productName LIKE '%'||TRIM(#{keyword})||'%'
+        OR brand LIKE '%'||TRIM(#{keyword})||'%'
+    </select>
 </mapper>
