@@ -14,8 +14,8 @@ public class OnMeetingServiceImpl implements OnMeetingService {
     @Autowired
     private OnMeetingMapper mapper;
 
-    @Transactional
     @Override
+    @Transactional
     public OnMeetingDTO createOnMeeting(OnMeetingDTO onMeetingDTO, OnMeetingMemDTO onMeetingMemDTO){
         mapper.createOnMeeting(onMeetingDTO);
         onMeetingMemDTO.setIsHost("1");
@@ -46,13 +46,23 @@ public class OnMeetingServiceImpl implements OnMeetingService {
 
     @Override
     public List<OnMeetingDTO> searchOnMeeting(String searchKeyword) {
+//        if(category.equals("전체")){
+//            return mapper.searchOnMeeting(searchKeyword);
+//        }
+//        return mapper.searchOnMeetingWithCategory(searchKeyword, category);
         return mapper.searchOnMeeting(searchKeyword);
     }
+
 
     @Override
     public List<OnMeetingDTO> getRecommendOnMeetingList(Long memberIdx) {
         return mapper.getRecommendOnMeetingList(memberIdx);
     }
+
+//    @Override
+//    public List<OnMeetingDTO> getRecommendOnMeetingListWithCategory(String memberIdx, String category) {
+//        return mapper.getRecommendOnMeetingListWithCategory(memberIdx, category);
+//    }
 
     @Override
     public List<OnMeetingDTO> getOnMeetingListByMember(Long memberIdx) {
@@ -60,10 +70,28 @@ public class OnMeetingServiceImpl implements OnMeetingService {
     }
 
     @Override
-    public OnMeetingMemDTO joinOnMeeting(OnMeetingMemDTO onMeetingMemDTO) {
-        mapper.createOnMeetingMem(onMeetingMemDTO);
+    public OnMeetingDTO joinOnMeeting(Long onMeetingIdx) {
+//        OnMeetingDTO onMeetingDTO = new OnMeetingDTO();
+//        onMeetingDTO.setOnMeetingIdx(onMeetingIdx);
+//        if(onMeetingDTO.getPersonnel() > onMeetingDTO.getMemberCnt()){
+//            OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
+//            onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
+//            onMeetingMemDTO.setMemberIdx(1L);
+//            onMeetingMemDTO.setIsHost("0");
+//
+//            mapper.joinOnMeeting(onMeetingMemDTO);
+//
+//            return mapper.getOnMeetingById(onMeetingMemDTO.getOnMeetingIdx());
+//        }
+//        return null;
+        OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
+        onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
+        onMeetingMemDTO.setMemberIdx(1L);
+        onMeetingMemDTO.setIsHost("0");
 
-        return mapper.getOnMeetingMemById(onMeetingMemDTO);
+        mapper.joinOnMeeting(onMeetingMemDTO);
+
+        return mapper.getOnMeetingById(onMeetingMemDTO.getOnMeetingIdx());
     }
 
     @Override
@@ -72,9 +100,18 @@ public class OnMeetingServiceImpl implements OnMeetingService {
     }
 
     @Override
-    public int removeOnMeetingMem(OnMeetingMemDTO onMeetingMemDTO) {
+    @Transactional
+    public int removeOnMeetingMem(Long onMeetingIdx) {
+        OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
+        onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
+        onMeetingMemDTO.setMemberIdx(1L);
+
+        onMeetingMemDTO = mapper.getOnMeetingMemById(onMeetingMemDTO);
         if(mapper.getOnMeetingById(onMeetingMemDTO.getOnMeetingIdx()).getMemberCnt() == 1){
             // 온모임 멤버 삭제 + 온모임 삭제
+            if(mapper.removeOnMeetingMem(onMeetingMemDTO) == 1){
+                return mapper.removeOnMeeting(onMeetingMemDTO.getOnMeetingIdx());
+            }
         }
         return mapper.removeOnMeetingMem(onMeetingMemDTO);
     }

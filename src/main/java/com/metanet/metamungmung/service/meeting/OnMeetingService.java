@@ -20,11 +20,13 @@ public interface OnMeetingService {
 
     public List<OnMeetingDTO> getRecommendOnMeetingList(Long memberIdx);
 
+//    public List<OnMeetingDTO> getRecommendOnMeetingListWithCategory(String memberIdx, String category);
+
     public List<OnMeetingDTO> getOnMeetingListByMember(Long memberIdx);
 
-    public OnMeetingMemDTO joinOnMeeting(OnMeetingMemDTO onMeetingMemDTO);
+    public OnMeetingDTO joinOnMeeting(Long onMeetingIdx);
 
     public OnMeetingMemDTO getOnMeetingMemById(OnMeetingMemDTO onMeetingMemDTO);
 
-    public int removeOnMeetingMem(OnMeetingMemDTO onMeetingMemDTO);
+    public int removeOnMeetingMem(Long onMeetingIdx);
 }

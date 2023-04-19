@@ -11,6 +11,8 @@ public interface OnMeetingMapper {
     public void createOnMeeting(OnMeetingDTO onMeetingDTO);
     public void createOnMeetingMem(OnMeetingMemDTO onMeetingMemDTO);
 
+    public void joinOnMeeting(OnMeetingMemDTO onMeetingMemDTO);
+
     public OnMeetingDTO getOnMeetingById(Long onMeetingIdx);
 
     public int modifyOnMeeting(OnMeetingDTO onMeetingDTO);
@@ -20,7 +22,11 @@ public interface OnMeetingMapper {
 
     public List<OnMeetingDTO> searchOnMeeting(String searchKeyword);
 
+//    public List<OnMeetingDTO> searchOnMeetingWithCategory(String searchKeyword, String category);
+
     public List<OnMeetingDTO> getRecommendOnMeetingList(Long memberIdx);
+
+//    public List<OnMeetingDTO> getRecommendOnMeetingListWithCategory(String memberIdx, String category);
 
     public List<OnMeetingDTO> getOnMeetingListByMember(Long memberIdx);
 

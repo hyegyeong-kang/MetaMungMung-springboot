@@ -45,11 +45,6 @@ public class OnMeetingController {
         return service.createOnMeeting(onMeetingDTO, onMeetingMemDTO);
     }
 
-//    @PostMapping("/{id}/join")
-//    public OnMeetingDTO joinOnMeeting(@RequestBody MemberDTO memberDTO){
-//
-//    }
-
     @PutMapping("/{id}")
     public OnMeetingDTO modifyOnMeeting(@PathVariable("id") Long id,
                                                         @RequestBody OnMeetingDTO onMeetingDTO){
@@ -75,19 +70,20 @@ public class OnMeetingController {
 
     @GetMapping("/search")
     public List<OnMeetingDTO> searchOnMeeting(@RequestParam String keyword){
-        System.out.println(keyword);
+
         return service.searchOnMeeting(keyword);
+    }
+
+    @PostMapping("/{id}/join")
+    public OnMeetingDTO joinOnMeeting(@PathVariable("id") Long id){
+
+        return service.joinOnMeeting(id);
     }
 
     @DeleteMapping("/{id}/withdraw")
     public int withdrawOnMeeting(@PathVariable("id") Long id){
-        OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
-        onMeetingMemDTO.setOnMeetingIdx(id);
-        onMeetingMemDTO.setMemberIdx(1L);
 
-        onMeetingMemDTO = service.getOnMeetingMemById(onMeetingMemDTO);
-
-        return service.removeOnMeetingMem(onMeetingMemDTO);
+        return service.removeOnMeetingMem(id);
     }
 
     @DeleteMapping("/{id}")
