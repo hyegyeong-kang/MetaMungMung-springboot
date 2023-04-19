@@ -1,5 +1,6 @@
 package com.metanet.metamungmung.dto.meeting;
 
+import com.metanet.metamungmung.dto.member.MemberDTO;
 import lombok.Data;
 
 import java.util.Date;
@@ -10,12 +11,13 @@ public class OnMeetingBoardDTO {
     private Long onMeetingBoardIdx;
     private Long onMeetingMemIdx;
     private Long onMeetingIdx;
-    private Long MemberIdx;
+    private Long memberIdx;
     private String writer;
     private String contents;
     private String onMeetingBoardAddr;
     private Date createDate;
     private Date updateDate;
-    private List<OnMeetingBoardReplyDTO> boardReplyList;
-    private List<OnMeetingBoardImgDTO> BoardImageList;
+    private MemberDTO onMeetingMember;
+    //private List<OnMeetingBoardReplyDTO> boardReplyList;
+    //private List<OnMeetingBoardImgDTO> BoardImageList;
 }

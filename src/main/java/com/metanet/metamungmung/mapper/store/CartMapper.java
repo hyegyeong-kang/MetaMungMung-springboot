@@ -10,18 +10,29 @@ import java.util.List;
 @Mapper
 public interface CartMapper {
     // 해당 회원 장바구니 리스트 출력
-    public List<CartDTO> getMyCartList(Long memberIdx);
+    public List<CartProductDTO> getMyCartList(Long memberIdx);
 
-    // 해당 회원 장바구니 물건추가
-    public void addCart(CartDTO cart);
+    // 장바구니 생성
+    public void createCart(CartDTO cart);
+
+    // 장바구니 물건 추가
+    public void addProductToCart(CartProductDTO cartProduct);
+
+    // 멤버 id 로 장바구니 가져오기
+    public CartDTO getCartByUserId(Long memberIdx);
+
+    // 카트 id 로 해당
+    public CartDTO getCartProductsByCartId(Long cartIdx);
 
 
-//    // 장바구니 중복 상품 확인
-//    public int checkCart(@Param("p_id")Long p_id, @Param("m_id")Long m_id);
-//
-//    // 중복된 상품이 있다면 넣지말고 수량 더해주기
-//    public void updateCount(CartDTO cart);
-//
+    // 장바구니 중복 상품 확인
+    public int checkCart(@Param("p_id")Long p_id, @Param("m_id")Long m_id);
+
+    // 중복된 상품이 있다면 넣지말고 수량 더해주기
+    public void updateCount(CartDTO cart);
+
+
+
 //    // 장바구니 물건 삭제
 //    public void deleteCart(@Param("p_id")Long p_id, @Param("m_id")Long m_id);
 //
