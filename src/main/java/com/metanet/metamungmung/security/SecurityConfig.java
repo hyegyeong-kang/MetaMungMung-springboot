@@ -27,7 +27,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
 //                        .antMatchers("/**")
-                .antMatchers("/members/signup");
+                .antMatchers("/members/signup")
+                .antMatchers("/members/idCheck");
         // 이 요청들에 대해서는 spring security 필터 체인을 적용하지 않겠다
     }
 
@@ -51,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+    @Bean
     public JwtFilter JwtFilter() throws Exception {
         return new JwtFilter(authenticationManager(), memberService);
     }
