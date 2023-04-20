@@ -105,8 +105,10 @@ public class OffMeetingController {
      * @return OffMeetingDTO
      **/
     @PatchMapping("/{offMeetingIdx}")
-    public OffMeetingDTO modifyOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody PatchOffMeetingDTO patchOffMeetingDTO) {
-        OffMeetingDTO newOffMeeting = null;
+    public OffMeetingDTO modifyOffMeeting(
+            @PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody PatchOffMeetingDTO patchOffMeetingDTO) {
+
+        OffMeetingDTO newOffMeeting = new OffMeetingDTO();
         patchOffMeetingDTO.setOffMeetingIdx(offMeetingIdx);
         int idx = offMeetingService.updateOffMeeting(patchOffMeetingDTO);
 
@@ -166,13 +168,15 @@ public class OffMeetingController {
             offMeetingMemDTO.setOnMeetingIdx(14L);
 
             /* offMeetingMemDTO 참여하는 코드 (오프 모임 회원 등록)*/
-            int idx2 = offMeetingService.joinOffMeeting(offMeetingMemDTO);
+            int idx1 = offMeetingService.joinOffMeeting(offMeetingMemDTO);
 
-            if(idx2 == 1) {
+            /* 참여가 완료되면 headcount 증가 */
+            int idx2 = offMeetingService.plusHeadcount(offMeetingIdx);
+
+            if(idx1 == 1 && idx2 == 1) {
                 result = "참여가 완료되었습니다.";
             }
         }
-
         return result;
     }
 
@@ -196,9 +200,12 @@ public class OffMeetingController {
         OffMeetingMemDTO findOffMeetingMem = offMeetingService.checkMemberByMemberIdx(map);
 
         if(findOffMeetingMem != null) {
-            int idx = offMeetingService.cancelJoinOffMeeting(map);
+            int idx1 = offMeetingService.cancelJoinOffMeeting(map);
 
-            if(idx == 1) {
+            /* 참여가 완료되면 headcount 증가 */
+            int idx2 = offMeetingService.minusHeadcount(offMeetingIdx);
+
+            if(idx1 == 1 && idx2 == 1) {
                 result = "참여가 취소되었습니다.";
             }
         }

@@ -3,14 +3,11 @@ package com.metanet.metamungmung.controller.member;
 import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.dto.member.PetDTO;
 import com.metanet.metamungmung.service.member.MemberService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -25,9 +22,17 @@ public class MemberController {
         return service.getMemberList();
     }
 
+    @PostMapping("/login")
+    public ResponseEntity login(@AuthenticationPrincipal MemberDTO member) {
+        System.out.println(member);
+//        return ResponseEntity.ok().header("memberIdx");
+        return null;
+    }
+
+
     @PostMapping("/signup")
     public ResponseEntity<Void> signUp(@RequestBody MemberDTO member) {
-        System.out.println(member);
+        System.out.println("member" + member);
         service.signUp(member);
         return ResponseEntity.ok().build();
     }
@@ -36,22 +41,22 @@ public class MemberController {
     public int idCheck(@RequestBody MemberDTO member) {
         String memberId = member.getMemberId();
         int result = service.idCheck(memberId);
-        if(result == 0)
-        {
+        if (result == 0) {
             System.out.println("사용 가능한 아이디");
-        }
-        else
-        {
+        } else {
             System.out.println("이미 존재하는 아이디");
         }
         return result;
     }
 
     @GetMapping("/modify")
-    public void modify() {}
+    public void modify() {
+    }
 
     @PatchMapping("/modify/{memberIdx}")
-    public void modify(@PathVariable("memberIdx") Long memberIdx, @RequestBody MemberDTO member) {
+    public void modify(@AuthenticationPrincipal MemberDTO memberDTO, @PathVariable("memberIdx") Long memberIdx, @RequestBody MemberDTO member) {
+        System.out.println("MemberController modify");
+        System.out.println(memberDTO);
         member.setMemberIdx(memberIdx);
         service.modify(member);
     }

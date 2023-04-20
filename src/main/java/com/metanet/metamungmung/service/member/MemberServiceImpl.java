@@ -39,6 +39,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public MemberDTO getMemberInfo(Long memberIdx) {
+        return mapper.getMemberInfo(memberIdx);
+    }
+
+    @Override
+    public MemberDTO findMemberId(String email) {
+        return mapper.findMemberId(email);
+    }
+
+    @Override
+    public MemberDTO findMemberPW(String memberId, String email) {
+        return null;
+    }
+
+    @Override
     public MemberDTO findByUserId(String memberId) {
         return mapper.findByUserId(memberId);
     }

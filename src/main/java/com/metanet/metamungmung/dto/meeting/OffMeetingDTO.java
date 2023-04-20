@@ -18,4 +18,5 @@ public class OffMeetingDTO {
     private double longitude;
     private String locationAddress;
     private String startTime;
+    private Long headcount;
 }

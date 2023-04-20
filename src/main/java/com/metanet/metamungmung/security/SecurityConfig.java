@@ -27,41 +27,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
 //                        .antMatchers("/**")
-                .antMatchers("/members")
-                .antMatchers("/members/signup")
-                .antMatchers("/members/idCheck");
+                .antMatchers("/members/signup");
         // 이 요청들에 대해서는 spring security 필터 체인을 적용하지 않겠다
     }
 
     @Override
-
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/**").permitAll()
-            .antMatchers("/members").permitAll()
-            .antMatchers("/members/idCheck").permitAll()
-            .antMatchers("/members/modify/{memberIdx}", "/members/pets/register").hasAnyRole("MEMBER", "DOGOWNER")
-            .anyRequest().authenticated()
-            .and()
-            .addFilter(getAuthenticationFilter())
-            .addFilter(JwtFilter()).authorizeRequests()
-            .and()
-            .formLogin()
-            .and()
-            .logout();
+                .authorizeRequests()
+                .antMatchers("/**").permitAll()
+                .antMatchers("/members").permitAll()
+                .antMatchers("/members/idCheck").permitAll()
+                .antMatchers("/members/modify/{memberIdx}", "/members/pets/register").hasAnyRole("MEMBER", "DOGOWNER")
+                .anyRequest().authenticated()
+                .and()
+                .addFilter(getAuthenticationFilter())
+                .addFilter(JwtFilter()).authorizeRequests()
+                .and()
+                .formLogin()
+                .and()
+                .logout();
 
     }
 
 
-    @Bean
     public JwtFilter JwtFilter() throws Exception {
-        return new JwtFilter(authenticationManager(), memberMapper);
+        return new JwtFilter(authenticationManager(), memberService);
     }
 
-    @Bean
-    public AuthenticationFilter getAuthenticationFilter() throws Exception{
-        return new AuthenticationFilter(authenticationManager(), memberMapper);
+    private AuthenticationFilter getAuthenticationFilter() throws Exception{
+        return new AuthenticationFilter(authenticationManager(), memberService);
     }
 
     @Override
