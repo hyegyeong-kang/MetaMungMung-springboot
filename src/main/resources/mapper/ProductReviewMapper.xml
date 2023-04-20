@@ -18,7 +18,7 @@
         <result column="content" property="content"></result>
         <result column="createDate" property="createDate"></result>
         <result column="updateDate" property="updateDate"></result>
-        <association property="reviewMemberVO" resultMap="GetReviewMemberVO"></association>
+        <association property="reviewMember" resultMap="GetReviewMemberVO"></association>
     </resultMap>
 
     <select id="getReviewList" parameterType="com.metanet.metamungmung.vo.store.GetReviewListVO" resultMap="GetReviewListVO" >

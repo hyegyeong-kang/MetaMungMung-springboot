@@ -12,5 +12,5 @@ public class GetReviewListVO {
     private String content;
     private Date createDate;
     private Date updateDate;
-    private GetReviewMemberVO reviewMemberVO;
+    private GetReviewMemberVO reviewMember;
 }
