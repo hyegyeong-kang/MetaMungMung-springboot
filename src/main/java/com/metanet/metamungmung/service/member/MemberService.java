@@ -15,6 +15,12 @@ public interface MemberService extends UserDetailsService {
     //Member 부분
     public List<MemberDTO> getMemberList();
 
+    MemberDTO getMemberInfo(Long memberIdx);
+
+    MemberDTO findMemberId(String email);
+
+    MemberDTO findMemberPW(String memberId, String email);
+
     MemberDTO findByUserId(String memberId);
 
     @Override

@@ -9,6 +9,18 @@
         select * from member
     </select>
 
+<!--    <select id="getMemberInfo" resultType="resultType=com.metanet.metamungmung.dto.member.MemberDTO">-->
+<!--        select memberName, sex, birth, email, phone, address1, address2 from member where memberIdx = #{memberIdx}-->
+<!--    </select>-->
+
+<!--    <select id="findMemberId" resultType="resultType=com.metanet.metamungmung.dto.member.MemberDTO">-->
+<!--        select memberId from member where email = #{email}-->
+<!--    </select>-->
+
+<!--    <select id="findMemberPW" resultType="resultType=com.metanet.metamungmung.dto.member.MemberDTO">-->
+<!--        select password from member where memberId = #{memberId}, email = #{email}-->
+<!--    </select>-->
+
     <select id="findByUserId" resultType="com.metanet.metamungmung.dto.member.MemberDTO">
         select * from member where memberId = #{memberId}
     </select>
@@ -52,8 +64,8 @@
     </select>
 
     <insert id="register">
-        insert into pet (petIdx, memberIdx, animalRegistrationNo, petName, sex, birth, petImg)
-        values (pet_seq.nextval, #{memberIdx}, #{animalRegistrationNo}, #{petName}, #{sex}, #{birth}, #{petImg})
+        insert into pet (petIdx, memberIdx, animalRegistrationNo, petName, sex, birth)
+        values (pet_seq.nextval, #{memberIdx}, #{animalRegistrationNo}, #{petName}, #{sex}, #{birth})
     </insert>
 
 </mapper>
