@@ -3,6 +3,7 @@ package com.metanet.metamungmung.mapper.meeting;
 import com.metanet.metamungmung.dto.meeting.OnMeetingDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -10,7 +11,6 @@ import java.util.List;
 public interface OnMeetingMapper {
     public void createOnMeeting(OnMeetingDTO onMeetingDTO);
     public void createOnMeetingMem(OnMeetingMemDTO onMeetingMemDTO);
-
     public void joinOnMeeting(OnMeetingMemDTO onMeetingMemDTO);
 
     public OnMeetingDTO getOnMeetingById(Long onMeetingIdx);
@@ -19,8 +19,11 @@ public interface OnMeetingMapper {
     public int modifyOnMeetingPersonnel(OnMeetingDTO onMeetingDTO);
 
     public int removeOnMeeting(Long id);
+    public List<OnMeetingDTO> searchOnMeeting(String searchKeyword, String category, String address);
 
-    public List<OnMeetingDTO> searchOnMeeting(String searchKeyword);
+    public List<OnMeetingDTO> getOnMeetingCategory(String category);
+
+    public List<OnMeetingDTO> searchOnMeetingWithCategory(String searchKeyword, String category);
 
 //    public List<OnMeetingDTO> searchOnMeetingWithCategory(String searchKeyword, String category);
 

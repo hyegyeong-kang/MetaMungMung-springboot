@@ -3,15 +3,12 @@ package com.metanet.metamungmung.controller.meeting;
 import com.metanet.metamungmung.dto.meeting.OnMeetingDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.dto.member.MemberDTO;
-import com.metanet.metamungmung.security.JwtFilter;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,18 +19,16 @@ import java.util.Map;
 public class OnMeetingController {
 
     private OnMeetingService service;
-    @Autowired
-    private JwtFilter jwtFilter;
 
     @GetMapping("")
-    public Map<String, List<OnMeetingDTO>> getOnMeetingList(HttpServletRequest request){
+    public Map<String, List<OnMeetingDTO>> getOnMeetingList(){
+
         Map<String, List<OnMeetingDTO>> map = new HashMap<>();
 
-        String token = request.getHeader("Authorization").substring(7);
-        Long memberIdx = jwtFilter.getMemberIdxFromToken(token);
-        // memberIdx를 활용한 로직 구현
-        System.out.println(memberIdx);
+        Long memberIdx = 1L;
+//        System.out.println("member  "+ memberDTO);
 
+//        System.out.println("idx " + memberIdx);
         if(service.getOnMeetingListByMember(memberIdx) != null){
             map.put("myList", service.getOnMeetingListByMember(memberIdx));
         }
@@ -48,77 +43,60 @@ public class OnMeetingController {
     }
 
     @PostMapping("")
-    public OnMeetingDTO createOnMeeting(@RequestBody OnMeetingDTO onMeetingDTO, HttpServletRequest request){
-        String token = request.getHeader("Authorization").substring(7);
-        Long memberIdx = jwtFilter.getMemberIdxFromToken(token);
-
+    public OnMeetingDTO createOnMeeting(@RequestBody OnMeetingDTO onMeetingDTO){
         OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
-        onMeetingMemDTO.setMemberIdx(memberIdx);
+        onMeetingMemDTO.setMemberIdx(1L);
         return service.createOnMeeting(onMeetingDTO, onMeetingMemDTO);
     }
 
+//    @PostMapping("/{id}/join")
+//    public OnMeetingDTO joinOnMeeting(@RequestBody MemberDTO memberDTO){
+//
+//    }
+
     @PutMapping("/{id}")
     public OnMeetingDTO modifyOnMeeting(@PathVariable("id") Long id,
-                                        @RequestBody OnMeetingDTO onMeetingDTO,
-                                        HttpServletRequest request){
+                                        @RequestBody OnMeetingDTO onMeetingDTO){
+        onMeetingDTO.setOnMeetingIdx(id);
+        System.out.println(onMeetingDTO);
 
-        String token = request.getHeader("Authorization").substring(7);
-        Long memberIdx = jwtFilter.getMemberIdxFromToken(token);
-
-        OnMeetingDTO originOnMeeting = service.getOnMeetingById(id);
-
-        if(originOnMeeting.getHostIdx() == memberIdx){
-            onMeetingDTO.setOnMeetingIdx(id);
-            return service.modifyOnMeeting(onMeetingDTO) == 1 ? service.getOnMeetingById(id) : null;
-        }
-
-        return null;
+//        HttpStatus status = HttpStatus.BAD_REQUEST;
+//        if(service.modifyOnMeeting(onMeetingDTO) == 1) {
+//            status = HttpStatus.OK;
+//        }
+//
+//        return ResponseEntity.status(status).body(onMeetingDTO);
+        return service.modifyOnMeeting(onMeetingDTO) == 1 ? onMeetingDTO : null;
     }
 
     @PatchMapping("/{id}")
     public OnMeetingDTO modifyOnMeetingPersonnel(@PathVariable("id") Long id,
-                                                 @RequestBody OnMeetingDTO onMeetingDTO,
-                                                 HttpServletRequest request){
-        String token = request.getHeader("Authorization").substring(7);
-        Long memberIdx = jwtFilter.getMemberIdxFromToken(token);
+                                                 @RequestBody OnMeetingDTO onMeetingDTO){
+        onMeetingDTO.setOnMeetingIdx(id);
 
-        OnMeetingDTO originOnMeeting = service.getOnMeetingById(onMeetingDTO.getOnMeetingIdx());
-
-        if(originOnMeeting.getHostIdx() == memberIdx){
-            onMeetingDTO.setOnMeetingIdx(id);
-            return service.modifyOnMeetingPersonnel(onMeetingDTO) == 1 ? service.getOnMeetingById(id) : null;
-        }
-        return null;
+        return service.modifyOnMeetingPersonnel(onMeetingDTO) == 1 ? service.getOnMeetingById(id) : null;
     }
 
     @GetMapping("/search")
-    public List<OnMeetingDTO> searchOnMeeting(@RequestParam String keyword){
-
-        return service.searchOnMeeting(keyword);
+    public List<OnMeetingDTO> searchOnMeeting(@RequestParam(name="keywords") String keywords,
+                                              @RequestParam(name="category") String category,
+                                              @RequestParam(name="address") String address){
+        return service.searchOnMeeting(keywords, category, address);
     }
 
     @PostMapping("/{id}/join")
-    public OnMeetingDTO joinOnMeeting(@PathVariable("id") Long id, HttpServletRequest request){
-        String token = request.getHeader("Authorization").substring(7);
-        Long memberIdx = jwtFilter.getMemberIdxFromToken(token);
-
-        return service.joinOnMeeting(id, memberIdx);
+    public OnMeetingDTO joinOnMeeting(@PathVariable("id") Long id){
+        return service.joinOnMeeting(id);
     }
 
     @DeleteMapping("/{id}/withdraw")
-    public int withdrawOnMeeting(@PathVariable("id") Long id, HttpServletRequest request){
-        String token = request.getHeader("Authorization").substring(7);
-        Long memberIdx = jwtFilter.getMemberIdxFromToken(token);
-
-        return service.removeOnMeetingMem(id, memberIdx);
+    public int withdrawOnMeeting(@PathVariable("id") Long id){
+        return service.removeOnMeetingMem(id, 1L);
     }
 
     @DeleteMapping("/{id}")
-    public int removeOnMeeting(@PathVariable("id") Long id, HttpServletRequest request){
-        String token = request.getHeader("Authorization").substring(7);
-        Long memberIdx = jwtFilter.getMemberIdxFromToken(token);
-
-        return service.removeOnMeeting(id, memberIdx);
+    public int removeOnMeeting(@PathVariable("id") Long id){
+        return service.removeOnMeeting(id, 1L);
     }
 
 }
