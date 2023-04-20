@@ -25,7 +25,6 @@ public class MemberController {
     @PostMapping("/login")
     public ResponseEntity login(@AuthenticationPrincipal MemberDTO member) {
         System.out.println(member);
-//        return ResponseEntity.ok().header("memberIdx");
         return null;
     }
 
@@ -61,9 +60,16 @@ public class MemberController {
         service.modify(member);
     }
 
+    @PatchMapping("/withdrawal/{memberIdx}")
+    public void withdrawal(@PathVariable("memberIdx") Long memberIdx, @RequestBody MemberDTO member) {
+        member.setMemberIdx(memberIdx);
+        service.withdrawal(member);
+    }
+
     @GetMapping("/pets")
-    public List<PetDTO> getPetList() {
-        return service.getPetList();
+    public List<PetDTO> getPetList(@RequestBody PetDTO pet) {
+        Long memberIdx = pet.getMemberIdx();
+        return service.getPetList(memberIdx);
     }
 
     @PostMapping("/pets/register")
@@ -71,6 +77,20 @@ public class MemberController {
         System.out.println(pet);
         service.register(pet);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/pets/register/{memberIdx}")
+    public void updateAuth(@PathVariable("memberIdx") Long memberIdx, @RequestBody MemberDTO member) {
+        member.setMemberIdx(memberIdx);
+        service.updateAuth(member);
+    }
+
+    @DeleteMapping("/pets/{petIdx}")
+    public void delete(@PathVariable("petIdx") Long petIdx) {
+        PetDTO pet = new PetDTO();
+        System.out.println(petIdx + "--------------------");
+        pet.setPetIdx(petIdx);
+        service.delete(pet);
     }
 
 }

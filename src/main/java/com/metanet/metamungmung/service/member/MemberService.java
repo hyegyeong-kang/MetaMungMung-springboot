@@ -32,11 +32,16 @@ public interface MemberService extends UserDetailsService {
 
     public int modify(MemberDTO member);
 
+    public int withdrawal(MemberDTO member);
+
+    public int updateAuth(MemberDTO member);
+
     public MemberDTO getUserEmail(String email);
 
     //Pet 부분
-    public List<PetDTO> getPetList();
+    public List<PetDTO> getPetList(Long memberIdx);
     public void register(PetDTO pet);
+    public int delete(PetDTO pet);
 
 
 }
