@@ -17,8 +17,8 @@ public class OnMeetingBoardReplyServiceImpl implements OnMeetingBoardReplyServic
 
     // 해당 게시물 댓글 조회
     @Override
-    public GetOnMeetingBoardVO replyList(Long onMeetingIdx, Long onMeetingBoardIdx) {
-        return mapper.getBoardReply(onMeetingIdx, onMeetingBoardIdx);
+    public GetOnMeetingBoardVO replyList(Long onMeetingIdx, Long onMeetingBoardIdx, Long memberIdx) {
+        return mapper.getBoardReply(onMeetingIdx, onMeetingBoardIdx, memberIdx);
     }
 
 

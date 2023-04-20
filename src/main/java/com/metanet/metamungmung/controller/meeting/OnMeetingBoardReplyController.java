@@ -19,10 +19,11 @@ public class OnMeetingBoardReplyController {
     @Autowired
     private OnMeetingBoardReplyService service;
     // 해당 게시물 댓글 조회
-    ///onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply
+    ////onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply
     @GetMapping("{onMeetingIdx}/board/{onMeetingBoardIdx}/reply")
     public GetOnMeetingBoardVO getReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingBoardIdx")Long onMeetingBoardIdx){
-        return service.replyList(onMeetingIdx, onMeetingBoardIdx);
+        Long memberIdx = 1L;
+        return service.replyList(onMeetingIdx, onMeetingBoardIdx, memberIdx);
     }
 
 
