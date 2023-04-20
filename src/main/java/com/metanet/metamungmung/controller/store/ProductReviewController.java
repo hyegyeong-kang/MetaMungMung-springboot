@@ -52,25 +52,18 @@ public class ProductReviewController {
 
     /**
      * 리뷰 작성 API
-     * [POST] /products/:productIdx}/reviews
+     * [POST] /products/:productIdx/reviews
      * @return String
      **/
     @PostMapping("/{productIdx}/reviews")
     public String createReview(@PathVariable("productIdx") Long productIdx,
                                @RequestBody ProductReviewDTO productReviewDTO , HttpServletRequest request) {
 
-        /* Jwt로부터 memberIdx 추출 */
-//        String token = request.getHeader("Authorization").substring(7);
-//        System.out.println("token!!!!!!!!!!!!! : " + token);
-//        Long memberIdx = jwtFilter.getMemberIdxFromToken(token);
-//
-//        System.out.println("memberIdx!!!!!!!!!!!! : " + memberIdx);
-
-        Long memberIdx = 10L;
-
         /* productReviewDTO 객체에 값을 넣어준다. */
         productReviewDTO.setProductIdx(productIdx);
-        productReviewDTO.setMemberIdx(memberIdx);
+//        productReviewDTO.setMemberIdx(memberIdx);
+
+        System.out.println(productReviewDTO);
 
         int idx = reviewService.registerReview(productReviewDTO);
 
