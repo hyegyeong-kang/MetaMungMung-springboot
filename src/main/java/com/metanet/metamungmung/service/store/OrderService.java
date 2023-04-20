@@ -11,9 +11,9 @@ import java.util.List;
 public interface OrderService {
 
 	public OrderDTO getOrderDetailList(Long orderIdx);
-	
+
 	public List<OrderDTO> getOrderList(Long memberIdx);
-	
+
 	public PaymentDTO getPayment(Long orderIdx);
 
 	public List<OrderProductDTO> getProductsInfo(List<OrderProductDTO> orderProducts);
@@ -23,5 +23,7 @@ public interface OrderService {
 	public void addOrder(OrderDTO order, PaymentDTO payment);
 
 	public int cancelOrder(Long orderIdx);
-	
+
+	public int confirmOrder(Long orderIdx);
+
 }

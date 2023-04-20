@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.metanet.metamungmung.dto.store.OrderDetailDTO;
+import com.metanet.metamungmung.mapper.member.MemberMapper;
 import com.metanet.metamungmung.mapper.store.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,15 +18,18 @@ import com.metanet.metamungmung.mapper.store.PaymentMapper;
 
 @Service
 public class OrderServiceImpl implements OrderService {
-	
+
 	@Autowired
 	private OrderMapper orderMapper;
-	
+
 	@Autowired
 	private PaymentMapper paymentMapper;
 
 	@Autowired
 	private ProductMapper productMapper;
+
+	@Autowired
+	private MemberMapper memberMapper;
 
 	@Override
 	public OrderDTO getOrderDetailList(Long orderIdx) {
@@ -39,18 +43,29 @@ public class OrderServiceImpl implements OrderService {
 
 		return list;
 	}
-	
+
 	@Transactional
 	@Override
 	public void addOrder(OrderDTO order, PaymentDTO payment) {
 		orderMapper.createOrder(order);
 		orderMapper.createOrderDetail(order);
+		payment.init();
 		paymentMapper.createPayment(payment);
 	}
 
 	@Override
 	public int cancelOrder(Long orderIdx) {
 		return orderMapper.cancelOrder(orderIdx);
+	}
+
+	@Override
+	public int confirmOrder(Long orderIdx) {
+
+		if(orderMapper.confirmOrder(orderIdx) == 1){
+			int accPoint = paymentMapper.getPayment(orderIdx).getAccPoint();
+			memberMapper.accumulatePoint(accPoint, 1L);
+		}
+		return 0;
 	}
 
 	@Override
@@ -74,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
 		for(OrderProductDTO product : orderProducts) {
 			OrderDetailDTO detailDto = new OrderDetailDTO();
 			detailDto.setProductIdx(product.getProductIdx());
-//			detailDto.setProductDTO(productMapper.read(product.getProductIdx()));
+			detailDto.setProductDTO(productMapper.getProduct(product.getProductIdx()));
 			detailDto.setQuantity(product.getOrderQuantity());
 			list.add(detailDto);
 		}
@@ -86,6 +101,4 @@ public class OrderServiceImpl implements OrderService {
 	public PaymentDTO getPayment(Long orderIdx) {
 		return paymentMapper.getPayment(orderIdx);
 	}
-
-
 }

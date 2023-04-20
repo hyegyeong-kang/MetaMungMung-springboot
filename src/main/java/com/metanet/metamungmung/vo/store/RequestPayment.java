@@ -7,8 +7,8 @@ import java.util.List;
 
 @Data
 public class RequestPayment {
-    private int totalQuantity;
-    private int totalPrice;
+    private int orderQuantity;
+    private int orderPrice;
     private Long memberIdx;
 
     private List<OrderProductDTO> orderProductList;

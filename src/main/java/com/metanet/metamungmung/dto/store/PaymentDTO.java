@@ -12,4 +12,9 @@ public class PaymentDTO {
     private int usePoint;
     private String method;
     private Date createDate;
+    private int accPoint;
+
+    public void init() {
+        this.accPoint = (int)(paymentPrice * 0.1);
+    }
 }
