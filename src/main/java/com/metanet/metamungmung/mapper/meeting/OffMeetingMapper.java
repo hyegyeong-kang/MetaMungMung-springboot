@@ -30,4 +30,8 @@ public interface OffMeetingMapper {
     public OffMeetingMemDTO checkMemberByMemberIdx(Map<String, Long> map);
 
     public int cancelJoinOffMeeting(Map<String, Long> map);
+
+    public int plusHeadcount(Long offMeetingIdx);
+
+    public int minusHeadcount(Long offMeetingIdx);
 }
