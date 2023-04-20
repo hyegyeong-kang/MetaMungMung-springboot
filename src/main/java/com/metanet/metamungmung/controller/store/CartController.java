@@ -135,11 +135,15 @@ public class CartController {
     }
 
     @DeleteMapping("/{cartIdx}")
-    public String deleteCart(@PathVariable("cartIdx") Long cartIdx, HttpSession session) throws Exception {
+    public String deleteCart(@PathVariable("cartIdx") Long cartIdx, @RequestBody Map<String, Integer> productInfo) throws Exception {
         // Long m_id = (Long) session.getAttribute("member");
-        service.deleteCart(cartIdx, 1L);
+        Long productIdx = Long.valueOf(productInfo.get("productIdx"));
+        System.out.println("p_id: " + productIdx);
+        System.out.println("cartIdx: " + cartIdx);
 
-        return "redirect:/cart/cartList" + 1L;
+        service.deleteCart(cartIdx, 1L, productIdx);
+
+        return "delete ok";
     }
 
     @GetMapping("/cartDeleteAll")
@@ -151,11 +155,11 @@ public class CartController {
     }
 
     @PatchMapping("/{cartIdx}")
-    public String updateCart(HttpSession session, @RequestBody Map<String, Integer> productInfo) {
+    public String updateCart(@PathVariable("cartIdx")Long cartIdx, HttpSession session, @RequestBody Map<String, Integer> productInfo) {
         //  Long m_id = (Long) session.getAttribute("member");
         Long productIdx = Long.valueOf(productInfo.get("productIdx"));
         int quantity = productInfo.get("quantity");
-        service.updateCart(productIdx, 1L, quantity);
+        service.updateCart(productIdx, 1L, quantity, cartIdx);
         return "update ok";
     }
 }

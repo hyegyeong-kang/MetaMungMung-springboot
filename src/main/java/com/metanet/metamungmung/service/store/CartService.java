@@ -39,13 +39,13 @@ public List<CartDTO> getMyCartList(Long memberIdx);
     public void updateCount(CartDTO cart);
 
     // 장바구니 물건 삭제
-    public void deleteCart(Long productIdx, Long memberIdx);
+    public void deleteCart(Long cartIdx, Long memberIdx, Long productIdx);
 
     // 장바구니 전체 비우기
     public void deleteAllCart(Long memberIdx);
 
     // 장바구니 물건 업데이트 (장바구니에서 수량변경하는 것)
-    public void updateCart(Long productIdx, Long memberIdx, int quantity);
+    public void updateCart(Long productIdx, Long memberIdx, int quantity, Long cartIdx);
 
     // 해당 회원의 장바구니 전체 금액 출력
     public Long getTotalPrice(Long memberIdx);

@@ -127,6 +127,7 @@
         delete from cart
         where productIdx = #{productIdx}
           and memberIdx = #{memberIdx}
+          and cartIdx = #{cartIdx}
     </delete>
 
     <!-- 장바구니 전체 비우기 -->
@@ -141,6 +142,7 @@
         set quantity = #{quantity}
         where memberIdx = #{memberIdx}
           and productIdx = #{productIdx}
+          and cartIdx = #{cartIdx}
     </update>
 
     <!-- 해당 회원의 장바구니 전체 금액 출력 -->

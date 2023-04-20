@@ -58,13 +58,13 @@ public interface CartMapper {
     public void updateCount(CartDTO cart);
 
     // 장바구니 물건 삭제
-    public void deleteCart(@Param("productIdx")Long productIdx, @Param("memberIdx")Long memberIdx);
+    public void deleteCart(@Param("cartIdx")Long CartIdx, @Param("productIdx")Long productIdx, @Param("memberIdx")Long memberIdx);
 
     // 장바구니 전체 비우기
     public void deleteAllCart(Long memberIdx);
 
     // 장바구니 물건 업데이트 (장바구니에서 수량변경하는 것)
-    public void updateCart(@Param("productIdx")Long productIdx, @Param("memberIdx")Long memberIdx, @Param("quantity")int quantity);
+    public void updateCart(@Param("productIdx")Long productIdx, @Param("memberIdx")Long memberIdx, @Param("quantity")int quantity, @Param("cartIdx")Long cartIdx);
 
     // 해당 회원의 장바구니 전체 금액 출력
     public Long getTotalPrice(Long memberIdx);

@@ -113,8 +113,8 @@ public class CartServiceImpl implements CartService{
 
     // 장바구니 물건 삭제
     @Override
-    public void deleteCart(Long productIdx, Long memberIdx) {
-        mapper.deleteCart(productIdx, memberIdx);
+    public void deleteCart(Long cartIdx, Long memberIdx, Long productIdx) {
+        mapper.deleteCart(cartIdx, memberIdx, productIdx);
     }
 
     // 장바구니 전체 비우기
@@ -125,8 +125,8 @@ public class CartServiceImpl implements CartService{
 
     // 장바구니 물건 업데이트 (장바구니에서 수량변경하는 것)
     @Override
-    public void updateCart(Long productIdx, Long memberIdx, int quantity) {
-        mapper.updateCart(productIdx, memberIdx, quantity);
+    public void updateCart(Long productIdx, Long memberIdx, int quantity, Long cartIdx) {
+        mapper.updateCart(productIdx, memberIdx, quantity, cartIdx);
     }
 
     // 해당 회원의 장바구니 전체 금액 출력
