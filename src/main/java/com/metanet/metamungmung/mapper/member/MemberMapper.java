@@ -11,6 +11,12 @@ public interface MemberMapper {
 
     public List<MemberDTO> getMemberList();
 
+    MemberDTO getMemberInfo(Long memberIdx);
+
+    MemberDTO findMemberId(String email);
+
+    MemberDTO findMemberPW(String memberId, String email);
+
     public MemberDTO findByUserId(String memberId);
 
     List<String> findAuthorities(String authority);
