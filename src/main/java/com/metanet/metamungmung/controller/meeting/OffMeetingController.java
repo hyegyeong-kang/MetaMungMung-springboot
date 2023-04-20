@@ -2,6 +2,7 @@ package com.metanet.metamungmung.controller.meeting;
 
 import com.metanet.metamungmung.dto.meeting.*;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
+import com.metanet.metamungmung.vo.meeting.GetOffMeeting2VO;
 import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 import com.metanet.metamungmung.service.meeting.OffMeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +84,8 @@ public class OffMeetingController {
      * @return OffMeetingDTO
      **/
     @GetMapping("/{offMeetingIdx}")
-    public OffMeetingDTO showOffMeetingDetail(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
-        OffMeetingDTO offMeeting = offMeetingService.getOffMeeting(offMeetingIdx);
+    public GetOffMeeting2VO showOffMeetingDetail(@PathVariable("offMeetingIdx") Long offMeetingIdx) {
+        GetOffMeeting2VO offMeeting = offMeetingService.getOffMeeting(offMeetingIdx);
         return offMeeting;
     }
 
@@ -105,18 +106,19 @@ public class OffMeetingController {
      * @return OffMeetingDTO
      **/
     @PatchMapping("/{offMeetingIdx}")
-    public OffMeetingDTO modifyOffMeeting(
+    public GetOffMeeting2VO modifyOffMeeting(
             @PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody PatchOffMeetingDTO patchOffMeetingDTO) {
 
-        OffMeetingDTO newOffMeeting = new OffMeetingDTO();
+        GetOffMeeting2VO getOffMeeting = new GetOffMeeting2VO();
         patchOffMeetingDTO.setOffMeetingIdx(offMeetingIdx);
         int idx = offMeetingService.updateOffMeeting(patchOffMeetingDTO);
 
         if (idx == 1) {
-            newOffMeeting = offMeetingService.getOffMeeting(offMeetingIdx) ;
+
+            getOffMeeting = offMeetingService.getOffMeeting(offMeetingIdx) ;
         }
 
-        return newOffMeeting;
+        return getOffMeeting;
     }
 
     /**

@@ -3,6 +3,7 @@ package com.metanet.metamungmung.service.store;
 import com.metanet.metamungmung.dto.store.PatchProductReviewDTO;
 import com.metanet.metamungmung.dto.store.ProductReviewDTO;
 import com.metanet.metamungmung.mapper.store.ProductReviewMapper;
+import com.metanet.metamungmung.vo.store.GetReviewListVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     private ProductReviewMapper reviewMapper;
 
     @Override
-    public List<ProductReviewDTO> getReviewList(Long productIdx) {
+    public List<GetReviewListVO> getReviewList(Long productIdx) {
         return reviewMapper.getReviewList(productIdx);
     }
 
