@@ -65,4 +65,15 @@ public class OffMeetingServiceImpl implements OffMeetingService {
     public int cancelJoinOffMeeting(Map<String, Long> map) {
         return offMeetingMapper.cancelJoinOffMeeting(map);
     }
+
+    @Override
+    public int plusHeadcount(Long offMeetingIdx) {
+        return offMeetingMapper.plusHeadcount(offMeetingIdx);
+    }
+
+    @Override
+    public int minusHeadcount(Long offMeetingIdx) {
+        return offMeetingMapper.minusHeadcount(offMeetingIdx);
+    }
+
 }
