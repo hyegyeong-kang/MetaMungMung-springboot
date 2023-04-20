@@ -4,6 +4,7 @@ import com.metanet.metamungmung.dto.store.PatchProductReviewDTO;
 import com.metanet.metamungmung.dto.store.ProductReviewDTO;
 import com.metanet.metamungmung.security.JwtFilter;
 import com.metanet.metamungmung.service.store.ProductReviewService;
+import com.metanet.metamungmung.vo.store.GetReviewListVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +32,8 @@ public class ProductReviewController {
      * @return List<ProductReviewDTO>
      **/
     @GetMapping("/{productIdx}/reviews")
-    public List<ProductReviewDTO> showReviewList(@PathVariable("productIdx") Long productIdx) {
-        List<ProductReviewDTO> reviewList = reviewService.getReviewList(productIdx);
+    public List<GetReviewListVO> showReviewList(@PathVariable("productIdx") Long productIdx) {
+        List<GetReviewListVO> reviewList = reviewService.getReviewList(productIdx);
         return reviewList;
     }
 
