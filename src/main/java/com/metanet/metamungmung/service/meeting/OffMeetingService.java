@@ -3,6 +3,7 @@ package com.metanet.metamungmung.service.meeting;
 import com.metanet.metamungmung.dto.meeting.OffMeetingDTO;
 import com.metanet.metamungmung.dto.meeting.OffMeetingMemDTO;
 import com.metanet.metamungmung.dto.meeting.PatchOffMeetingDTO;
+import com.metanet.metamungmung.vo.meeting.GetOffMeeting2VO;
 import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.Map;
 public interface OffMeetingService {
     public List<OffMeetingDTO> getOffMeetingList();
 
-    public OffMeetingDTO getOffMeeting(Long offMeetingIdx);
+    public GetOffMeeting2VO getOffMeeting(Long offMeetingIdx);
 
     public void registerOffMeeting(OffMeetingDTO offMeetingDTO);
 
