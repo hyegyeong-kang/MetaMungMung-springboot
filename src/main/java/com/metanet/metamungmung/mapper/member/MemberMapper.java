@@ -13,13 +13,7 @@ public interface MemberMapper {
 
     MemberDTO getMemberInfo(Long memberIdx);
 
-    MemberDTO findMemberId(String email);
-
-    MemberDTO findMemberPW(String memberId, String email);
-
     public MemberDTO findByUserId(String memberId);
-
-    List<String> findAuthorities(String authority);
 
     public void signUp(MemberDTO member);
 
@@ -27,10 +21,15 @@ public interface MemberMapper {
 
     public int modify(MemberDTO member);
 
+    public int withdrawal(MemberDTO member);
+
+    public int updateAuth(MemberDTO member);
+
     public MemberDTO getUserEmail(String email);
 
     //Pet 부분
-    public List<PetDTO> getPetList();
+    public List<PetDTO> getPetList(Long memberIdx);
     public void register(PetDTO pet);
+    public int delete(PetDTO pet);
 
 }
