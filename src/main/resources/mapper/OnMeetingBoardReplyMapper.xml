@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metanet.metamungmung.mapper.meeting.OnMeetingBoardReplyMapper">
+
+    <!--댓글 조회 -->
+    <select id="getBoardReply" resultMap="replyResultMap">
+        select omr.onMeetingBoardIdx, omr.onMeetingMemIdx, omr.onMeetingIdx,
+               omr.onMeetingReplyIdx, omr.onMeetingBoardIdx,
+               omr.onMeetingMemIdx, omr.onMeetingIdx,
+               omr.contents, omr.createDate, omr.updateDate, omr.writer
+        from onMeetingBoard omb, onMeetingReply omr
+        where omb.onMeetingBoardIdx = omr.onMeetingBoardIdx
+        and omr.onMeetingBoardIdx = #{onMeetingBoardIdx}
+        and omb.onMeetingIdx = #{onMeetingIdx}
+        and omb.onMeetingIdx = omr.onMeetingIdx
+
+    </select>
+
+    <resultMap id="replyResultMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO">
+        <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
+        <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
+        <result column="onMeetingIdx" property="onMeetingIdx"/>
+        <collection property="replyList" resultMap="replyMap"/>
+    </resultMap>
+
+    <resultMap type="com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO" id="replyMap" >
+        <result column="onMeetingReplyIdx" property="onMeetingReplyIdx"/>
+        <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
+        <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
+        <result column="onMeetingIdx" property="onMeetingIdx"/>
+        <result column="memberIdx" property="memberIdx"/>
+        <result column="contents" property="contents"/>
+        <result column="createDate" property="createDate"/>
+        <result column="updateDate" property="updateDate"/>
+        <result column="writer" property="writer"/>
+    </resultMap>
+
+    <!--댓글 작성 // Long onMeetingIdx, OnMeetingBoardReplyDTO replyDTO-->
+    <insert id="addReply">
+
+
+    </insert>
+
+
+    <!--댓글 수정 // Long onMeetingIdx, OnMeetingBoardReplyDTO replyDTO-->
+    <update id="updateReply">
+        update onMeetingReply
+        set contents = #{contents}
+        where onMeetingIdx = #{onMeetingIdx}
+        and onMeetigBoardIndex = #{onMeetingBoardIdx}
+        and onMeetingReplyIdx = #{onMeetingReplyIdx}
+        and memberIdx = #{memberIdx}
+
+    </update>
+
+    <!--댓글 삭제 // Long onMeetingIdx, Long onMeetingReplyIdx-->
+    <delete id="deleteReply">
+        delete from onMeetingReply
+        where onMeetingReplyIdx = #{onMeetingReplyIdx}
+        and memberIdx = #{memberIdx}
+
+    </delete>
+
+
+</mapper>

@@ -2,13 +2,15 @@ package com.metanet.metamungmung.service.meeting;
 
 import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
+import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
+import com.metanet.metamungmung.vo.meeting.GetOnMeetingVO;
 
 import java.util.List;
 
 public interface OnMeetingBoardService {
 
     // 게시글 목록 조회
-    public List<OnMeetingBoardDTO> getBoardList(Long onMeetingIdx);
+    public List<GetOnMeetingBoardVO> getBoardList(Long onMeetingIdx);
 
     // 온모임 가입한 사용자 리스트
     public List<OnMeetingMemDTO> getOnMeetingMembers(Long onMeetingIdx);
@@ -16,10 +18,13 @@ public interface OnMeetingBoardService {
     // 게시글 상세 조회
 
     // 게시글 작성
+    public String registerBoard(Long onMeetingIdx, OnMeetingBoardDTO board);
 
     // 게시글 수정
+    public String updateBoard(Long onMeetingIdx, OnMeetingBoardDTO board);
 
     // 게시글 삭제
+    public String delete(Long onMeetingIdx, Long onMeetingBoardIdx);
 
     // 게시글 검색
 
