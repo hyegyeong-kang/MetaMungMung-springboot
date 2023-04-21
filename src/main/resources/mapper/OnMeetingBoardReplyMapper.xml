@@ -12,9 +12,10 @@
                omr.contents, omr.createDate, omr.updateDate, omr.writer
         from onMeetingBoard omb, onMeetingReply omr
         where omb.onMeetingBoardIdx = omr.onMeetingBoardIdx
-        and omb.onMeetingIdx = #{onMeetingIdx}
         and omr.onMeetingBoardIdx = #{onMeetingBoardIdx}
-        and omr.memberIdx = #{memberIdx}
+        and omb.onMeetingIdx = #{onMeetingIdx}
+        and omb.onMeetingIdx = omr.onMeetingIdx
+
     </select>
 
     <resultMap id="replyResultMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO">
@@ -36,11 +37,31 @@
         <result column="writer" property="writer"/>
     </resultMap>
 
-    <!--댓글 작성 -->
+    <!--댓글 작성 // Long onMeetingIdx, OnMeetingBoardReplyDTO replyDTO-->
+    <insert id="addReply">
 
-    <!--댓글 수정 -->
 
-    <!--댓글 삭제 -->
+    </insert>
+
+
+    <!--댓글 수정 // Long onMeetingIdx, OnMeetingBoardReplyDTO replyDTO-->
+    <update id="updateReply">
+        update onMeetingReply
+        set contents = #{contents}
+        where onMeetingIdx = #{onMeetingIdx}
+        and onMeetigBoardIndex = #{onMeetingBoardIdx}
+        and onMeetingReplyIdx = #{onMeetingReplyIdx}
+        and memberIdx = #{memberIdx}
+
+    </update>
+
+    <!--댓글 삭제 // Long onMeetingIdx, Long onMeetingReplyIdx-->
+    <delete id="deleteReply">
+        delete from onMeetingReply
+        where onMeetingReplyIdx = #{onMeetingReplyIdx}
+        and memberIdx = #{memberIdx}
+
+    </delete>
 
 
 </mapper>
