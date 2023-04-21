@@ -6,8 +6,7 @@ import lombok.Getter;
 @Getter
 public class GetOnMeetingMemVO {
     private Long memberIdx;
-    private Long memberName;
-    private Long memberImg;
-
+    private Long memberNameVO;
+    private Long memberImgVO;
   //  private MemberDTO member;
 }
