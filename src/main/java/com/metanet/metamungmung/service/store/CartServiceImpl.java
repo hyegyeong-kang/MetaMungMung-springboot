@@ -113,8 +113,8 @@ public class CartServiceImpl implements CartService{
 
     // 장바구니 물건 삭제
     @Override
-    public void deleteCart(Long cartIdx, Long memberIdx, Long productIdx) {
-        mapper.deleteCart(cartIdx, memberIdx, productIdx);
+    public void deleteCart(Long productIdx, Long memberIdx) {
+        mapper.deleteCart(productIdx, memberIdx);
     }
 
     // 장바구니 전체 비우기
