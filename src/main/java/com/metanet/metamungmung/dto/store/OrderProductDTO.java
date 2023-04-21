@@ -24,6 +24,6 @@ public class OrderProductDTO {
 
 	public void init() {
 		this.orderPrice = this.price.intValue() * this.orderQuantity;
-		this.point = (int)(orderPrice * 0.1);
+		this.point = (int)(orderPrice * 0.01);
 	}
 }

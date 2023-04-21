@@ -15,6 +15,6 @@ public class PaymentDTO {
     private int accPoint;
 
     public void init() {
-        this.accPoint = (int)(paymentPrice * 0.1);
+        this.accPoint = (int)(paymentPrice * 0.01);
     }
 }
