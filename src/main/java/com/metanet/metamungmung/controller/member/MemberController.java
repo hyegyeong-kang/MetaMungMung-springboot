@@ -5,7 +5,10 @@ import com.metanet.metamungmung.dto.member.PetDTO;
 import com.metanet.metamungmung.service.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +23,24 @@ public class MemberController {
     @GetMapping("")
     public List<MemberDTO> getMemberList() {
         return service.getMemberList();
+    }
+
+    @GetMapping("/my")
+    public MemberDTO getMemberInfo() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
+        return service.getMemberInfo(memberIdx);
     }
 
     @PostMapping("/login")
@@ -67,8 +88,19 @@ public class MemberController {
     }
 
     @GetMapping("/pets")
-    public List<PetDTO> getPetList(@RequestBody PetDTO pet) {
-        Long memberIdx = pet.getMemberIdx();
+    public List<PetDTO> getPetList() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
         return service.getPetList(memberIdx);
     }
 
