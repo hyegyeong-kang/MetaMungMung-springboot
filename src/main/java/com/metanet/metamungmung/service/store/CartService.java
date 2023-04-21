@@ -39,7 +39,7 @@ public List<CartDTO> getMyCartList(Long memberIdx);
     public void updateCount(CartDTO cart);
 
     // 장바구니 물건 삭제
-    public void deleteCart(Long cartIdx, Long memberIdx, Long productIdx);
+    public void deleteCart(Long productIdx, Long memberIdx);
 
     // 장바구니 전체 비우기
     public void deleteAllCart(Long memberIdx);

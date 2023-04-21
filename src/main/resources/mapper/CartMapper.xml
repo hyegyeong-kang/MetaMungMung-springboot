@@ -127,7 +127,6 @@
         delete from cart
         where productIdx = #{productIdx}
           and memberIdx = #{memberIdx}
-          and cartIdx = #{cartIdx}
     </delete>
 
     <!-- 장바구니 전체 비우기 -->

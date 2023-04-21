@@ -58,7 +58,7 @@ public interface CartMapper {
     public void updateCount(CartDTO cart);
 
     // 장바구니 물건 삭제
-    public void deleteCart(@Param("cartIdx")Long CartIdx, @Param("productIdx")Long productIdx, @Param("memberIdx")Long memberIdx);
+    public void deleteCart(@Param("productIdx")Long productIdx, @Param("memberIdx")Long memberIdx);
 
     // 장바구니 전체 비우기
     public void deleteAllCart(Long memberIdx);
