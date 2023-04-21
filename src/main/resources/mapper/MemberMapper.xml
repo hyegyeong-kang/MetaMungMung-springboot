@@ -9,17 +9,9 @@
         select * from member
     </select>
 
-<!--    <select id="getMemberInfo" resultType="resultType=com.metanet.metamungmung.dto.member.MemberDTO">-->
-<!--        select memberName, sex, birth, email, phone, address1, address2 from member where memberIdx = #{memberIdx}-->
-<!--    </select>-->
-
-<!--    <select id="findMemberId" resultType="resultType=com.metanet.metamungmung.dto.member.MemberDTO">-->
-<!--        select memberId from member where email = #{email}-->
-<!--    </select>-->
-
-<!--    <select id="findMemberPW" resultType="resultType=com.metanet.metamungmung.dto.member.MemberDTO">-->
-<!--        select password from member where memberId = #{memberId}, email = #{email}-->
-<!--    </select>-->
+    <select id="getMemberInfo" resultType="com.metanet.metamungmung.dto.member.MemberDTO">
+        select * from member where memberIdx = #{memberIdx}
+    </select>
 
     <select id="findByUserId" resultType="com.metanet.metamungmung.dto.member.MemberDTO">
         select * from member where memberId = #{memberId}
@@ -31,10 +23,7 @@
     </insert>
 
     <select id="idCheck" resultType="int">
-        select count(*)
-        from member
-        where memberId = #{memberId} LIMIT 1
-        ) as subquery
+        select count(*) from member where memberId = #{memberId}
     </select>
 
     <select id="login" resultType="com.metanet.metamungmung.dto.member.MemberDTO">
