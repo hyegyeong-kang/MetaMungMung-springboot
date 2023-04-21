@@ -18,6 +18,6 @@ public class OnMeetingBoardDTO {
     private Date createDate;
     private Date updateDate;
     private MemberDTO onMeetingMember;
-    //private List<OnMeetingBoardReplyDTO> boardReplyList;
+//    private List<OnMeetingBoardReplyDTO> boardReplyList;
     //private List<OnMeetingBoardImgDTO> BoardImageList;
 }
