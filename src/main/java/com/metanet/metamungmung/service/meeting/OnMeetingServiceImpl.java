@@ -3,8 +3,12 @@ package com.metanet.metamungmung.service.meeting;
 import ch.qos.logback.core.util.FileUtil;
 import com.metanet.metamungmung.dto.meeting.OnMeetingDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
+import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.mapper.meeting.OnMeetingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,9 +100,21 @@ public class OnMeetingServiceImpl implements OnMeetingService {
 //            return mapper.getOnMeetingById(onMeetingMemDTO.getOnMeetingIdx());
 //        }
 //        return null;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
         OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
         onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
-        onMeetingMemDTO.setMemberIdx(1L);
+        onMeetingMemDTO.setMemberIdx(memberIdx);
         onMeetingMemDTO.setIsHost("0");
 
         mapper.joinOnMeeting(onMeetingMemDTO);

@@ -7,8 +7,12 @@ import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Member;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,12 +27,24 @@ public class OnMeetingController {
     @GetMapping("")
     public Map<String, List<OnMeetingDTO>> getOnMeetingList(){
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
         Map<String, List<OnMeetingDTO>> map = new HashMap<>();
 
-        Long memberIdx = 1L;
+//        Long memberIdx = 1L;
 //        System.out.println("member  "+ memberDTO);
 
 //        System.out.println("idx " + memberIdx);
+
         if(service.getOnMeetingListByMember(memberIdx) != null){
             map.put("myList", service.getOnMeetingListByMember(memberIdx));
         }
@@ -44,8 +60,20 @@ public class OnMeetingController {
 
     @PostMapping("")
     public OnMeetingDTO createOnMeeting(@RequestBody OnMeetingDTO onMeetingDTO){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
         OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
-        onMeetingMemDTO.setMemberIdx(1L);
+        onMeetingMemDTO.setMemberIdx(memberIdx);
         return service.createOnMeeting(onMeetingDTO, onMeetingMemDTO);
     }
 
@@ -91,12 +119,35 @@ public class OnMeetingController {
 
     @DeleteMapping("/{id}/withdraw")
     public int withdrawOnMeeting(@PathVariable("id") Long id){
-        return service.removeOnMeetingMem(id, 1L);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
+        return service.removeOnMeetingMem(id, memberIdx);
     }
 
     @DeleteMapping("/{id}")
     public int removeOnMeeting(@PathVariable("id") Long id){
-        return service.removeOnMeeting(id, 1L);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
+        return service.removeOnMeeting(id, memberIdx);
     }
 
 }
