@@ -4,6 +4,8 @@ import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingBoardService;
+import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
+import com.metanet.metamungmung.vo.meeting.GetOnMeetingVO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +22,7 @@ public class OnMeetingBoardController {
 
     // 게시글 목록 조회
     @GetMapping("{onMeetingIdx}/board")
-    public List<OnMeetingBoardDTO> getBoardList(@PathVariable("onMeetingIdx")Long onMeetingIdx)throws Exception {
+    public List<GetOnMeetingBoardVO> getBoardList(@PathVariable("onMeetingIdx")Long onMeetingIdx)throws Exception {
         return service.getBoardList(onMeetingIdx);
     }
 
@@ -32,8 +34,10 @@ public class OnMeetingBoardController {
 
     // 게시글 작성
     @PostMapping("{onMeetingIdx}/board")
-    public String registerBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardDTO boardDTO) {
-        service.registerBoard(onMeetingIdx, boardDTO);
+    public String registerBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardDTO onMeetingBoardDTO) {
+        Long memberIdx = 1L;
+        onMeetingBoardDTO.setMemberIdx(memberIdx);
+        service.registerBoard(onMeetingIdx, onMeetingBoardDTO);
         return "register ok";
     }
 

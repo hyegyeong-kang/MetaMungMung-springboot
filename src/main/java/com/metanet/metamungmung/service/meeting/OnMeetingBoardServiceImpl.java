@@ -3,6 +3,8 @@ package com.metanet.metamungmung.service.meeting;
 import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.mapper.meeting.OnMeetingBoardMapper;
+import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
+import com.metanet.metamungmung.vo.meeting.GetOnMeetingVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,7 @@ public class OnMeetingBoardServiceImpl implements OnMeetingBoardService{
 
     // 게시글 목록 조회
     @Override
-    public List<OnMeetingBoardDTO> getBoardList(Long onMeetingIdx) {
+    public List<GetOnMeetingBoardVO> getBoardList(Long onMeetingIdx) {
         return mapper.getBoardList(onMeetingIdx);
     }
 

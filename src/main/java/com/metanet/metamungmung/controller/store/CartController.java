@@ -134,14 +134,15 @@ public class CartController {
         return true;
     }
 
-    @DeleteMapping("/{cartIdx}")
-    public String deleteCart(@PathVariable("cartIdx") Long cartIdx, @RequestBody Map<String, Integer> productInfo) throws Exception {
+    @DeleteMapping("/{productIdx}")
+    public String deleteCart(@PathVariable("productIdx") Long productIdx) throws Exception {
         // Long m_id = (Long) session.getAttribute("member");
-        Long productIdx = Long.valueOf(productInfo.get("productIdx"));
-        System.out.println("p_id: " + productIdx);
-        System.out.println("cartIdx: " + cartIdx);
+        System.out.println("삭제 컨트롤러 들어왓냐!");
+     //   Long productIdx = Long.valueOf(productInfo.get("productIdx"));
+     //   System.out.println("deleteProductID!!!: " + productIdx);
+        System.out.println("cartIdx: " + productIdx);
 
-        service.deleteCart(cartIdx, 1L, productIdx);
+        service.deleteCart(productIdx, 1L);
 
         return "delete ok";
     }

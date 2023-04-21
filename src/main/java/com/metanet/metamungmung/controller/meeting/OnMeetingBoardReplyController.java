@@ -31,7 +31,10 @@ public class OnMeetingBoardReplyController {
     @PostMapping("{onMeetingIdx}/board/reply")
     @ResponseBody
     public void addReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardReplyDTO replyDTO) {
-        service.addReply(onMeetingIdx, replyDTO);
+        Long memberIdx = 1L;
+        replyDTO.setOnMeetingIdx(onMeetingIdx);
+        replyDTO.setOnMeetingIdx(memberIdx);
+        service.addReply(replyDTO);
     }
 
 
@@ -39,12 +42,15 @@ public class OnMeetingBoardReplyController {
     // /onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply/{onMeetingReplyIdx}
     @PatchMapping("{onMeetingIdx}/board/reply/{onMeetingReplyIdx}")
     public void updateReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardReplyDTO replyDTO){
-        service.updateReply(onMeetingIdx, replyDTO);
+        Long onMeetingBoardIdx = replyDTO.getOnMeetingBoardIdx();
+        Long memberIdx = 1L;
+        service.updateReply(onMeetingIdx, onMeetingBoardIdx, memberIdx);
     }
 
     // 해당 게시물 댓글 삭제
     @DeleteMapping("{onMeetingIdx}/board/reply/{onMeetingReplyIdx}")
     public void deleteReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingReplyIdx")Long onMeetingReplyIdx){
-        service.deleteReply(onMeetingIdx, onMeetingReplyIdx);
+        Long memberIdx = 1L;
+        service.deleteReply(onMeetingIdx, onMeetingReplyIdx, memberIdx);
     }
 }

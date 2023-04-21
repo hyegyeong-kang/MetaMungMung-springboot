@@ -15,4 +15,5 @@ public class OnMeetingBoardReplyDTO {
     private Date createDate;
     private Date updateDate;
     private String writer;
+    private String replyWriterImg;
 }

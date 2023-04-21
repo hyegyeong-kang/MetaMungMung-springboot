@@ -14,13 +14,13 @@ public interface OnMeetingBoardReplyMapper {
     public GetOnMeetingBoardVO getBoardReply(Long onMeetingIdx, Long onMeetingBoardIdx, Long memberIdx);
 
     // 해당 게시물 댓글 추가
-    public void addReply(Long onMeetingIdx, OnMeetingBoardReplyDTO replyDTO);
+    public void addReply(OnMeetingBoardReplyDTO replyDTO);
 
     // 해당 게시물 댓글 수정
-    public void updateReply(Long onMeetingIdx, OnMeetingBoardReplyDTO replyDTO);
+    public void updateReply(Long onMeetingIdx, Long onMeetingBoardIdx, Long memberIdx);
 
     // 해당 게시물 댓글 삭제
-    public void deleteReply(Long onMeetingIdx, Long onMeetingReplyIdx);
+    public void deleteReply(Long onMeetingIdx, Long onMeetingReplyIdx, Long memberIdx);
 
 
 }
