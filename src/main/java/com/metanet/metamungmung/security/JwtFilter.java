@@ -32,6 +32,14 @@ public class JwtFilter extends BasicAuthenticationFilter {
         HttpServletRequest rq = (HttpServletRequest) request2;
         HttpServletResponse rp = (HttpServletResponse) response2;
         System.out.println("--------------------------혹시 시작도 안 되는 거니?");
+
+        String requestURI = rq.getRequestURI();
+
+        if (requestURI.equals("/members/idCheck")) {
+            filterChain.doFilter(rq, rp); // 해당 URL은 토큰 검증을 수행하지 않음
+            return;
+        }
+
         if (rq.getHeader("AUTHORIZATION") == null) {
             System.out.println("--------------------------혹시 없는거니?");
             return;

@@ -63,7 +63,6 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         String username = member.getUsername();
         response.addHeader("memberIdx", member.getMemberIdx().toString());
         response.addHeader("status", member.getStatus());
-        response.addHeader("authority", member.getAuthority());
         String token = Jwts.builder()
                 .setHeaderParam("type", "token")
                 .setSubject(username)

@@ -26,7 +26,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-//                        .antMatchers("/**")
                 .antMatchers("/members/signup")
                 .antMatchers("/members/idCheck");
         // 이 요청들에 대해서는 spring security 필터 체인을 적용하지 않겠다
@@ -38,8 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/**").permitAll()
                 .antMatchers("/members").permitAll()
-                .antMatchers("/members/idCheck").permitAll()
                 .antMatchers("/members/modify").hasAnyRole("MEMBER", "DOGOWNER")
+                .antMatchers("/members/my").hasAnyRole("MEMBER", "DOGOWNER")
                 .antMatchers("/members/pets/register").hasAnyRole("MEMBER", "DOGOWNER")
                 .antMatchers("/onMeetings").hasAnyRole("MEMBER", "DOGOWNER")
                 .antMatchers("/offMeetings").hasAnyRole("MEMBER", "DOGOWNER")
