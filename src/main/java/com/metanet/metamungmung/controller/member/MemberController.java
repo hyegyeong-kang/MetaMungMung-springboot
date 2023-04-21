@@ -5,7 +5,10 @@ import com.metanet.metamungmung.dto.member.PetDTO;
 import com.metanet.metamungmung.service.member.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,10 +25,27 @@ public class MemberController {
         return service.getMemberList();
     }
 
+    @GetMapping("/my")
+    public MemberDTO getMemberInfo() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
+        return service.getMemberInfo(memberIdx);
+    }
+
     @PostMapping("/login")
     public ResponseEntity login(@AuthenticationPrincipal MemberDTO member) {
         System.out.println(member);
-//        return ResponseEntity.ok().header("memberIdx");
         return null;
     }
 
@@ -61,9 +81,27 @@ public class MemberController {
         service.modify(member);
     }
 
+    @PatchMapping("/withdrawal/{memberIdx}")
+    public void withdrawal(@PathVariable("memberIdx") Long memberIdx, @RequestBody MemberDTO member) {
+        member.setMemberIdx(memberIdx);
+        service.withdrawal(member);
+    }
+
     @GetMapping("/pets")
     public List<PetDTO> getPetList() {
-        return service.getPetList();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
+        return service.getPetList(memberIdx);
     }
 
     @PostMapping("/pets/register")
@@ -71,6 +109,20 @@ public class MemberController {
         System.out.println(pet);
         service.register(pet);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/pets/register/{memberIdx}")
+    public void updateAuth(@PathVariable("memberIdx") Long memberIdx, @RequestBody MemberDTO member) {
+        member.setMemberIdx(memberIdx);
+        service.updateAuth(member);
+    }
+
+    @DeleteMapping("/pets/{petIdx}")
+    public void delete(@PathVariable("petIdx") Long petIdx) {
+        PetDTO pet = new PetDTO();
+        System.out.println(petIdx + "--------------------");
+        pet.setPetIdx(petIdx);
+        service.delete(pet);
     }
 
 }

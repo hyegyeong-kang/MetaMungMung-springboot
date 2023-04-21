@@ -9,17 +9,9 @@
         select * from member
     </select>
 
-<!--    <select id="getMemberInfo" resultType="resultType=com.metanet.metamungmung.dto.member.MemberDTO">-->
-<!--        select memberName, sex, birth, email, phone, address1, address2 from member where memberIdx = #{memberIdx}-->
-<!--    </select>-->
-
-<!--    <select id="findMemberId" resultType="resultType=com.metanet.metamungmung.dto.member.MemberDTO">-->
-<!--        select memberId from member where email = #{email}-->
-<!--    </select>-->
-
-<!--    <select id="findMemberPW" resultType="resultType=com.metanet.metamungmung.dto.member.MemberDTO">-->
-<!--        select password from member where memberId = #{memberId}, email = #{email}-->
-<!--    </select>-->
+    <select id="getMemberInfo" resultType="com.metanet.metamungmung.dto.member.MemberDTO">
+        select * from member where memberIdx = #{memberIdx}
+    </select>
 
     <select id="findByUserId" resultType="com.metanet.metamungmung.dto.member.MemberDTO">
         select * from member where memberId = #{memberId}
@@ -31,9 +23,7 @@
     </insert>
 
     <select id="idCheck" resultType="int">
-        select count(*)
-        from member
-        where memberId = #{memberId}
+        select count(*) from member where memberId = #{memberId}
     </select>
 
     <select id="login" resultType="com.metanet.metamungmung.dto.member.MemberDTO">
@@ -50,6 +40,18 @@
         where memberIdx = #{memberIdx}
     </update>
 
+    <update id="withdrawal">
+        update member
+        set status = #{status}
+        where memberIdx = #{memberIdx}
+    </update>
+
+    <update id="updateAuth">
+        update member
+        set authority = #{authority}
+        where memberIdx = #{memberIdx}
+    </update>
+
     <!-- 스프링 시큐리티에서 사용할 이메일 -->
     <select id="getUserEmail" resultType="com.metanet.metamungmung.dto.member.MemberDTO">
         select *
@@ -60,12 +62,16 @@
 
     <!--  Pet 부분  -->
     <select id="getPetList" resultType="com.metanet.metamungmung.dto.member.PetDTO">
-        select * from pet
+        select * from pet where memberIdx = #{memberIdx}
     </select>
 
     <insert id="register">
         insert into pet (petIdx, memberIdx, animalRegistrationNo, petName, sex, birth)
         values (pet_seq.nextval, #{memberIdx}, #{animalRegistrationNo}, #{petName}, #{sex}, #{birth})
     </insert>
+
+    <delete id="delete">
+        delete from pet where petIdx = #{petIdx}
+    </delete>
 
 </mapper>

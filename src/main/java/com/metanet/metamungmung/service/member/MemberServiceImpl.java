@@ -6,13 +6,9 @@ import com.metanet.metamungmung.mapper.member.MemberMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -40,17 +35,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public MemberDTO getMemberInfo(Long memberIdx) {
+        System.out.println("넘어오나요?---------------------");
         return mapper.getMemberInfo(memberIdx);
-    }
-
-    @Override
-    public MemberDTO findMemberId(String email) {
-        return mapper.findMemberId(email);
-    }
-
-    @Override
-    public MemberDTO findMemberPW(String memberId, String email) {
-        return null;
     }
 
     @Override
@@ -87,18 +73,38 @@ public class MemberServiceImpl implements MemberService {
         return mapper.modify(member);
     }
 
+    @Override
+    public int withdrawal(MemberDTO member) {
+        String status = member.getStatus();
+        member.setStatus(status);
+        return mapper.withdrawal(member);
+    }
+
+    @Override
+    public int updateAuth(MemberDTO member) {
+        String authority = member.getAuthority();
+        member.setAuthority(authority);
+        return mapper.updateAuth(member);
+    }
+
     public MemberDTO getUserEmail(String email) {
         return mapper.getUserEmail(email);
     }
 
+//    pet 부분
     @Override
-    public List<PetDTO> getPetList() {
-        return mapper.getPetList();
+    public List<PetDTO> getPetList(Long memberIdx) {
+        return mapper.getPetList(memberIdx);
     }
 
     @Override
     public void register(PetDTO pet) {
         mapper.register(pet);
+    }
+
+    @Override
+    public int delete(PetDTO pet) {
+        return mapper.delete(pet);
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(List<String> roles) {

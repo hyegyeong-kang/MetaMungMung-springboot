@@ -61,7 +61,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         System.out.println("여기가 넘어와야 해요--------------------------");
         MemberDTO member = (MemberDTO) authResult.getPrincipal();
         String username = member.getUsername();
-        response.addHeader("memberIdx",member.getMemberIdx().toString());
+        response.addHeader("memberIdx", member.getMemberIdx().toString());
+        response.addHeader("status", member.getStatus());
         String token = Jwts.builder()
                 .setHeaderParam("type", "token")
                 .setSubject(username)
