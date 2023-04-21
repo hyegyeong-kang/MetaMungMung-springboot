@@ -3,6 +3,7 @@ package com.metanet.metamungmung.service.meeting;
 import com.metanet.metamungmung.dto.meeting.OffMeetingDTO;
 import com.metanet.metamungmung.dto.meeting.OffMeetingMemDTO;
 import com.metanet.metamungmung.dto.meeting.PatchOffMeetingDTO;
+import com.metanet.metamungmung.vo.meeting.GetOffMeeting2VO;
 import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 import com.metanet.metamungmung.mapper.meeting.OffMeetingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class OffMeetingServiceImpl implements OffMeetingService {
     }
 
     @Override
-    public OffMeetingDTO getOffMeeting(Long offMeetingIdx) {
+    public GetOffMeeting2VO getOffMeeting(Long offMeetingIdx) {
         return offMeetingMapper.getOffMeeting(offMeetingIdx);
     }
 
