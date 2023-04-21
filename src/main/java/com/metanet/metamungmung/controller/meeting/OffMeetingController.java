@@ -61,24 +61,16 @@ public class OffMeetingController {
 
         /* 오프모임을 생성한다. */
         offMeetingService.registerOffMeeting(offMeetingDTO);
-        System.out.println("offMeetingDTO => " + offMeetingDTO);
-
-        System.out.println("getOnMeetingDetailVO => " + getOnMeetingDetailVO.getTitle() + getOnMeetingDetailVO.getMemberIdx());
 
         /* 온미팅회원필요 => */
         OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
         onMeetingMemDTO.setOnMeetingIdx(getOnMeetingDetailVO.getOnMeetingIdx());
         onMeetingMemDTO.setMemberIdx(getOnMeetingDetailVO.getMemberIdx());
 
-        System.out.println("onMeetingMemDTO 전이지롱 !!!!! => " + onMeetingMemDTO);
-
         onMeetingMemDTO = onMeetingService.getOnMeetingMemById(onMeetingMemDTO);
-
-        System.out.println("onMeetingMemDTO 나왓지롱 !!!!! => " + onMeetingMemDTO);
 
         /* 생성된 오프모임의 offMeetingIdx를 가져온다. */
         Long newOffMeetingIdx = offMeetingDTO.getOffMeetingIdx();
-        System.out.println("newOffMeetingIdx ======> !!!" + newOffMeetingIdx);
 
         /* OffMeetingMemDTO 객체 생성 */
         OffMeetingMemDTO offMeetingMemDTO = new OffMeetingMemDTO();
