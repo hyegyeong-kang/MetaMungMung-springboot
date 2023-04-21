@@ -1,8 +1,10 @@
 package com.metanet.metamungmung.controller.meeting;
 
 
+import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingBoardReplyService;
+import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +19,11 @@ public class OnMeetingBoardReplyController {
     @Autowired
     private OnMeetingBoardReplyService service;
     // 해당 게시물 댓글 조회
-    ///onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply
-    @GetMapping("{onMeetingIdx}/board/reply")
-    public List<OnMeetingBoardReplyDTO> getReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx){
-        return service.replyList(onMeetingIdx);
+    ////onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply
+    @GetMapping("{onMeetingIdx}/board/{onMeetingBoardIdx}/reply")
+    public GetOnMeetingBoardVO getReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingBoardIdx")Long onMeetingBoardIdx){
+        Long memberIdx = 1L;
+        return service.replyList(onMeetingIdx, onMeetingBoardIdx, memberIdx);
     }
 
 
@@ -28,7 +31,10 @@ public class OnMeetingBoardReplyController {
     @PostMapping("{onMeetingIdx}/board/reply")
     @ResponseBody
     public void addReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardReplyDTO replyDTO) {
-        service.addReply(onMeetingIdx, replyDTO);
+        Long memberIdx = 1L;
+        replyDTO.setOnMeetingIdx(onMeetingIdx);
+        replyDTO.setOnMeetingIdx(memberIdx);
+        service.addReply(replyDTO);
     }
 
 
@@ -36,12 +42,15 @@ public class OnMeetingBoardReplyController {
     // /onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply/{onMeetingReplyIdx}
     @PatchMapping("{onMeetingIdx}/board/reply/{onMeetingReplyIdx}")
     public void updateReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardReplyDTO replyDTO){
-        service.updateReply(onMeetingIdx, replyDTO);
+        Long onMeetingBoardIdx = replyDTO.getOnMeetingBoardIdx();
+        Long memberIdx = 1L;
+        service.updateReply(onMeetingIdx, onMeetingBoardIdx, memberIdx);
     }
 
     // 해당 게시물 댓글 삭제
     @DeleteMapping("{onMeetingIdx}/board/reply/{onMeetingReplyIdx}")
     public void deleteReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingReplyIdx")Long onMeetingReplyIdx){
-        service.deleteReply(onMeetingIdx, onMeetingReplyIdx);
+        Long memberIdx = 1L;
+        service.deleteReply(onMeetingIdx, onMeetingReplyIdx, memberIdx);
     }
 }

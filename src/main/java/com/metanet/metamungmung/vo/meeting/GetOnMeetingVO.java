@@ -16,5 +16,5 @@ public class GetOnMeetingVO {
     private String thumbnail;
     private int personnel;
 
-    private List<OnMeetingBoardDTO> boardList;
+    private List<GetOnMeetingBoardVO> boardList;
 }
