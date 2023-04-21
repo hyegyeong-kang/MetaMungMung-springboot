@@ -1,5 +1,6 @@
 package com.metanet.metamungmung.controller.store;
 
+import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.dto.store.OrderDTO;
 import com.metanet.metamungmung.dto.store.OrderDetailDTO;
 import com.metanet.metamungmung.dto.store.OrderProductDTO;
@@ -12,6 +13,9 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -30,9 +34,18 @@ public class OrderController {
     @GetMapping("")
     public List<OrderDTO> getOrderList() {
 
-//		MemberDTO member = (MemberDTO) session.getAttribute("member");
-//		Long m_id = member.getM_id();
-        Long memberIdx = 1L;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
+//        Long memberIdx = 1L;
 
         return service.getOrderList(memberIdx);
     }
@@ -43,6 +56,8 @@ public class OrderController {
 
         OrderDTO orderDTO = service.getOrderDetailList(orderIdx);
         PaymentDTO paymentDTO = service.getPayment(orderIdx);
+
+        System.out.println("order!!!!" + orderDTO);
 
         Map<String, Object> response = new HashMap<>();
         response.put("order", orderDTO);
@@ -64,6 +79,17 @@ public class OrderController {
     @PostMapping("/payment")
     public ResponseEntity<Map<String, Object>> payment(@RequestBody RequestPayment requestPayment) {
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -78,7 +104,7 @@ public class OrderController {
 
 //		MemberDTO member = (MemberDTO) session.getAttribute("member");
 //		Long m_id = member.getM_id();
-        Long memberIdx = 1L;
+//        Long memberIdx = 1L;
         order.setMemberIdx(memberIdx);
         List<OrderProductDTO> orderProducts = orderProduct.getOrderProductList();
         System.out.println("orderProducts  : " + orderProducts);
@@ -100,9 +126,7 @@ public class OrderController {
 
 //		order.setTotal_amount(total_quantity); // 전달할 때 보내면 더 좋을듯
         order.setOrderDetailList(list);
-        System.out.println("order!!!!" + order);
 
-        //여기 오류나!!!!!
 //        payment.setM_id(m_id);
         service.addOrder(order, payment);
 
@@ -112,6 +136,7 @@ public class OrderController {
 //        }
 
 //		order = service.getOrderDetailList(order.getO_id());
+        System.out.println("!!!!order : " + order);
 
         Map<String, Object> response = new HashMap<>();
         response.put("order", order);
@@ -143,11 +168,22 @@ public class OrderController {
     @PatchMapping("/{orderIdx}/confirm")
     public ResponseEntity<Map<String, Object>> confirmOrder(@PathVariable("orderIdx") Long orderIdx){
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
         Map<String, Object> response = new HashMap<>();
         OrderDTO orderDTO = new OrderDTO();
         PaymentDTO paymentDTO = new PaymentDTO();
 
-        if(service.confirmOrder(orderIdx) == 1){
+        if(service.confirmOrder(orderIdx, memberIdx) == 1){
             orderDTO = service.getOrderDetailList(orderIdx);
             paymentDTO = service.getPayment(orderIdx);
         }

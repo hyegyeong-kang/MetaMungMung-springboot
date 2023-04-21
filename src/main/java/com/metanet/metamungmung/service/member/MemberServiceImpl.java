@@ -120,4 +120,14 @@ public class MemberServiceImpl implements MemberService {
 //        authorities.add(new SimpleGrantedAuthority(member.getAuthority()));
 //        return authorities;
 //    }
+
+    // 포인트 적립
+    @Override
+    public int accumulatePoint(int point, Long memberIdx) {
+        int originPoint = mapper.getMemberInfo(memberIdx).getPoint();
+        point += originPoint;
+        return mapper.accumulatePoint(point, memberIdx);
+    }
+
+
 }

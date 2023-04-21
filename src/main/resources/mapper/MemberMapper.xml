@@ -74,4 +74,12 @@
         delete from pet where petIdx = #{petIdx}
     </delete>
 
+
+    <!--    포인트 적립-->
+    <update id="accumulatePoint">
+        update member
+        set point = #{point}
+        where memberIdx = #{memberIdx}
+    </update>
+
 </mapper>

@@ -59,11 +59,11 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public int confirmOrder(Long orderIdx) {
+	public int confirmOrder(Long orderIdx, Long memberIdx) {
 
 		if(orderMapper.confirmOrder(orderIdx) == 1){
 			int accPoint = paymentMapper.getPayment(orderIdx).getAccPoint();
-			memberMapper.accumulatePoint(accPoint, 1L);
+			memberMapper.accumulatePoint(accPoint, memberIdx);
 		}
 		return 0;
 	}

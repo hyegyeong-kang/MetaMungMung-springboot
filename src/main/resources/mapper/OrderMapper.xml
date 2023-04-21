@@ -56,7 +56,7 @@
     </resultMap>
 
     <select id="getOrderDetail" resultMap="orderMap">
-        SELECT o.orderIdx, o.createDate, o.status, o.orderQuantity, o.orderPrice, o.memberIdx, od.quantity,
+        SELECT o.orderIdx, o.createDate, o.status, o.orderQuantity, o.orderPrice, o.memberIdx, o.deliveryMsg, od.quantity,
                p.productIdx, p.brand, p.productName, (p.price * od.quantity) as productPrice, p.productImg
         FROM orders o
                  JOIN orderDetail od ON o.orderIdx = od.orderIdx

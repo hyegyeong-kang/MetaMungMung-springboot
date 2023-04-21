@@ -24,6 +24,6 @@ public interface OrderService {
 
 	public int cancelOrder(Long orderIdx);
 
-	public int confirmOrder(Long orderIdx);
+	public int confirmOrder(Long orderIdx, Long memberIdx);
 
 }

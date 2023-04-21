@@ -32,4 +32,8 @@ public interface MemberMapper {
     public void register(PetDTO pet);
     public int delete(PetDTO pet);
 
+
+    // 포인트 적립
+    public int accumulatePoint(int point, Long memberIdx);
+
 }
