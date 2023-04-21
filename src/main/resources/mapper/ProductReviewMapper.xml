@@ -5,11 +5,41 @@
 <mapper namespace="com.metanet.metamungmung.mapper.store.ProductReviewMapper">
 
     <!-- 리뷰 조회 -->
-    <select id="getReviewList" resultType="com.metanet.metamungmung.dto.store.ProductReviewDTO">
-        select *
-        from productReview pr
-        left join product p
+    <resultMap id="GetReviewMemberVO" type="com.metanet.metamungmung.vo.store.GetReviewMemberVO">
+        <result column="memberIdx" property="memberIdx"></result>
+        <result column="memberId" property="memberId"></result>
+        <result column="memberImg" property="memberImg"></result>
+    </resultMap>
+
+    <resultMap id="GetReviewListVO" type="com.metanet.metamungmung.vo.store.GetReviewListVO">
+        <result column="productReviewIdx" property="productReviewIdx"></result>
+        <result column="productIdx" property="productIdx"></result>
+        <result column="title" property="title"></result>
+        <result column="content" property="content"></result>
+        <result column="createDate" property="createDate"></result>
+        <result column="updateDate" property="updateDate"></result>
+        <association property="reviewMember" resultMap="GetReviewMemberVO"></association>
+    </resultMap>
+
+    <select id="getReviewList" parameterType="com.metanet.metamungmung.vo.store.GetReviewListVO" resultMap="GetReviewListVO" >
+        select
+            pr.productReviewIdx,
+            pr.productIdx,
+            pr.memberIdx,
+            m.memberImg,
+            m.memberId,
+            pr.title,
+            pr.createDate,
+            pr.updateDate,
+            pr.content
+        from
+            productReview pr
+        left join
+            product p
         on pr.productIdx = p.productIdx
+        left join
+            member m
+        on pr.memberIdx = m.memberIdx
         where pr.productIdx = #{productIdx}
         and pr.status = 'ACTIVE'
         order by createDate DESC
