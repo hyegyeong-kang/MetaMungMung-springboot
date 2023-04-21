@@ -1,11 +1,18 @@
 package com.metanet.metamungmung.controller.meeting;
 
 import com.metanet.metamungmung.dto.meeting.*;
+import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import com.metanet.metamungmung.vo.meeting.GetOffMeeting2VO;
 import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 import com.metanet.metamungmung.service.meeting.OffMeetingService;
+import com.metanet.metamungmung.vo.meeting.GetOnMeetingDetailVO;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -45,25 +52,42 @@ public class OffMeetingController {
      * @return OffMeetingDTO
      **/
     @PostMapping("")
-    public String createOffMeeting(@RequestBody OffMeetingDTO offMeetingDTO) {
+    public String createOffMeeting(@RequestBody GetOnMeetingDetailVO getOnMeetingDetailVO) {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        /* 오프미팅 등록 폼 => onMeet*/
+        OffMeetingDTO offMeetingDTO = mapper.map(getOnMeetingDetailVO, OffMeetingDTO.class);
+
         /* 오프모임을 생성한다. */
         offMeetingService.registerOffMeeting(offMeetingDTO);
+        System.out.println("offMeetingDTO => " + offMeetingDTO);
+
+        System.out.println("getOnMeetingDetailVO => " + getOnMeetingDetailVO.getTitle() + getOnMeetingDetailVO.getMemberIdx());
+
+        /* 온미팅회원필요 => */
+        OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
+        onMeetingMemDTO.setOnMeetingIdx(getOnMeetingDetailVO.getOnMeetingIdx());
+        onMeetingMemDTO.setMemberIdx(getOnMeetingDetailVO.getMemberIdx());
+
+        System.out.println("onMeetingMemDTO 전이지롱 !!!!! => " + onMeetingMemDTO);
+
+        onMeetingMemDTO = onMeetingService.getOnMeetingMemById(onMeetingMemDTO);
+
+        System.out.println("onMeetingMemDTO 나왓지롱 !!!!! => " + onMeetingMemDTO);
 
         /* 생성된 오프모임의 offMeetingIdx를 가져온다. */
         Long newOffMeetingIdx = offMeetingDTO.getOffMeetingIdx();
+        System.out.println("newOffMeetingIdx ======> !!!" + newOffMeetingIdx);
 
         /* OffMeetingMemDTO 객체 생성 */
         OffMeetingMemDTO offMeetingMemDTO = new OffMeetingMemDTO();
 
         /* 생성된 오프모임의 offMeetingIdx를 넣어서 오프 모임 회원을 호스트로 생성한다. */
+        offMeetingMemDTO = mapper.map(onMeetingMemDTO, OffMeetingMemDTO.class);
+
         offMeetingMemDTO.setOffMeetingIdx(newOffMeetingIdx);
 
-        /* 임시 onMeetingMemIdx, onMeetingIdx */
-        offMeetingMemDTO.setOnMeetingMemIdx(45L);
-        offMeetingMemDTO.setOnMeetingIdx(14L);
-        offMeetingMemDTO.setMemberIdx(11L);
-
-        /* 등록과 동시에 호스트가 된다. */
         int idx = offMeetingService.registerOffMeetingHost(offMeetingMemDTO);
 
         /* 결과 */
