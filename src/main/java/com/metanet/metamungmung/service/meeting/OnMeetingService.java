@@ -14,17 +14,16 @@ public interface OnMeetingService {
     public int modifyOnMeeting(OnMeetingDTO onMeetingDTO);
     public int modifyOnMeetingPersonnel(OnMeetingDTO onMeetingDTO);
 
-    public int removeOnMeeting(Long id);
-
-    public List<OnMeetingDTO> searchOnMeeting(String searchKeyword);
+    public int removeOnMeeting(Long id, Long memberIdx);
+    public List<OnMeetingDTO> searchOnMeeting(String searchKeyword, String category, String address);
 
     public List<OnMeetingDTO> getRecommendOnMeetingList(Long memberIdx);
 
     public List<OnMeetingDTO> getOnMeetingListByMember(Long memberIdx);
 
-    public OnMeetingMemDTO joinOnMeeting(OnMeetingMemDTO onMeetingMemDTO);
+    public OnMeetingDTO joinOnMeeting(Long onMeetingIdx);
 
     public OnMeetingMemDTO getOnMeetingMemById(OnMeetingMemDTO onMeetingMemDTO);
 
-    public int removeOnMeetingMem(OnMeetingMemDTO onMeetingMemDTO);
+    public int removeOnMeetingMem(Long onMeetingIdx, Long memberIdx);
 }

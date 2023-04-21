@@ -4,4 +4,110 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.metanet.metamungmung.mapper.store.OrderMapper">
 
+    <!-- 특정 회원의 주문 목록 보기 -->
+    <select id="getOrderList" resultType="com.metanet.metamungmung.dto.store.OrderDTO">
+		<![CDATA[
+        SELECT *
+        FROM orders
+        WHERE orderIdx > 0
+          AND memberIdx = #{memberIdx}
+        ORDER BY createDate DESC
+        ]]>
+	</select>
+
+    <!-- 특정 회원의 특정 주문 보기 -->
+    <select id="getOrder" resultType="com.metanet.metamungmung.dto.store.OrderDTO">
+        SELECT *
+        FROM orders
+        WHERE orderIdx = #{orderIdx}
+    </select>
+
+    <!-- 특정 주문의 상세 보기 -->
+    <resultMap type="com.metanet.metamungmung.dto.store.OrderDTO" id="orderMap">
+        <result property="orderIdx" column="orderIdx"/>
+        <result property="memberIdx" column="memberIdx"/>
+        <result property="orderPrice" column="orderPrice"/>
+        <result property="deliveryMsg" column="deliveryMsg"/>
+        <result property="createDate" column="createDate"/>
+        <result property="updateDate" column="updateDate"/>
+        <result property="status" column="status"/>
+        <result property="orderQuantity" column="orderQuantity"/>
+        <collection property="orderDetailList" resultMap="orderDetailMap"/>
+    </resultMap>
+
+    <resultMap type="com.metanet.metamungmung.dto.store.OrderDetailDTO" id="orderDetailMap">
+        <result property="orderDetailIdx" column="orderDetailIdx"/>
+        <result property="orderIdx" column="orderIdx"/>
+        <result property="productIdx" column="productIdx"/>
+        <result property="quantity" column="quantity"/>
+        <association property="productDTO" javaType="com.metanet.metamungmung.dto.store.ProductDTO" resultMap="productMap"/>
+    </resultMap>
+
+    <resultMap type="com.metanet.metamungmung.dto.store.ProductDTO" id="productMap">
+        <result property="productIdx" column="productIdx"/>
+        <result property="category" column="category"/>
+        <result property="productName" column="productName"/>
+        <result property="brand" column="brand"/>
+        <result property="price" column="productPrice"/>
+        <result property="productImg" column="productImg"/>
+        <result property="productDetail" column="productDetail"/>
+        <result property="volume" column="volume"/>
+        <result property="productDetailImg" column="productDetailImg"/>
+    </resultMap>
+
+    <select id="getOrderDetail" resultMap="orderMap">
+        SELECT o.orderIdx, o.createDate, o.status, o.orderQuantity, o.orderPrice, o.memberIdx, o.deliveryMsg, od.quantity,
+               p.productIdx, p.brand, p.productName, (p.price * od.quantity) as productPrice, p.productImg
+        FROM orders o
+                 JOIN orderDetail od ON o.orderIdx = od.orderIdx
+                 JOIN product p ON od.productIdx = p.productIdx
+        WHERE o.orderIdx = #{orderIdx}
+    </select>
+
+    <!-- 특정 회원의 주문하기 -->
+    <!-- 주문 생성 -->
+    <insert id="createOrder">
+        INSERT INTO orders
+        VALUES(#{orderIdx}, #{memberIdx}, #{orderPrice}, #{deliveryMsg, jdbcType=VARCHAR},
+        sysdate, sysdate, '결제완료', #{orderQuantity})
+        <selectKey keyProperty="orderIdx" order="BEFORE" resultType="long">
+            SELECT orders_seq.nextval FROM dual
+        </selectKey>
+    </insert>
+    <!-- 주문 상세(리스트) 추가 -->
+    <insert id="createOrderDetail">
+        <foreach collection="orderDetailList" item="detail"
+                 separator=" " open="INSERT ALL " close="SELECT * FROM DUAL">
+            INTO orderDetail
+            VALUES (orderDetail_seq.nextval, #{orderIdx}, #{detail.productIdx}, #{detail.quantity})
+        </foreach>
+        <selectKey keyProperty="orderIdx" order="BEFORE" resultType="long">
+            SELECT orders_seq.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <!-- 주문 상품 정보 조회 -->
+    <select id="getProductInfo" resultType="com.metanet.metamungmung.dto.store.OrderProductDTO">
+        SELECT productIdx, brand, productName, price, productImg
+        FROM product
+        WHERE productIdx = #{productIdx}
+    </select>
+
+    <!-- 주문 취소(주문 내역은 남아있어야 함!) -->
+    <update id="cancelOrder">
+        UPDATE orders
+        SET
+            status = '주문취소'
+        WHERE
+            orderIdx = #{orderIdx} AND status = '결제완료'
+    </update>
+
+    <!--    구매확정-->
+    <update id="confirmOrder">
+        UPDATE orders
+        SET
+            status = '구매확정'
+        WHERE
+            orderIdx = #{orderIdx} AND status = '결제완료'
+    </update>
 </mapper>

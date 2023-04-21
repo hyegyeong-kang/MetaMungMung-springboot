@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.metanet.metamungmung.mapper.store.PaymentMapper">
+
+    <insert id="createPayment">
+        insert into payment values(payment_seq.nextval, #{orderIdx},
+                                   #{paymentPrice}, #{usePoint}, #{method}, sysdate, #{accPoint})
+        <selectKey keyProperty="orderIdx" order="BEFORE" resultType="long">
+            select orders_seq.currval from dual
+        </selectKey>
+    </insert>
+
+    <select id="getPayment" resultType="PaymentDTO">
+        select * from payment where orderIdx = #{orderIdx}
+    </select>
+
+</mapper>

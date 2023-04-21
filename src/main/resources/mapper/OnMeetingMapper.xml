@@ -4,17 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.metanet.metamungmung.mapper.meeting.OnMeetingMapper">
 
-<!--    On모임 생성-->
+    <!--    On모임 생성-->
     <insert id="createOnMeeting">
         insert into onMeeting
         values
-            (#{onMeetingIdx}, #{onMeetName}, #{category}, #{introduction, jdbcType=VARCHAR}, #{thumbnail, jdbcType=VARCHAR},
-             #{isPublic, jdbcType=VARCHAR}, #{onMeetingAddr, jdbcType=VARCHAR}, sysdate, sysdate, 50)
+        (#{onMeetingIdx}, #{onMeetName}, #{category}, #{introduction, jdbcType=VARCHAR}, #{thumbnail, jdbcType=VARCHAR},
+        #{isPublic, jdbcType=VARCHAR}, #{onMeetingAddr, jdbcType=VARCHAR}, sysdate, sysdate, 50)
         <selectKey keyProperty="onMeetingIdx" order="BEFORE" resultType="long">
             select onMeeting_seq.nextval from dual
         </selectKey>
     </insert>
-<!--    On모임 회원 생성-->
+    <!--    On모임 멤버 생성-->
     <insert id="createOnMeetingMem">
         insert into onMeetingMem
         values (onMeetingMem_seq.nextval, #{onMeetingIdx}, #{memberIdx}, sysdate, #{isHost, jdbcType=VARCHAR})
@@ -23,15 +23,20 @@
         </selectKey>
     </insert>
 
-<!--    On모임 회원 탈퇴-->
+    <!--    On모임 멤버 가입-->
+    <insert id="joinOnMeeting">
+        insert into onMeetingMem
+        values (onMeetingMem_seq.nextval, #{onMeetingIdx}, #{memberIdx}, sysdate, #{isHost, jdbcType=VARCHAR})
+    </insert>
+
+    <!--    On모임 멤버 삭제-->
     <delete id="removeOnMeetingMem">
         delete
         from onMeetingMem
-        where onMeetingIdx = #{onMeetingIdx}
-        and onMeetingMemIdx = #{onMeetingMemIdx}
+        where onMeetingMemIdx = #{onMeetingMemIdx}
     </delete>
 
-<!--    On모임 수정-->
+    <!--    On모임 수정-->
     <update id="modifyOnMeeting">
         update onMeeting
         set
@@ -42,7 +47,7 @@
             onMeetingIdx = #{onMeetingIdx}
     </update>
 
-<!--    On모임 수정(최대인원 변경)-->
+    <!--    On모임 수정(최대인원 변경)-->
     <update id="modifyOnMeetingPersonnel">
         update onMeeting
         set
@@ -51,162 +56,124 @@
             onMeetingIdx = #{onMeetingIdx}
     </update>
 
-<!--    On모임 삭제-->
-<!--    아예 날릴건지?-->
-<!--    on delete cascade 설정?!?!?!?!-->
+    <!--    On모임 삭제-->
+    <!--    아예 날릴건지?-->
     <delete id="removeOnMeeting">
         delete
         from onMeeting
         where onMeetingIdx = #{onMeetingIdx}
     </delete>
 
-<!--    On모임 하나 조회-->
-    <select id="getOnMeetingById" resultMap="onMeetingMap">
-        select meet.*,
-               (SELECT memberIdx
-                FROM onMeetingMem mem
-                WHERE onMeetingIdx = meet.onMeetingIdx
-                  AND isHost = '1') as hostIdx,
-               (SELECT memberName
-                FROM onMeetingMem mem
-                         JOIN member m
-                              ON mem.memberIdx = m.memberIdx
-                WHERE onMeetingIdx = meet.onMeetingIdx
-                  AND isHost = '1') as hostName,
-               (SELECT COUNT(*)
-                FROM onMeetingMem
-                WHERE onMeetingIdx = meet.onMeetingIdx) as memberCnt
-        from onMeeting meet
+    <sql id="selectOnMeeting">
+        SELECT distinct meet.*,
+                        (SELECT memberIdx
+                         FROM onMeetingMem
+                         WHERE onMeetingIdx = meet.onMeetingIdx
+                           AND isHost = '1') as hostIdx,
+                        (SELECT memberName
+                         FROM onMeetingMem mem
+                                  JOIN member m
+                                       ON mem.memberIdx = m.memberIdx
+                         WHERE onMeetingIdx = meet.onMeetingIdx
+                           AND isHost = '1') as hostName,
+                        (SELECT COUNT(*)
+                         FROM onMeetingMem
+                         WHERE onMeetingIdx = meet.onMeetingIdx) as memberCnt
+        FROM onMeeting meet
+    </sql>
 
+    <!--    On모임 하나 조회-->
+    <select id="getOnMeetingById" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
+        <include refid="selectOnMeeting"/>
         where onMeetingIdx = #{onMeetingIdx}
     </select>
 
-<!--    On모임 회원 하나 조회-->
+    <!--    On모임 회원 하나 조회-->
     <select id="getOnMeetingMemById" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO">
         select *
         from onMeetingMem mem
-        join member m on mem.memberIdx = m.memberIdx
+                 join member m on mem.memberIdx = m.memberIdx
         where mem.onMeetingIdx = #{onMeetingIdx}
-            and m.memberIdx = #{memberIdx}
+          and m.memberIdx = #{memberIdx}
     </select>
-<!--    호스트-->
-<!--    <select id="getOnMeetingHost" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">-->
-<!--        select  onMeetingIdx, onMeetName,-->
-<!--               (SELECT memberIdx-->
-<!--                FROM onMeetingMem mem-->
-<!--                WHERE onMeetingIdx = meet.onMeetingIdx-->
-<!--                  AND isHost = '1') as hostIdx,-->
-<!--               (SELECT memberName-->
-<!--                FROM onMeetingMem mem-->
-<!--                         JOIN member m-->
-<!--                              ON mem.memberIdx = m.memberIdx-->
-<!--                WHERE onMeetingIdx = meet.onMeetingIdx-->
-<!--                  AND isHost = '1') as hostName-->
-<!--        from onMeeting meet-->
-<!--        where onMeetingIdx = #{onMeetingIdx}-->
-<!--    </select>-->
 
-<!--    On모임 검색-->
+    <!--    On모임 검색-->
     <select id="searchOnMeeting" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
-        select *
-        from onMeeting
-        where (onMeetName LIKE %#{searchKeyword}% OR introduction LIKE %#{searchKeyword}%)
+        <include refid="selectOnMeeting"/>
+        JOIN onMeetingMem mem ON meet.onMeetingIdx = mem.onMeetingIdx
+        JOIN member m ON mem.memberIdx = m.memberIdx
+        WHERE (onMeetName LIKE '%' || #{searchKeyword} || '%'
+        OR introduction LIKE '%' || #{searchKeyword} || '%')
+        <if test='category != ""'>
+            AND category = #{category}
+        </if>
+        <if test='address != ""'>
+            AND onMeetingAddr = #{address}
+        </if>
     </select>
 
-<!--    On모임 검색(+카테고리)-->
-    <select id="searchOnMeetingWithCategory" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
-        select *
-        from onMeeting
-        where (onMeetName LIKE %#{searchKeyword}% OR introduction LIKE %#{searchKeyword}%) AND category = #{category}
-    </select>
-<!--    <select id="searchOnMeeting" parameterType="Search" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">-->
-<!--        select * from board-->
-<!--        <if test="area != null">-->
-<!--            <where>-->
-<!--                &lt;!&ndash; where (title LIKE %Java% OR writer LIKE %Java%) &ndash;&gt;-->
-<!--                <foreach collection="area" item="item" open="(" close=")" separator="OR">-->
-<!--                    ${item} LIKE #{searchKey}-->
-<!--                </foreach>-->
-<!--            </where>-->
-<!--        </if>-->
-<!--        order by seq desc-->
-<!--    </select>-->
-
-<!--    My On모임 리스트-->
+    <!--    My On모임 리스트-->
     <select id="getOnMeetingListByMember" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
-        select meet.*,
-               (SELECT memberIdx
-                FROM onMeetingMem mem
-                WHERE onMeetingIdx = meet.onMeetingIdx
-                  AND isHost = '1') as hostIdx,
-               (SELECT memberName
-                FROM onMeetingMem mem
-                         JOIN member m
-                              ON mem.memberIdx = m.memberIdx
-                WHERE onMeetingIdx = meet.onMeetingIdx
-                  AND isHost = '1') as hostName,
-               (SELECT COUNT(*)
-                FROM onMeetingMem
-                WHERE onMeetingIdx = meet.onMeetingIdx) as memberCnt
-        from onMeeting meet
-            join onMeetingMem mem on meet.onMeetingIdx = mem.onMeetingIdx
-            join member m on mem.memberIdx = m.memberIdx
+        SELECT distinct meet.*, mem.joinDate,
+                        (SELECT memberIdx
+                         FROM onMeetingMem
+                         WHERE onMeetingIdx = meet.onMeetingIdx
+                           AND isHost = '1') as hostIdx,
+                        (SELECT memberName
+                         FROM onMeetingMem mem
+                                  JOIN member m
+                                       ON mem.memberIdx = m.memberIdx
+                         WHERE onMeetingIdx = meet.onMeetingIdx
+                           AND isHost = '1') as hostName,
+                        (SELECT COUNT(*)
+                         FROM onMeetingMem
+                         WHERE onMeetingIdx = meet.onMeetingIdx) as memberCnt
+        FROM onMeeting meet
+                 JOIN onMeetingMem mem ON meet.onMeetingIdx = mem.onMeetingIdx
+                 JOIN member m ON mem.memberIdx = m.memberIdx
         where m.memberIdx = #{memberIdx}
+        ORDER BY mem.joinDate desc
     </select>
 
-<!--    추천 On모임 리스트-->
+    <!--    추천 On모임 리스트-->
     <select id="getRecommendOnMeetingList" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
-        SELECT distinct meet.*,
-               (SELECT memberIdx
-                FROM onMeetingMem
-                WHERE onMeetingIdx = meet.onMeetingIdx
-                  AND isHost = '1') as hostIdx,
-               (SELECT memberName
-                    FROM onMeetingMem mem
-                        JOIN member m
-                            ON mem.memberIdx = m.memberIdx
-                    WHERE onMeetingIdx = meet.onMeetingIdx
-                        AND isHost = '1') as hostName,
-               (SELECT COUNT(*)
-                    FROM onMeetingMem
-                        WHERE onMeetingIdx = meet.onMeetingIdx) as memberCnt
-               FROM onMeeting meet
-                   JOIN onMeetingMem mem ON meet.onMeetingIdx = mem.onMeetingIdx
-                   JOIN member m ON mem.memberIdx = m.memberIdx
-               WHERE m.memberIdx != #{memberIdx}
-                   ORDER BY DBMS_RANDOM.VALUE
+        <include refid="selectOnMeeting"/>
+        JOIN onMeetingMem mem ON meet.onMeetingIdx = mem.onMeetingIdx
+        JOIN member m ON mem.memberIdx = m.memberIdx
+        WHERE m.memberIdx != #{memberIdx}
+        ORDER BY DBMS_RANDOM.VALUE
     </select>
 
-    <resultMap id="onMeetingMap" type="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
-        <result property="onMeetingIdx" column="onMeetingIdx"/>
-        <result property="onMeetName" column="onMeetName"/>
-        <result property="category" column="category"/>
-        <result property="introduction" column="introduction"/>
-        <result property="thumbnail" column="thumbnail"/>
-        <result property="isPublic" column="isPublic"/>
-        <result property="onMeetingAddr" column="onMeetingAddr"/>
-        <result property="isPublic" column="isPublic"/>
-        <result property="hostIdx" column="hostIdx"/>
-        <result property="hostName" column="hostName"/>
-<!--        <collection property="onMeetingMemList" resultMap="onMeetingMemMap"/>-->
-    </resultMap>
+    <!--    <resultMap id="onMeetingMap" type="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">-->
+    <!--        <result property="onMeetingIdx" column="onMeetingIdx"/>-->
+    <!--        <result property="onMeetName" column="onMeetName"/>-->
+    <!--        <result property="category" column="category"/>-->
+    <!--        <result property="introduction" column="introduction"/>-->
+    <!--        <result property="thumbnail" column="thumbnail"/>-->
+    <!--        <result property="isPublic" column="isPublic"/>-->
+    <!--        <result property="onMeetingAddr" column="onMeetingAddr"/>-->
+    <!--        <result property="isPublic" column="isPublic"/>-->
+    <!--        <result property="hostIdx" column="hostIdx"/>-->
+    <!--        <result property="hostName" column="hostName"/>-->
+    <!--&lt;!&ndash;        <collection property="onMeetingMemList" resultMap="onMeetingMemMap"/>&ndash;&gt;-->
+    <!--    </resultMap>-->
 
-<!--    <resultMap id="onMeetingMemMap" type="com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO">-->
-<!--        <result property="onMeetingMemIdx" column="onMeetingMemIdx"/>-->
-<!--        <result property="onMeetingIdx" column="onMeetingIdx"/>-->
-<!--        <result property="memberIdx" column="memberIdx"/>-->
-<!--        <result property="isHost" column="isHost"/>-->
-<!--        <association property="memberDTO" resultMap="memberMap"/>-->
-<!--    </resultMap>-->
+    <!--    <resultMap id="onMeetingMemMap" type="com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO">-->
+    <!--        <result property="onMeetingMemIdx" column="onMeetingMemIdx"/>-->
+    <!--        <result property="onMeetingIdx" column="onMeetingIdx"/>-->
+    <!--        <result property="memberIdx" column="memberIdx"/>-->
+    <!--        <result property="isHost" column="isHost"/>-->
+    <!--        <association property="memberDTO" resultMap="memberMap"/>-->
+    <!--    </resultMap>-->
 
-<!--    <resultMap id="memberMap" type="com.metanet.metamungmung.dto.member.MemberDTO">-->
-<!--        <result property="memberIdx" column="memberIdx"/>-->
-<!--        <result property="memberId" column="memberId"/>-->
-<!--        <result property="memberName" column="memberName"/>-->
-<!--        <result property="sex" column="sex"/>-->
-<!--        <result property="birth" column="birth"/>-->
-<!--        <result property="email" column="email"/>-->
-<!--        <result property="memberImg" column="memberImg"/>-->
-<!--    </resultMap>-->
+    <!--    <resultMap id="memberMap" type="com.metanet.metamungmung.dto.member.MemberDTO">-->
+    <!--        <result property="memberIdx" column="memberIdx"/>-->
+    <!--        <result property="memberId" column="memberId"/>-->
+    <!--        <result property="memberName" column="memberName"/>-->
+    <!--        <result property="sex" column="sex"/>-->
+    <!--        <result property="birth" column="birth"/>-->
+    <!--        <result property="email" column="email"/>-->
+    <!--        <result property="memberImg" column="memberImg"/>-->
+    <!--    </resultMap>-->
 
 </mapper>
