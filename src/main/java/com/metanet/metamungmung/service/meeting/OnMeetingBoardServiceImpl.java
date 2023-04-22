@@ -5,6 +5,7 @@ import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.mapper.meeting.OnMeetingBoardMapper;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingVO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class OnMeetingBoardServiceImpl implements OnMeetingBoardService{
 
     // 게시글 목록 조회
     @Override
-    public List<GetOnMeetingBoardVO> getBoardList(Long onMeetingIdx) {
+    public List<GetOnMeetingVO> getBoardList(Long onMeetingIdx) {
         return mapper.getBoardList(onMeetingIdx);
     }
 
@@ -28,16 +29,22 @@ public class OnMeetingBoardServiceImpl implements OnMeetingBoardService{
         return mapper.getOnMeetingMembers(onMeetingIdx);
     }
 
+    // 온모임 가입한 사용자 명 수
+    @Override
+    public String getCnt(Long onMeetingIdx) {
+        return mapper.getCnt(onMeetingIdx);
+    }
+
     // 게시글 작성
     @Override
-    public String registerBoard(Long onMeetingIdx, OnMeetingBoardDTO board) {
-        return mapper.registerBoard(onMeetingIdx, board);
+    public void registerBoard(OnMeetingBoardDTO board) {
+         mapper.registerBoard(board);
     }
 
     // 게시글 수정
     @Override
-    public String updateBoard(Long onMeetingIdx, OnMeetingBoardDTO board) {
-        return mapper.updateBoard(onMeetingIdx, board);
+    public String updateBoard(OnMeetingBoardDTO board) {
+        return mapper.updateBoard(board);
     }
 
     // 게시글 삭제

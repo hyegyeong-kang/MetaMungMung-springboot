@@ -17,8 +17,14 @@ public class OnMeetingBoardReplyServiceImpl implements OnMeetingBoardReplyServic
 
     // 해당 게시물 댓글 조회
     @Override
-    public GetOnMeetingBoardVO replyList(Long onMeetingIdx, Long onMeetingBoardIdx, Long memberIdx) {
+    public List<GetOnMeetingBoardVO> replyList(Long onMeetingIdx, Long onMeetingBoardIdx, Long memberIdx) {
         return mapper.getBoardReply(onMeetingIdx, onMeetingBoardIdx, memberIdx);
+    }
+
+    // 전체 댓글가져오기
+    @Override
+    public List<GetOnMeetingBoardVO> getAllReplyList(Long onMeetingIdx, Long memberIdx) {
+        return mapper.getAllReplyList(onMeetingIdx, memberIdx);
     }
 
 

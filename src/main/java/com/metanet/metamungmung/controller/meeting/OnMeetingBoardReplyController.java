@@ -21,9 +21,15 @@ public class OnMeetingBoardReplyController {
     // 해당 게시물 댓글 조회
     ////onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply
     @GetMapping("{onMeetingIdx}/board/{onMeetingBoardIdx}/reply")
-    public GetOnMeetingBoardVO getReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingBoardIdx")Long onMeetingBoardIdx){
+    public List<GetOnMeetingBoardVO> getReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingBoardIdx")Long onMeetingBoardIdx){
         Long memberIdx = 1L;
         return service.replyList(onMeetingIdx, onMeetingBoardIdx, memberIdx);
+    }
+
+    @GetMapping("{onMeetingIdx}/board/reply")
+    public List<GetOnMeetingBoardVO> getAllReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx){
+        Long memberIdx = 1L;
+        return service.getAllReplyList(onMeetingIdx, memberIdx);
     }
 
 
@@ -31,9 +37,8 @@ public class OnMeetingBoardReplyController {
     @PostMapping("{onMeetingIdx}/board/reply")
     @ResponseBody
     public void addReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardReplyDTO replyDTO) {
-        Long memberIdx = 1L;
         replyDTO.setOnMeetingIdx(onMeetingIdx);
-        replyDTO.setOnMeetingIdx(memberIdx);
+        System.out.println("boardINSERT::" + replyDTO.toString());
         service.addReply(replyDTO);
     }
 
@@ -54,3 +59,4 @@ public class OnMeetingBoardReplyController {
         service.deleteReply(onMeetingIdx, onMeetingReplyIdx, memberIdx);
     }
 }
+
