@@ -5,19 +5,12 @@
 <mapper namespace="com.metanet.metamungmung.mapper.meeting.OnMeetingBoardMapper">
 
     <!--하나의 모임에 있는 게시글 목록 출력-->
-    <select id="getBoardList" resultMap="boardResultMap" resultType="com.metanet.metamungmung.vo.meeting.GetOnMeetingVO">
---         select *
---         from onMeeting o, onMeetingBoard ob, member m, onMeetingReply omr
---         where o.onMeetingIdx = #{onMeetingIdx}
---         and o.onMeetingIdx = ob.onMeetingIdx
--- --         and ob.onMeetingBoardIdx = omr.onMeetingBoardIdx
---         and ob.memberIdx = m.memberIdx
+    <select id="getBoardList" resultMap="boardResultMap" parameterType="com.metanet.metamungmung.vo.meeting.GetOnMeetingVO">
         SELECT *
         FROM onMeeting o
-                 LEFT JOIN onMeetingBoard ob ON o.onMeetingIdx = ob.onMeetingIdx
-                 LEFT JOIN member m ON ob.memberIdx = m.memberIdx
-                 LEFT JOIN onMeetingReply omr ON ob.onMeetingBoardIdx = omr.onMeetingBoardIdx
-        WHERE o.onMeetingIdx = #{onMeetingIdx};
+            LEFT JOIN onMeetingBoard ob ON o.onMeetingIdx = ob.onMeetingIdx
+            LEFT JOIN member m ON ob.memberIdx = m.memberIdx
+        WHERE o.onMeetingIdx = #{onMeetingIdx}
     </select>
 
     <resultMap id="boardResultMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingVO">
@@ -28,20 +21,20 @@
             <result column="introduction" property="introduction"/>
             <result column="thumbnail" property="thumbnail"/>
             <result column="personnel" property="personnel"/>
-            <collection property="boardList" autoMapping="true" resultMap="boardMap" ofType="java.lang.String"/>
+            <collection property="boardList" resultMap="boardMap"/>
     </resultMap>
 
     <resultMap id="boardMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO">
         <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
         <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
         <result column="onMeetingIdx" property="onMeetingIdx"/>
-        <result column="boardMemberIdx" property="memberIdx"/>
+        <result column="memberIdx" property="memberIdx"/>
         <result column="boardWriter" property="boardWriter"/>
         <result column="boardContents" property="boardContents"/>
         <result column="boardCreateDate" property="boardCreateDate"/>
         <result column="boardUpdateDate" property="boardUpdateDate"/>
-        <association property="boardMember" resultMap="boardMemMap" javaType="com.metanet.metamungmung.dto.member.MemberDTO"/>
-        <collection property="replyList" autoMapping="true" resultMap="replyMap" ofType="java.lang.String"/>
+        <association property="boardMember" resultMap="boardMemMap"/>
+<!--        <collection property="replyList" autoMapping="true" resultMap="replyMap" ofType="java.lang.String"/>-->
     </resultMap>
 
     <resultMap type="com.metanet.metamungmung.dto.member.MemberDTO" id="boardMemMap" >
@@ -63,24 +56,24 @@
         <result column="updateDate" property="updateDate"/>
     </resultMap>
 
-    <resultMap id="replyMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingReplyVO">
-        <result column="onMeetingReplyIdx" property="onMeetingReplyIdx"/>
-        <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
-        <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
-        <result column="memberIdx" property="memberIdx"/>
-        <result column="replyContents" property="replyContents"/>
-        <result column="replyCreateDate" property="replyCreateDate"/>
-        <result column="replyUpdateDate" property="replyUpdateDate"/>
-        <result column="replyWriter" property="replyWriter"/>
-        <result column="replyWriterImg" property="replyWriterImg"/>
-        <association property="replyMember" resultMap="onMemMap" javaType="com.metanet.metamungmung.vo.meeting.GetOnMeetingMemVO"/>
-    </resultMap>
+<!--    <resultMap id="replyMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingReplyVO">-->
+<!--        <result column="onMeetingReplyIdx" property="onMeetingReplyIdx"/>-->
+<!--        <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>-->
+<!--        <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>-->
+<!--        <result column="memberIdx" property="memberIdx"/>-->
+<!--        <result column="replyContents" property="replyContents"/>-->
+<!--        <result column="replyCreateDate" property="replyCreateDate"/>-->
+<!--        <result column="replyUpdateDate" property="replyUpdateDate"/>-->
+<!--        <result column="replyWriter" property="replyWriter"/>-->
+<!--        <result column="replyWriterImg" property="replyWriterImg"/>-->
+<!--        <association property="replyMember" resultMap="onMemMap" javaType="com.metanet.metamungmung.vo.meeting.GetOnMeetingMemVO"/>-->
+<!--    </resultMap>-->
 
-    <resultMap id="onMemMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingMemVO">
-        <result column="memberIdx" property="memberIdx"/>
-        <result column="memberNameVO" property="memberName"/>
-        <result column="memberImgVO" property="memberImg"/>
-    </resultMap>
+<!--    <resultMap id="onMemMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingMemVO">-->
+<!--        <result column="memberIdx" property="memberIdx"/>-->
+<!--        <result column="memberNameVO" property="memberName"/>-->
+<!--        <result column="memberImgVO" property="memberImg"/>-->
+<!--    </resultMap>-->
 
 
 
@@ -138,13 +131,14 @@
             boardUpdateDate
         ) values (
                      onMeetingBoard_seq.nextval,
-                     1L,
+                     #{onMeetingMemIdx},
                      #{onMeetingIdx},
-                     1L,
+                     #{memberIdx},
                      #{boardWriter},
                      #{boardContents},
                      #{onMeetingBoardAddr},
-                     sysdate,sysdate
+                     sysdate,
+                     sysdate
                  )
     </insert>
 

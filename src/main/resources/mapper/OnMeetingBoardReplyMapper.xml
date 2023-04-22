@@ -5,20 +5,14 @@
 <mapper namespace="com.metanet.metamungmung.mapper.meeting.OnMeetingBoardReplyMapper">
 
     <!--댓글 조회 -->
-    <select id="getBoardReply" resultMap="replyResultMap">
-        select omr.onMeetingBoardIdx, omr.onMeetingMemIdx, omr.onMeetingIdx,
-               omr.onMeetingReplyIdx, omr.onMeetingBoardIdx,
-               omr.onMeetingMemIdx, omr.onMeetingIdx,
-               omr.contents, omr.createDate, omr.updateDate, omr.writer
-        from onMeetingBoard omb, onMeetingReply omr
-        where omb.onMeetingBoardIdx = omr.onMeetingBoardIdx
-        and omr.onMeetingBoardIdx = #{onMeetingBoardIdx}
-        and omb.onMeetingIdx = #{onMeetingIdx}
-        and omb.onMeetingIdx = omr.onMeetingIdx
-
+    <select id="getBoardReply" resultMap="replyResultMap" parameterType="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO">
+        SELECT *
+        FROM onMeetingBoard omb
+        LEFT JOIN onMeetingReply omr ON omb.onMeetingBoardIdx = omr.onMeetingBoardIdx AND omb.onMeetingIdx = omr.onMeetingIdx
+        WHERE omb.onMeetingBoardIdx = #{onMeetingBoardIdx} AND omb.onMeetingIdx = #{onMeetingIdx}
     </select>
 
-    <resultMap id="replyResultMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO">
+    <resultMap id="replyResultMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoard2VO">
         <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
         <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
         <result column="onMeetingIdx" property="onMeetingIdx"/>
@@ -31,11 +25,45 @@
         <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
         <result column="onMeetingIdx" property="onMeetingIdx"/>
         <result column="memberIdx" property="memberIdx"/>
-        <result column="contents" property="contents"/>
-        <result column="createDate" property="createDate"/>
-        <result column="updateDate" property="updateDate"/>
-        <result column="writer" property="writer"/>
+        <result column="replyContents" property="replyContents"/>
+        <result column="replyCreateDate" property="replyCreateDate"/>
+        <result column="replyUpdateDate" property="replyUpdateDate"/>
+        <result column="replyWriter" property="replyWriter"/>
+        <result column="replyWriterImg" property="replyWriterImg"/>
     </resultMap>
+
+
+    <!--전체 댓글 조회 -->
+    <select id="getAllReplyList" resultMap="replyResultMap11" parameterType="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO">
+        SELECT *
+        FROM onMeetingBoard omb
+                 LEFT JOIN onMeetingReply omr ON omb.onMeetingBoardIdx = omr.onMeetingBoardIdx AND omb.onMeetingIdx = omr.onMeetingIdx
+        WHERE omb.onMeetingIdx = #{onMeetingIdx}
+    </select>
+
+    <resultMap id="replyResultMap11" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoard2VO">
+        <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
+        <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
+        <result column="onMeetingIdx" property="onMeetingIdx"/>
+        <collection property="replyList" resultMap="replyMap11"/>
+    </resultMap>
+
+    <resultMap type="com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO" id="replyMap11" >
+        <result column="onMeetingReplyIdx" property="onMeetingReplyIdx"/>
+        <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
+        <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
+        <result column="onMeetingIdx" property="onMeetingIdx"/>
+        <result column="memberIdx" property="memberIdx"/>
+        <result column="replyContents" property="replyContents"/>
+        <result column="replyCreateDate" property="replyCreateDate"/>
+        <result column="replyUpdateDate" property="replyUpdateDate"/>
+        <result column="replyWriter" property="replyWriter"/>
+        <result column="replyWriterImg" property="replyWriterImg"/>
+    </resultMap>
+
+
+
+
 
     <!--댓글 작성 // Long onMeetingIdx, OnMeetingBoardReplyDTO replyDTO-->
     <insert id="addReply">

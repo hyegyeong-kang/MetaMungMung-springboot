@@ -4,7 +4,6 @@ import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingBoardService;
-import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardDetailVO;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingVO;
 import lombok.AllArgsConstructor;
@@ -27,7 +26,9 @@ public class OnMeetingBoardController {
 
     // 게시글 목록 조회
     @GetMapping("{onMeetingIdx}/board")
-    public List<GetOnMeetingBoardVO> getBoardList(@PathVariable("onMeetingIdx")Long onMeetingIdx)throws Exception {
+    public List<GetOnMeetingVO> getBoardList(@PathVariable("onMeetingIdx")Long onMeetingIdx)throws Exception {
+        System.out.println("$$$$KANG" + onMeetingIdx);
+
         return service.getBoardList(onMeetingIdx);
     }
 
@@ -37,11 +38,16 @@ public class OnMeetingBoardController {
         return service.getOnMeetingMembers(onMeetingIdx);
     }
 
+//    @GetMapping("{onMeetingIdx}/board/members")
+//    public String getOnMeetingMembersCnt(@PathVariable("onMeetingIdx") Long onMeetingIdx) throws Exception {
+//        return service.getCnt(onMeetingIdx);
+//    }
+
+
+
     // 게시글 작성
     @PostMapping("{onMeetingIdx}/board")
-    public String registerBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardDTO onMeetingBoardDTO) {
-        Long memberIdx = 1L;
-
+    public void registerBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardDTO onMeetingBoardDTO) {
         System.out.println("등록컨트롤러!!");
 
 
@@ -58,12 +64,12 @@ public class OnMeetingBoardController {
        // onMeetingMemDTO = onMeetingService.getOnMeetingMemById(onMeetingMemDTO);
         onMeetingBoardDTO.setOnMeetingMemIdx(1L);
         onMeetingBoardDTO.setOnMeetingIdx(1L);
-        onMeetingBoardDTO.setMemberIdx(1L);
+
 
         System.out.println("등록컨트롤러!!" + onMeetingBoardDTO.toString());
         //onMeetingBoardDTO.setMemberIdx(memberIdx);
         service.registerBoard(onMeetingBoardDTO);
-        return "register ok";
+        //return "register ok";
     }
 
     // 게시글 수정

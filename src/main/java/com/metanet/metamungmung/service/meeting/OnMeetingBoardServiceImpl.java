@@ -19,7 +19,7 @@ public class OnMeetingBoardServiceImpl implements OnMeetingBoardService{
 
     // 게시글 목록 조회
     @Override
-    public List<GetOnMeetingBoardVO> getBoardList(Long onMeetingIdx) {
+    public List<GetOnMeetingVO> getBoardList(Long onMeetingIdx) {
         return mapper.getBoardList(onMeetingIdx);
     }
 
@@ -29,10 +29,16 @@ public class OnMeetingBoardServiceImpl implements OnMeetingBoardService{
         return mapper.getOnMeetingMembers(onMeetingIdx);
     }
 
+    // 온모임 가입한 사용자 명 수
+    @Override
+    public String getCnt(Long onMeetingIdx) {
+        return mapper.getCnt(onMeetingIdx);
+    }
+
     // 게시글 작성
     @Override
-    public String registerBoard(OnMeetingBoardDTO board) {
-        return mapper.registerBoard(board);
+    public void registerBoard(OnMeetingBoardDTO board) {
+         mapper.registerBoard(board);
     }
 
     // 게시글 수정
