@@ -61,9 +61,7 @@ public class ProductReviewController {
 
         /* productReviewDTO 객체에 값을 넣어준다. */
         productReviewDTO.setProductIdx(productIdx);
-
-//        System.out.println(productReviewDTO);
-
+        
         Long memberIdx = productReviewDTO.getMemberIdx();
 
         String result = "";
