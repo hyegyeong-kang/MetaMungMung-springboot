@@ -39,4 +39,9 @@ public class ProductReviewServiceImpl implements ProductReviewService {
     public int deleteReview(Map<String, Long> map) {
         return reviewMapper.deleteReview(map);
     }
+
+    @Override
+    public int checkReview(Long productIdx, Long memberIdx) {
+        return reviewMapper.checkReview(productIdx, memberIdx);
+    }
 }

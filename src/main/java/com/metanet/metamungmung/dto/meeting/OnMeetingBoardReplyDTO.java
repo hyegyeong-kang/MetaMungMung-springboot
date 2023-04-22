@@ -11,9 +11,9 @@ public class OnMeetingBoardReplyDTO {
     private Long onMeetingMemIdx;
     private Long onMeetingIdx;
     private Long memberIdx;
-    private String contents;
-    private Date createDate;
-    private Date updateDate;
-    private String writer;
+    private String replyContents;
+    private Date replyCreateDate;
+    private Date replyUpdateDate;
+    private String replyWriter;
     private String replyWriterImg;
 }
