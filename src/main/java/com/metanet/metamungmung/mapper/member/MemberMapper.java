@@ -15,6 +15,8 @@ public interface MemberMapper {
 
     public MemberDTO findByUserId(String memberId);
 
+    public String findId(String email);
+
     public void signUp(MemberDTO member);
 
     public int idCheck(String memberId);
