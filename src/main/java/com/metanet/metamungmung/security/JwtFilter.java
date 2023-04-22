@@ -40,6 +40,11 @@ public class JwtFilter extends BasicAuthenticationFilter {
             return;
         }
 
+        if (requestURI.equals("/members/findId")) {
+            filterChain.doFilter(rq, rp); // 해당 URL은 토큰 검증을 수행하지 않음
+            return;
+        }
+
         if (rq.getHeader("AUTHORIZATION") == null) {
             System.out.println("--------------------------혹시 없는거니?");
             return;
