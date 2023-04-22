@@ -67,6 +67,29 @@
 
     <!--댓글 작성 // Long onMeetingIdx, OnMeetingBoardReplyDTO replyDTO-->
     <insert id="addReply">
+        insert into onMeetingReply (
+            onMeetingReplyIdx,
+            onMeetingBoardIdx,
+            onMeetingMemIdx,
+            onMeetingIdx,
+            memberIdx,
+            replyContents,
+            replyWriter,
+            replyCreateDate,
+            replyUpdateDate,
+            replyWriterImg
+        ) values (
+                    ONMEETIINGBOARDREPLY_SEQ.nextval,
+                     #{onMeetingBoardIdx},
+                     #{onMeetingMemIdx},
+                     #{onMeetingIdx},
+                     #{memberIdx},
+                     #{replyContents},
+                     #{replyWriter},
+                     sysdate,
+                     sysdate,
+                     #{replyWriterImg}
+                 )
 
 
     </insert>

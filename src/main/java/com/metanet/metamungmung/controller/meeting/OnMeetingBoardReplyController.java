@@ -37,9 +37,8 @@ public class OnMeetingBoardReplyController {
     @PostMapping("{onMeetingIdx}/board/reply")
     @ResponseBody
     public void addReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardReplyDTO replyDTO) {
-        Long memberIdx = 1L;
         replyDTO.setOnMeetingIdx(onMeetingIdx);
-        replyDTO.setOnMeetingIdx(memberIdx);
+        System.out.println("boardINSERT::" + replyDTO.toString());
         service.addReply(replyDTO);
     }
 
