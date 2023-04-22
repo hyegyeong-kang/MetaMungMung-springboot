@@ -59,6 +59,12 @@ public class OffMeetingController {
         /* 오프미팅 등록 폼 => onMeet*/
         OffMeetingDTO offMeetingDTO = mapper.map(getOnMeetingDetailVO, OffMeetingDTO.class);
 
+        System.out.println("offMeetingDTO =======>" + offMeetingDTO);
+
+        System.out.println("getOn :::::::: " + getOnMeetingDetailVO);
+        System.out.println("getMemberOnIdx :::::::: " + getOnMeetingDetailVO.getMemberIdx());
+        System.out.println("getOnMeetingIdx :::::::: " + getOnMeetingDetailVO.getOnMeetingIdx());
+
         /* 오프모임을 생성한다. */
         offMeetingService.registerOffMeeting(offMeetingDTO);
 
@@ -67,10 +73,16 @@ public class OffMeetingController {
         onMeetingMemDTO.setOnMeetingIdx(getOnMeetingDetailVO.getOnMeetingIdx());
         onMeetingMemDTO.setMemberIdx(getOnMeetingDetailVO.getMemberIdx());
 
+        System.out.println("onMeetingMemDTO(전) ======> " + onMeetingMemDTO);
+
         onMeetingMemDTO = onMeetingService.getOnMeetingMemById(onMeetingMemDTO);
+
+        System.out.println("onMeetingMemDTO(후) ======> " + onMeetingMemDTO);
 
         /* 생성된 오프모임의 offMeetingIdx를 가져온다. */
         Long newOffMeetingIdx = offMeetingDTO.getOffMeetingIdx();
+
+        System.out.println("newOffMeetingIdx =====> " + newOffMeetingIdx);
 
         /* OffMeetingMemDTO 객체 생성 */
         OffMeetingMemDTO offMeetingMemDTO = new OffMeetingMemDTO();
@@ -79,6 +91,8 @@ public class OffMeetingController {
         offMeetingMemDTO = mapper.map(onMeetingMemDTO, OffMeetingMemDTO.class);
 
         offMeetingMemDTO.setOffMeetingIdx(newOffMeetingIdx);
+
+        System.out.println("offMeetingMemDTO ====> " + offMeetingMemDTO);
 
         int idx = offMeetingService.registerOffMeetingHost(offMeetingMemDTO);
 
