@@ -1,11 +1,8 @@
 package com.metanet.metamungmung.mapper.meeting;
 
-import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
 
 @Mapper
 public interface OnMeetingBoardReplyMapper {
@@ -24,3 +21,4 @@ public interface OnMeetingBoardReplyMapper {
 
 
 }
+

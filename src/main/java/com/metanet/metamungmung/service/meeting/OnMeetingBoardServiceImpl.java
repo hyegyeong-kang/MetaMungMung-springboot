@@ -5,6 +5,7 @@ import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.mapper.meeting.OnMeetingBoardMapper;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingVO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,14 +31,14 @@ public class OnMeetingBoardServiceImpl implements OnMeetingBoardService{
 
     // 게시글 작성
     @Override
-    public String registerBoard(Long onMeetingIdx, OnMeetingBoardDTO board) {
-        return mapper.registerBoard(onMeetingIdx, board);
+    public String registerBoard(OnMeetingBoardDTO board) {
+        return mapper.registerBoard(board);
     }
 
     // 게시글 수정
     @Override
-    public String updateBoard(Long onMeetingIdx, OnMeetingBoardDTO board) {
-        return mapper.updateBoard(onMeetingIdx, board);
+    public String updateBoard(OnMeetingBoardDTO board) {
+        return mapper.updateBoard(board);
     }
 
     // 게시글 삭제
