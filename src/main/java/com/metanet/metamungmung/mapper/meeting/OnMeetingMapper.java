@@ -21,15 +21,11 @@ public interface OnMeetingMapper {
     public int removeOnMeeting(Long id);
     public List<OnMeetingDTO> searchOnMeeting(String searchKeyword, String category, String address);
 
-    public List<OnMeetingDTO> getOnMeetingCategory(String category);
-
-    public List<OnMeetingDTO> searchOnMeetingWithCategory(String searchKeyword, String category);
-
-//    public List<OnMeetingDTO> searchOnMeetingWithCategory(String searchKeyword, String category);
+//    public List<OnMeetingDTO> searchOnMeetingWithCate(String category, String address);
+//
+//    public List<OnMeetingDTO> searchOnMeetingWithAddr(String address);
 
     public List<OnMeetingDTO> getRecommendOnMeetingList(Long memberIdx);
-
-//    public List<OnMeetingDTO> getRecommendOnMeetingListWithCategory(String memberIdx, String category);
 
     public List<OnMeetingDTO> getOnMeetingListByMember(Long memberIdx);
 

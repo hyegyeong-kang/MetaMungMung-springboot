@@ -6,6 +6,7 @@ import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import com.metanet.metamungmung.service.member.MemberService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,8 +25,6 @@ import java.util.Map;
 public class OnMeetingController {
 
     private OnMeetingService service;
-
-    private MemberService memberService;
 
     @GetMapping("")
     public Map<String, List<OnMeetingDTO>> getOnMeetingList(){
@@ -145,7 +144,7 @@ public class OnMeetingController {
             MemberDTO memberDTO = (MemberDTO) userDetails;
             memberIdx = memberDTO.getMemberIdx();
 
-            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~" + memberIdx);
         }
 
         return service.removeOnMeeting(id, memberIdx);

@@ -102,15 +102,37 @@
         <include refid="selectOnMeeting"/>
         JOIN onMeetingMem mem ON meet.onMeetingIdx = mem.onMeetingIdx
         JOIN member m ON mem.memberIdx = m.memberIdx
-        WHERE (onMeetName LIKE '%' || #{searchKeyword} || '%'
-        OR introduction LIKE '%' || #{searchKeyword} || '%')
-        <if test='category != ""'>
-            AND category = #{category}
-        </if>
-        <if test='address != ""'>
-            AND onMeetingAddr = #{address}
-        </if>
+        <where>
+            <if test='searchKeyword != ""'>
+                (onMeetName LIKE '%' || #{searchKeyword} || '%'
+                OR introduction LIKE '%' || #{searchKeyword} || '%')
+            </if>
+            <if test='category != ""'>
+                AND category = #{category}
+            </if>
+            <if test='address != ""'>
+                AND onMeetingAddr = #{address}
+            </if>
+        </where>
     </select>
+
+<!--    <select id="searchOnMeetingWithCate" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">-->
+<!--        <include refid="selectOnMeeting"/>-->
+<!--        JOIN onMeetingMem mem ON meet.onMeetingIdx = mem.onMeetingIdx-->
+<!--        JOIN member m ON mem.memberIdx = m.memberIdx-->
+<!--        WHERE-->
+<!--            category = #{category}-->
+<!--        <if test='address != ""'>-->
+<!--            AND onMeetingAddr = #{address}-->
+<!--        </if>-->
+<!--    </select>-->
+
+<!--    <select id="searchOnMeetingWithAddr" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">-->
+<!--        <include refid="selectOnMeeting"/>-->
+<!--        JOIN onMeetingMem mem ON meet.onMeetingIdx = mem.onMeetingIdx-->
+<!--        JOIN member m ON mem.memberIdx = m.memberIdx-->
+<!--        WHERE onMeetingAddr = #{address}-->
+<!--    </select>-->
 
     <!--    My On모임 리스트-->
     <select id="getOnMeetingListByMember" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
