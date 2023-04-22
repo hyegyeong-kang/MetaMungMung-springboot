@@ -4,6 +4,7 @@ import com.metanet.metamungmung.dto.meeting.OnMeetingDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
+import com.metanet.metamungmung.service.member.MemberService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,8 @@ public class OnMeetingController {
 
     private OnMeetingService service;
 
+    private MemberService memberService;
+
     @GetMapping("")
     public Map<String, List<OnMeetingDTO>> getOnMeetingList(){
 
@@ -34,8 +37,6 @@ public class OnMeetingController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             MemberDTO memberDTO = (MemberDTO) userDetails;
             memberIdx = memberDTO.getMemberIdx();
-
-            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
         }
 
         Map<String, List<OnMeetingDTO>> map = new HashMap<>();
