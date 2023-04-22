@@ -61,16 +61,25 @@ public class ProductReviewController {
 
         /* productReviewDTO 객체에 값을 넣어준다. */
         productReviewDTO.setProductIdx(productIdx);
-//        productReviewDTO.setMemberIdx(memberIdx);
 
-        System.out.println(productReviewDTO);
+//        System.out.println(productReviewDTO);
 
-        int idx = reviewService.registerReview(productReviewDTO);
+        Long memberIdx = productReviewDTO.getMemberIdx();
 
         String result = "";
 
-        if (idx == 1) {
-            result = "리뷰를 등록하였습니다.";
+
+        /* 이미 해당 구매 상품에 대해 작성한 리뷰가 있는지 체크한다. */
+        int idx1 = reviewService.checkReview(productIdx, memberIdx);
+
+        if(idx1 >= 1) {
+            result = "이미 작성한 리뷰가 존재합니다. ";
+        } else {
+            int idx2 = reviewService.registerReview(productReviewDTO);
+
+            if (idx2 == 1) {
+                result = "리뷰를 등록하였습니다.";
+            }
         }
 
         return result;

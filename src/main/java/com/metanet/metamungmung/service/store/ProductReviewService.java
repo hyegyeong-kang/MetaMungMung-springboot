@@ -17,4 +17,6 @@ public interface ProductReviewService {
     public int updateReview(PatchProductReviewDTO patchProductReviewDTO);
 
     public int deleteReview(Map<String, Long> map);
+
+    public int checkReview(Long productIdx, Long memberIdx);
 }

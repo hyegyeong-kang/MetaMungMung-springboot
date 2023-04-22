@@ -54,6 +54,14 @@
         and status = 'ACTIVE'
     </select>
 
+    <!-- 리뷰 등록 전 리뷰 존재 여부 확인  -->
+    <select id="checkReview" resultType="int">
+        select count(*)
+        from productReview
+        where productIdx = #{productIdx}
+        and memberIdx = #{memberIdx}
+    </select>
+
     <!-- 리뷰 등록 -->
     <insert id="registerReview">
         insert into
