@@ -11,6 +11,7 @@
             LEFT JOIN onMeetingBoard ob ON o.onMeetingIdx = ob.onMeetingIdx
             LEFT JOIN member m ON ob.memberIdx = m.memberIdx
         WHERE o.onMeetingIdx = #{onMeetingIdx}
+        ORDER BY ob.boardCreateDate DESC
     </select>
 
     <resultMap id="boardResultMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingVO">
@@ -159,6 +160,83 @@
     </delete>
 
     <!--게시글 검색 -->
+<!--    <select id="getSearchBoards" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO">-->
+<!--        select *-->
+<!--        from onMeetingBoard-->
+<!--        where boardContents LIKE '%'||TRIM(#{keyword})||'%'-->
+<!--        ORDER BY boardCreateDate DESC-->
+<!--    </select>-->
+
+
+    <select id="getSearchBoards" resultMap="boardResultMap9" parameterType="com.metanet.metamungmung.vo.meeting.GetOnMeetingVO">
+        SELECT *
+        FROM onMeeting o
+                 LEFT JOIN onMeetingBoard ob ON o.onMeetingIdx = ob.onMeetingIdx
+                 LEFT JOIN member m ON ob.memberIdx = m.memberIdx
+        WHERE o.onMeetingIdx = #{onMeetingIdx}
+        AND ob.boardContents LIKE '%'||TRIM(#{keyword})||'%'
+        ORDER BY ob.boardCreateDate DESC
+    </select>
+
+    <resultMap id="boardResultMap9" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingVO">
+        <result column="onMeetingIdx" property="onMeetingIdx"/>
+        <result column="onMeetName" property="onMeetName"/>
+        <result column="createDate" property="createDate"/>
+        <result column="updateDate" property="updateDate"/>
+        <result column="introduction" property="introduction"/>
+        <result column="thumbnail" property="thumbnail"/>
+        <result column="personnel" property="personnel"/>
+        <collection property="boardList" resultMap="boardMap9"/>
+    </resultMap>
+
+    <resultMap id="boardMap9" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO">
+        <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
+        <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
+        <result column="onMeetingIdx" property="onMeetingIdx"/>
+        <result column="memberIdx" property="memberIdx"/>
+        <result column="boardWriter" property="boardWriter"/>
+        <result column="boardContents" property="boardContents"/>
+        <result column="boardCreateDate" property="boardCreateDate"/>
+        <result column="boardUpdateDate" property="boardUpdateDate"/>
+        <association property="boardMember" resultMap="boardMemMap9"/>
+        <!--        <collection property="replyList" autoMapping="true" resultMap="replyMap" ofType="java.lang.String"/>-->
+    </resultMap>
+
+    <resultMap type="com.metanet.metamungmung.dto.member.MemberDTO" id="boardMemMap9" >
+        <result column="memberIdx" property="memberIdx"/>
+        <result column="memberId" property="memberId"/>
+        <result column="password" property="password"/>
+        <result column="memberName" property="memberName"/>
+        <result column="sex" property="sex"/>
+        <result column="birth" property="birth"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="address1" property="address1"/>
+        <result column="address2" property="address2"/>
+        <result column="authority" property="authority"/>
+        <result column="status" property="status"/>
+        <result column="point" property="point"/>
+        <result column="memberImg" property="memberImg"/>
+        <result column="createDate" property="createDate"/>
+        <result column="updateDate" property="updateDate"/>
+    </resultMap>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 게시글 전체 삭제 -->
+    <delete id="deleteAllBoards">
+        delete from onMeetingBoard
+        where onMeetingIdx = {onMeetingBoardIdx}
+    </delete>
 
 
 </mapper>
