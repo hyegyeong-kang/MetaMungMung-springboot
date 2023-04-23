@@ -146,7 +146,7 @@ public class OrderController {
     }
 
     /* 주문 취소 */
-    @PatchMapping("/{orderIdx}")
+    @PatchMapping("/{orderIdx}/cancel")
     public ResponseEntity<Map<String, Object>> cancelOrder(@PathVariable("orderIdx") Long orderIdx) {
 
         Map<String, Object> response = new HashMap<>();
@@ -165,7 +165,7 @@ public class OrderController {
     }
 
     /*구매 확정*/
-    @PatchMapping("/{orderIdx}/confirm")
+    @PatchMapping("/{orderIdx}")
     public ResponseEntity<Map<String, Object>> confirmOrder(@PathVariable("orderIdx") Long orderIdx){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
