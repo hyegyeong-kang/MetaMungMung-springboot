@@ -7,7 +7,6 @@ import com.metanet.metamungmung.service.meeting.OnMeetingBoardService;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingVO;
-import com.metanet.metamungmung.vo.store.GetBoardIndex;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
