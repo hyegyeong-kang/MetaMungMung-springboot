@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Mapper
 public interface OffMeetingMapper {
-    public List<OffMeetingDTO> getOffMeetingList();
+    public List<OffMeetingDTO> getOffMeetingList(Long onMeetingIdx);
 
     public GetOffMeeting2VO getOffMeeting(Long offMeetingIdx);
 
