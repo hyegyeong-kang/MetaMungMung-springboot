@@ -120,12 +120,6 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/pets/register/{memberIdx}")
-    public void updateAuth(@PathVariable("memberIdx") Long memberIdx, @RequestBody MemberDTO member) {
-        member.setMemberIdx(memberIdx);
-        service.updateAuth(member);
-    }
-
     @DeleteMapping("/pets/{petIdx}")
     public void delete(@PathVariable("petIdx") Long petIdx) {
         PetDTO pet = new PetDTO();
