@@ -7,6 +7,7 @@ import com.metanet.metamungmung.service.meeting.OnMeetingBoardService;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingVO;
+import com.metanet.metamungmung.vo.store.GetBoardIndex;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -77,11 +78,12 @@ public class OnMeetingBoardController {
         return "update ok";
     }
 
-    // 게시글 삭제
+    // 한개의 게시글 삭제
     @DeleteMapping("{onMeetingIdx}/board")
-    public String deleteBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestParam Long onMeetingBoardIdx){
+    public void deleteBoard(@PathVariable("onMeetingIdx") Long onMeetingIdx, @RequestParam(name = "onMeetingBoardIdx") Long onMeetingBoardIdx){
+      // System.out.println("삭제되나여??" + getBoardIndex.getOnMeetingBoardIdx());
         service.delete(onMeetingIdx, onMeetingBoardIdx);
-        return "delete ok";
+       // return "delete ok";
     }
 
     // 게시글 검색
