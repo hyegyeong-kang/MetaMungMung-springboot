@@ -4,6 +4,7 @@ import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingBoardService;
+import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingVO;
 import lombok.AllArgsConstructor;
@@ -21,8 +22,10 @@ public class OnMeetingBoardController {
 
     @Autowired
     private OnMeetingBoardService service;
-//    @Autowired
-//    private OnMeetingBoardService onMeetingService;
+
+    @Autowired
+    private OnMeetingService onMeetingService;
+
 
     // 게시글 목록 조회
     @GetMapping("{onMeetingIdx}/board")
@@ -50,24 +53,18 @@ public class OnMeetingBoardController {
     public void registerBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardDTO onMeetingBoardDTO) {
         System.out.println("등록컨트롤러!!");
 
+        OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
+        onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
+        onMeetingMemDTO.setMemberIdx(onMeetingBoardDTO.getMemberIdx());
 
-//        ModelMapper mapper = new ModelMapper();
-//        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-//
-//        OnMeetingBoardDTO onMeetingBoardDTO = mapper.map(getOnMeetingBoardDetailVO, OnMeetingBoardDTO.class);
+        //OnMeetingMemDTO omDTO = onMeetingService.getOnMeetingMemById(onMeetingMemDTO);
+        //Long onMeetingMemIdx = omDTO.getOnMeetingMemIdx();
 
-        // onMeetingMemIdx 회원 가져오기
-//        OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
-//        onMeetingMemDTO.setOnMeetingIdx(getOnMeetingBoardDetailVO.getOnMeetingIdx());
-//        onMeetingMemDTO.setMemberIdx(getOnMeetingBoardDetailVO.getMemberIdx());
-
-       // onMeetingMemDTO = onMeetingService.getOnMeetingMemById(onMeetingMemDTO);
         onMeetingBoardDTO.setOnMeetingMemIdx(1L);
-        onMeetingBoardDTO.setOnMeetingIdx(1L);
-
+        onMeetingBoardDTO.setOnMeetingIdx(onMeetingIdx);
 
         System.out.println("등록컨트롤러!!" + onMeetingBoardDTO.toString());
-        //onMeetingBoardDTO.setMemberIdx(memberIdx);
+
         service.registerBoard(onMeetingBoardDTO);
         //return "register ok";
     }
@@ -88,6 +85,12 @@ public class OnMeetingBoardController {
     }
 
     // 게시글 검색
+    @GetMapping("{onMeetingIdx}/board/search")
+    public List<GetOnMeetingVO> getSearchBoards(@PathVariable("onMeetingIdx")Long onMeetingIdx,@RequestParam(name = "keyword") String keyword) {
+        System.out.println("강강강" +keyword);
+        List<GetOnMeetingVO> boardList = service.getSearchBoards(onMeetingIdx,keyword);
+        return boardList;
+    }
 
     
 
