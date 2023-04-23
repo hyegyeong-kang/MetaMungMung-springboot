@@ -1,11 +1,15 @@
 package com.metanet.metamungmung.controller.store;
 
+import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.dto.store.PatchProductReviewDTO;
 import com.metanet.metamungmung.dto.store.ProductReviewDTO;
 import com.metanet.metamungmung.security.JwtFilter;
 import com.metanet.metamungmung.service.store.ProductReviewService;
 import com.metanet.metamungmung.vo.store.GetReviewListVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -119,13 +123,23 @@ public class ProductReviewController {
             @PathVariable("productIdx") Long productIdx,
             @PathVariable("reviewIdx") Long reviewIdx) {
 
-        /* 임시 회원 */
-        Long memberIdx = 10L;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+        }
+
+        System.out.println("pid : " + productIdx);
+        System.out.println("rid : " + reviewIdx);
+        System.out.println("mid : " + memberIdx);
 
         Map<String, Long> map = new HashMap<>();
         map.put("productIdx", productIdx);
         map.put("reviewIdx", reviewIdx);
-        map.put("memberIdx", memberIdx);
 
         String result = "";
 

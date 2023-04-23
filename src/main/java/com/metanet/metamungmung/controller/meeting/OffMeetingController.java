@@ -3,6 +3,7 @@ package com.metanet.metamungmung.controller.meeting;
 import com.metanet.metamungmung.dto.meeting.*;
 import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
+import com.metanet.metamungmung.vo.meeting.GetMeetingVO;
 import com.metanet.metamungmung.vo.meeting.GetOffMeeting2VO;
 import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
 import com.metanet.metamungmung.service.meeting.OffMeetingService;
@@ -176,15 +177,21 @@ public class OffMeetingController {
      * @return String
      **/
     @PostMapping("/{offMeetingIdx}/join")
-    public String joinOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody OffMeetingMemDTO offMeetingMemDTO) {
-        /* 임시 회원 */
-        Long findMemberIdx = 10L;
+    public String joinOffMeeting(@PathVariable("offMeetingIdx") Long offMeetingIdx, @RequestBody GetMeetingVO getMeetingVO) {
+        /* 회원 memberIdx 추출 */
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        offMeetingMemDTO.setOffMeetingIdx(offMeetingIdx);
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+        }
 
         Map<String, Long> map = new HashMap<>();
         map.put("offMeetingIdx", offMeetingIdx);
-        map.put("findMemberIdx", findMemberIdx);
+        map.put("findMemberIdx", memberIdx);
 
         String result = "";
 
@@ -194,10 +201,25 @@ public class OffMeetingController {
         if(findOffMeetingMem != null) {
             result = "이미 참여한 회원입니다.";
         } else if(findOffMeetingMem == null) {
+            /* 해당하는 온미팅 정보 찾기 */
+            /* 온미팅회원필요 => */
+            OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
+            onMeetingMemDTO.setOnMeetingIdx(getMeetingVO.getOnMeetingIdx());
+            onMeetingMemDTO.setMemberIdx(memberIdx);
+
+            System.out.println("onMeetingMemDTO(전) ======> " + onMeetingMemDTO);
+
+            onMeetingMemDTO = onMeetingService.getOnMeetingMemById(onMeetingMemDTO);
+
+            System.out.println("onMeetingMemDTO(후) ======> " + onMeetingMemDTO);
+
             /* offMeetingMemDTO에 해당하는 값 저장*/
-            offMeetingMemDTO.setMemberIdx(findMemberIdx);
-            offMeetingMemDTO.setOnMeetingMemIdx(44L);
-            offMeetingMemDTO.setOnMeetingIdx(14L);
+            OffMeetingMemDTO offMeetingMemDTO = new OffMeetingMemDTO();
+
+            offMeetingMemDTO.setOffMeetingIdx(offMeetingIdx);
+            offMeetingMemDTO.setMemberIdx(memberIdx);
+            offMeetingMemDTO.setOnMeetingMemIdx(onMeetingMemDTO.getOnMeetingMemIdx());
+            offMeetingMemDTO.setOnMeetingIdx(onMeetingMemDTO.getOnMeetingIdx());
 
             /* offMeetingMemDTO 참여하는 코드 (오프 모임 회원 등록)*/
             int idx1 = offMeetingService.joinOffMeeting(offMeetingMemDTO);
