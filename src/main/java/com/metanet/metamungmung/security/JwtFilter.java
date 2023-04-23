@@ -68,6 +68,7 @@ public class JwtFilter extends BasicAuthenticationFilter {
             return;
         }
 
+
         if (rq.getHeader("AUTHORIZATION") == null) {
             System.out.println("--------------------------혹시 없는거니?");
             return;
