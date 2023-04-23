@@ -15,9 +15,11 @@ public interface MemberService extends UserDetailsService {
     //Member 부분
     public List<MemberDTO> getMemberList();
 
-    MemberDTO getMemberInfo(Long memberIdx);
+    public MemberDTO getMemberInfo(Long memberIdx);
 
-    MemberDTO findByUserId(String memberId);
+    public MemberDTO findByUserId(String memberId);
+
+    public String findId(String email);
 
     @Override
     public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException;

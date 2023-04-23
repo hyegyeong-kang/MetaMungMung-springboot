@@ -25,6 +25,13 @@ public class MemberController {
         return service.getMemberList();
     }
 
+    @PostMapping("/findId")
+    public String findId(@RequestBody MemberDTO member) {
+        String email = member.getEmail();
+        System.out.println(service.findId(email));
+        return service.findId(email);
+    }
+
     @GetMapping("/my")
     public MemberDTO getMemberInfo() {
 
@@ -87,6 +94,8 @@ public class MemberController {
         service.withdrawal(member);
     }
 
+
+    //반려동물
     @GetMapping("/pets")
     public List<PetDTO> getPetList() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
