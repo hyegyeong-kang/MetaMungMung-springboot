@@ -60,6 +60,7 @@
         from productReview
         where productIdx = #{productIdx}
         and memberIdx = #{memberIdx}
+        and status != 'DELETED'
     </select>
 
     <!-- 리뷰 등록 -->
@@ -103,7 +104,6 @@
         status = 'DELETED'
         where productIdx = #{productIdx}
         and productReviewIdx = #{reviewIdx}
-        and memberIdx = #{memberIdx}
         and status = 'ACTIVE'
     </update>
 </mapper>

@@ -33,4 +33,6 @@ public interface OffMeetingService {
     public int plusHeadcount(Long offMeetingIdx);
 
     public int minusHeadcount(Long offMeetingIdx);
+
+    public List<OffMeetingDTO> getMyOffMeetingList(Long onMeetingIdx, Long memberIdx, Long onMeetingMemIdx);
 }
