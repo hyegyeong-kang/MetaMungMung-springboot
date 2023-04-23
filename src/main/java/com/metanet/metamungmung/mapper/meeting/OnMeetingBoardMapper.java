@@ -29,8 +29,11 @@ public interface OnMeetingBoardMapper {
     // 게시글 수정
     public String updateBoard(OnMeetingBoardDTO board);
 
-    // 게시글 삭제
-    public String deleteBoard(Long onMeetingIdx, Long onMeetingBoardIdx);
+    // 한개의 게시글 삭제
+    public void deleteBoard(Long onMeetingIdx, Long onMeetingBoardIdx);
+
+    // 한개의 게시글에 해당하는 댓글 삭제
+    public void deleteReply(Long onMeetingIdx, Long onMeetingBoardIdx);
 
     // 게시글 전체 삭제
     public void deleteAllBoards(Long onMeetingIdx);

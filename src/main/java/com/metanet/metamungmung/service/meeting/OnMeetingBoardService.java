@@ -26,8 +26,8 @@ public interface OnMeetingBoardService {
     // 게시글 수정
     public String updateBoard(OnMeetingBoardDTO board);
 
-    // 게시글 삭제
-    public String delete(Long onMeetingIdx, Long onMeetingBoardIdx);
+    // 한개의 게시글 삭제 -> 댓글 함께 삭제
+    public void delete(Long onMeetingIdx, Long onMeetingBoardIdx);
 
     // 게시글 전체 삭제
     public void deleteAllBoards(Long onMeetingIdx);
