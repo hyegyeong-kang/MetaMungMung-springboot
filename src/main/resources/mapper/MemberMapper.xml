@@ -17,6 +17,10 @@
         select * from member where memberId = #{memberId}
     </select>
 
+    <select id="findId" resultType="java.lang.String">
+        select memberId from member where email = #{email}
+    </select>
+
     <insert id="signUp">
         insert into member (memberIdx, memberId, password, memberName, sex, birth, email, phone, address1, address2)
         values (member_seq.nextval, #{memberId}, #{password}, #{memberName}, #{sex}, #{birth}, #{email}, #{phone}, #{address1}, #{address2})
