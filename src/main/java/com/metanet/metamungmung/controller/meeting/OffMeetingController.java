@@ -38,8 +38,8 @@ public class OffMeetingController {
      * @return List<OffMeetingDTO>
      **/
     @GetMapping("")
-    public List<OffMeetingDTO> showOffMeetingList() {
-        List<OffMeetingDTO> offMeetingList = offMeetingService.getOffMeetingList();
+    public List<OffMeetingDTO> showOffMeetingList(@RequestParam("onMeetingIdx") Long onMeetingIdx) {
+        List<OffMeetingDTO> offMeetingList = offMeetingService.getOffMeetingList(onMeetingIdx);
 
         return offMeetingList;
     }

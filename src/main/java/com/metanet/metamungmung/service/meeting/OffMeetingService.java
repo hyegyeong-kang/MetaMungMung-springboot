@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface OffMeetingService {
-    public List<OffMeetingDTO> getOffMeetingList();
+    public List<OffMeetingDTO> getOffMeetingList(Long onMeetingIdx);
 
     public GetOffMeeting2VO getOffMeeting(Long offMeetingIdx);
 
