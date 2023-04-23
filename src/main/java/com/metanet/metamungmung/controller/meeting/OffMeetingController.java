@@ -3,11 +3,8 @@ package com.metanet.metamungmung.controller.meeting;
 import com.metanet.metamungmung.dto.meeting.*;
 import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
-import com.metanet.metamungmung.vo.meeting.GetMeetingVO;
-import com.metanet.metamungmung.vo.meeting.GetOffMeeting2VO;
-import com.metanet.metamungmung.vo.meeting.GetOffMeetingVO;
+import com.metanet.metamungmung.vo.meeting.*;
 import com.metanet.metamungmung.service.meeting.OffMeetingService;
-import com.metanet.metamungmung.vo.meeting.GetOnMeetingDetailVO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +40,34 @@ public class OffMeetingController {
     @GetMapping("")
     public List<OffMeetingDTO> showOffMeetingList() {
         List<OffMeetingDTO> offMeetingList = offMeetingService.getOffMeetingList();
+
+        return offMeetingList;
+    }
+
+    /**
+     * 나의 OFF 모임 조회 API
+     * [GET] /offMeetings/:offMeetingIdx/myOffMeetings
+     * @return List<OffMeetingDTO>
+     **/
+    @GetMapping("/myOffMeetings")
+    public List<OffMeetingDTO> showOffMeetingList(@RequestBody GetMyOffMeetingVO getMyOffMeetingVO) {
+
+        /* 온미팅회원필요 => */
+        OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
+        onMeetingMemDTO.setOnMeetingIdx(getMyOffMeetingVO.getOnMeetingIdx());
+        onMeetingMemDTO.setMemberIdx(getMyOffMeetingVO.getMemberIdx());
+
+        System.out.println("onMeetingMemDTO(전) ======> " + onMeetingMemDTO);
+
+        onMeetingMemDTO = onMeetingService.getOnMeetingMemById(onMeetingMemDTO);
+
+        System.out.println("onMeetingMemDTO(후) ======> " + onMeetingMemDTO);
+
+        List<OffMeetingDTO> offMeetingList = offMeetingService.getMyOffMeetingList(
+                onMeetingMemDTO.getOnMeetingIdx(),
+                onMeetingMemDTO.getMemberIdx(),
+                onMeetingMemDTO.getOnMeetingMemIdx()
+        );
 
         return offMeetingList;
     }

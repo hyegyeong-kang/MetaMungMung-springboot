@@ -77,4 +77,8 @@ public class OffMeetingServiceImpl implements OffMeetingService {
         return offMeetingMapper.minusHeadcount(offMeetingIdx);
     }
 
+    @Override
+    public List<OffMeetingDTO> getMyOffMeetingList(Long onMeetingIdx, Long memberIdx, Long onMeetingMemIdx) {
+        return offMeetingMapper.getMyOffMeetingList(onMeetingIdx, memberIdx, onMeetingMemIdx);
+    }
 }
