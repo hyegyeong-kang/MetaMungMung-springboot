@@ -29,6 +29,10 @@ public interface OnMeetingBoardService {
     // 게시글 삭제
     public String delete(Long onMeetingIdx, Long onMeetingBoardIdx);
 
+    // 게시글 전체 삭제
+    public void deleteAllBoards(Long onMeetingIdx);
+
     // 게시글 검색
+    public List<GetOnMeetingVO> getSearchBoards(Long onMeetingIdx,String keyword);
 
 }

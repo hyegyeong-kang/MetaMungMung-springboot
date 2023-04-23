@@ -52,4 +52,16 @@ public class OnMeetingBoardServiceImpl implements OnMeetingBoardService{
     public String delete(Long onMeetingIdx, Long onMeetingBoardIdx) {
         return mapper.deleteBoard(onMeetingIdx, onMeetingBoardIdx);
     }
+
+    // 게시글 전체 삭제
+    @Override
+    public void deleteAllBoards(Long onMeetingIdx) {
+        mapper.deleteAllBoards(onMeetingIdx);
+    }
+
+    // 게시물 검색
+    @Override
+    public List<GetOnMeetingVO> getSearchBoards(Long onMeetingIdx,String keyword) {
+        return mapper.getSearchBoards(onMeetingIdx, keyword);
+    }
 }

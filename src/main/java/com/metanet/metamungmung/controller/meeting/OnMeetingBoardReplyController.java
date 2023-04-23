@@ -3,7 +3,9 @@ package com.metanet.metamungmung.controller.meeting;
 
 import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO;
+import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingBoardReplyService;
+import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,11 @@ public class OnMeetingBoardReplyController {
 
     @Autowired
     private OnMeetingBoardReplyService service;
+
+    @Autowired
+    private OnMeetingService onMeetingService;
+
+
     // 해당 게시물 댓글 조회
     ////onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply
     @GetMapping("{onMeetingIdx}/board/{onMeetingBoardIdx}/reply")
@@ -27,7 +34,7 @@ public class OnMeetingBoardReplyController {
     }
 
     @GetMapping("{onMeetingIdx}/board/reply")
-    public List<GetOnMeetingBoardVO> getAllReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx){
+    public List<OnMeetingBoardReplyDTO> getAllReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx){
         Long memberIdx = 1L;
         return service.getAllReplyList(onMeetingIdx, memberIdx);
     }
@@ -37,7 +44,18 @@ public class OnMeetingBoardReplyController {
     @PostMapping("{onMeetingIdx}/board/reply")
     @ResponseBody
     public void addReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardReplyDTO replyDTO) {
+        OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
+        onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
+        onMeetingMemDTO.setMemberIdx(replyDTO.getMemberIdx());
+
+//        System.out.println("boarㅇㅇdINSERT::" + replyDTO.getMemberIdx());
+//
+//        OnMeetingMemDTO omDTO = onMeetingService.getOnMeetingMemById(onMeetingMemDTO);
+//        Long onMeetingMemIdx = omDTO.getOnMeetingMemIdx();
+
+        replyDTO.setOnMeetingMemIdx(1L);
         replyDTO.setOnMeetingIdx(onMeetingIdx);
+
         System.out.println("boardINSERT::" + replyDTO.toString());
         service.addReply(replyDTO);
     }

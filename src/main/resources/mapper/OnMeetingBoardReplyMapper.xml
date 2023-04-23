@@ -34,21 +34,21 @@
 
 
     <!--전체 댓글 조회 -->
-    <select id="getAllReplyList" resultMap="replyResultMap11" parameterType="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoardVO">
+    <select id="getAllReplyList" resultMap="replyResultMap11" parameterType="com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO">
         SELECT *
         FROM onMeetingBoard omb
                  LEFT JOIN onMeetingReply omr ON omb.onMeetingBoardIdx = omr.onMeetingBoardIdx AND omb.onMeetingIdx = omr.onMeetingIdx
         WHERE omb.onMeetingIdx = #{onMeetingIdx}
     </select>
 
-    <resultMap id="replyResultMap11" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoard2VO">
-        <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
-        <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>
-        <result column="onMeetingIdx" property="onMeetingIdx"/>
-        <collection property="replyList" resultMap="replyMap11"/>
-    </resultMap>
+<!--    <resultMap id="replyResultMap11" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoard2VO">-->
+<!--        <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>-->
+<!--        <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>-->
+<!--        <result column="onMeetingIdx" property="onMeetingIdx"/>-->
+<!--        <collection property="replyList" resultMap="replyMap11"/>-->
+<!--    </resultMap>-->
 
-    <resultMap type="com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO" id="replyMap11" >
+    <resultMap type="com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO" id="replyResultMap11" >
         <result column="onMeetingReplyIdx" property="onMeetingReplyIdx"/>
         <result column="onMeetingBoardIdx" property="onMeetingBoardIdx"/>
         <result column="onMeetingMemIdx" property="onMeetingMemIdx"/>

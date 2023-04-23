@@ -13,7 +13,7 @@ public interface OnMeetingBoardReplyService {
 
 
     // 전체 댓글 조회
-    public List<GetOnMeetingBoardVO> getAllReplyList(Long onMeetingIdx, Long memberIdx);
+    public List<OnMeetingBoardReplyDTO> getAllReplyList(Long onMeetingIdx, Long memberIdx);
 
     // 해당 게시물 댓글 추가
     public void addReply(OnMeetingBoardReplyDTO replyDTO);
@@ -23,4 +23,7 @@ public interface OnMeetingBoardReplyService {
 
     // 해당 게시물 댓글 삭제
     public void deleteReply(Long onMeetingIdx, Long onMeetingReplyIdx, Long memberIdx);
+
+    // 해당 게시물 댓글 전체 삭제
+    public void deleteAll(Long onMeetingIdx, Long onMeetingBoardIdx);
 }
