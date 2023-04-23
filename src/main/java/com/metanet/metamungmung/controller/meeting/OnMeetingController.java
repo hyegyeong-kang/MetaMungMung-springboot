@@ -34,8 +34,6 @@ public class OnMeetingController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             MemberDTO memberDTO = (MemberDTO) userDetails;
             memberIdx = memberDTO.getMemberIdx();
-
-            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
         }
 
         Map<String, List<OnMeetingDTO>> map = new HashMap<>();

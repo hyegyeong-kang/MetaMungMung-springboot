@@ -103,20 +103,32 @@ public class CartController {
 
     @GetMapping("")
     public List<CartDTO> getCartList(HttpSession session) throws Exception {
-        // MemberDTO member = (MemberDTO) session.getAttribute("member");
-        //  Long m_id = member.getM_id();
 
-        System.out.println("########");
-        // List<CartDTO> cartList = service.getMyCartList(m_id);
-        return service.getMyCartList(1L);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+        }
+
+        return service.getMyCartList(memberIdx);
     }
 
 
     @PostMapping("")
     @ResponseBody
     public boolean addCart(HttpSession session, @RequestBody Map<String, Integer> productInfo) throws Exception {
-        //MemberDTO member = (MemberDTO) session.getAttribute("member");
-        //Long m_id = member.getM_id();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+        }
 
         CartDTO cart = new CartDTO();
 
@@ -124,13 +136,12 @@ public class CartController {
         Long productIdx = Long.valueOf(productInfo.get("productIdx"));
         int quantity = productInfo.get("quantity");
 
-        cart.setMemberIdx(1L);
+        cart.setMemberIdx(memberIdx);
         cart.setProductIdx(productIdx);
         cart.setQuantity(quantity);
 
-        System.out.println("여기야");
 
-        if (service.checkCart(productIdx, 1L) > 0) {
+        if (service.checkCart(productIdx, memberIdx) > 0) {
             service.updateCount(cart);
         } else {
             service.addCart(cart);
@@ -152,13 +163,10 @@ public class CartController {
 
             System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
         }
-        // Long m_id = (Long) session.getAttribute("member");
-        System.out.println("삭제 컨트롤러 들어왓냐!");
-     //   Long productIdx = Long.valueOf(productInfo.get("productIdx"));
-     //   System.out.println("deleteProductID!!!: " + productIdx);
+
         System.out.println("cartIdx: " + productIdx);
 
-        service.deleteCart(productIdx, 1L);
+        service.deleteCart(productIdx, memberIdx);
 
         return "delete ok";
     }
@@ -188,7 +196,7 @@ public class CartController {
 
         Long productIdx = Long.valueOf(productInfo.get("productIdx"));
         int quantity = productInfo.get("quantity");
-        service.updateCart(productIdx, 1L, quantity, cartIdx);
+        service.updateCart(productIdx, memberIdx, quantity, cartIdx);
         return "update ok";
     }
 }
