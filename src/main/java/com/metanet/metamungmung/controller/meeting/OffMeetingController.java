@@ -46,16 +46,16 @@ public class OffMeetingController {
 
     /**
      * 나의 OFF 모임 조회 API
-     * [GET] /offMeetings/:offMeetingIdx/myOffMeetings
+     * [GET] /offMeetings/myOffMeetings
      * @return List<OffMeetingDTO>
      **/
     @GetMapping("/myOffMeetings")
-    public List<OffMeetingDTO> showOffMeetingList(@RequestBody GetMyOffMeetingVO getMyOffMeetingVO) {
+    public List<OffMeetingDTO> showOffMeetingList(@RequestParam(name = "onMeetingIdx") Long onMeetingIdx, @RequestParam("memberIdx") Long memberIdx) {
 
         /* 온미팅회원필요 => */
         OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
-        onMeetingMemDTO.setOnMeetingIdx(getMyOffMeetingVO.getOnMeetingIdx());
-        onMeetingMemDTO.setMemberIdx(getMyOffMeetingVO.getMemberIdx());
+        onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
+        onMeetingMemDTO.setMemberIdx(memberIdx);
 
         System.out.println("onMeetingMemDTO(전) ======> " + onMeetingMemDTO);
 
