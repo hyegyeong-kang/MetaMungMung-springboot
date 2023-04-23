@@ -77,11 +77,12 @@ public class OnMeetingBoardController {
         return "update ok";
     }
 
-    // 게시글 삭제
+    // 한개의 게시글 삭제
     @DeleteMapping("{onMeetingIdx}/board")
-    public String deleteBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestParam Long onMeetingBoardIdx){
+    public void deleteBoard(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestParam(name="onMeetingBoardIdx") Long onMeetingBoardIdx){
+       System.out.println("삭제되나여??" + onMeetingBoardIdx);
         service.delete(onMeetingIdx, onMeetingBoardIdx);
-        return "delete ok";
+       // return "delete ok";
     }
 
     // 게시글 검색

@@ -152,12 +152,22 @@
         and onMeetingBoardIdx = #{onMeetingBoardIdx}
     </update>
 
-<!--   게시글 삭제 // // onMeetingIdx, onMeetingBoardIdx 보내줌-->
+
+<!--  한개한개의 게시글 삭제 -> 해당하는 댓글 삭제// // onMeetingIdx, onMeetingBoardIdx 보내줌-->
+    <delete id="deleteReply">
+        delete from onMeetingReply
+        where onMeetingIdx = #{onMeetingIdx}
+        and onMeetingBoardIdx = #{onMeetingBoardIdx}
+
+    </delete>
+
     <delete id="deleteBoard">
         delete from onMeetingBoard
         where onMeetingIdx = #{onMeetingIdx}
         and onMeetingBoardIdx = #{onMeetingBoardIdx}
     </delete>
+
+
 
     <!--게시글 검색 -->
 <!--    <select id="getSearchBoards" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO">-->
@@ -234,8 +244,10 @@
 
     <!-- 게시글 전체 삭제 -->
     <delete id="deleteAllBoards">
-        delete from onMeetingBoard
-        where onMeetingIdx = {onMeetingBoardIdx}
+        DELETE onMeetingBoard, onMeetingReply
+        FROM onMeetingBoard
+        INNER JOIN onMeetingReply ON onMeetingBoard.onMeetingBoardIdx = onMeetingReply.onMeetingBoardIdx
+        WHERE onMeetingBoard.onMeetingIdx = #{onMeetingIdx};
     </delete>
 
 

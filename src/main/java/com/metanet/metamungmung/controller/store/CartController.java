@@ -1,11 +1,15 @@
 package com.metanet.metamungmung.controller.store;
 
+import com.metanet.metamungmung.dto.member.MemberDTO;
 import com.metanet.metamungmung.dto.store.CartDTO;
 import com.metanet.metamungmung.dto.store.CartProductDTO;
 import com.metanet.metamungmung.service.store.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -116,6 +120,7 @@ public class CartController {
 
         CartDTO cart = new CartDTO();
 
+       // Long memberIdx = Long.valueOf(productInfo.get("memberIdx"));
         Long productIdx = Long.valueOf(productInfo.get("productIdx"));
         int quantity = productInfo.get("quantity");
 
@@ -136,6 +141,17 @@ public class CartController {
 
     @DeleteMapping("/{productIdx}")
     public String deleteCart(@PathVariable("productIdx") Long productIdx) throws Exception {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
         // Long m_id = (Long) session.getAttribute("member");
         System.out.println("삭제 컨트롤러 들어왓냐!");
      //   Long productIdx = Long.valueOf(productInfo.get("productIdx"));
@@ -158,6 +174,18 @@ public class CartController {
     @PatchMapping("/{cartIdx}")
     public String updateCart(@PathVariable("cartIdx")Long cartIdx, HttpSession session, @RequestBody Map<String, Integer> productInfo) {
         //  Long m_id = (Long) session.getAttribute("member");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long memberIdx = 0L;
+
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            MemberDTO memberDTO = (MemberDTO) userDetails;
+            memberIdx = memberDTO.getMemberIdx();
+
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+        }
+
+
         Long productIdx = Long.valueOf(productInfo.get("productIdx"));
         int quantity = productInfo.get("quantity");
         service.updateCart(productIdx, 1L, quantity, cartIdx);
