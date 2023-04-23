@@ -45,6 +45,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public String findId(String email) {
+        System.out.println("여기는 Impl~~~~~~~~~~");
+        return mapper.findId(email);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         MemberDTO member = mapper.findByUserId(username);
 
