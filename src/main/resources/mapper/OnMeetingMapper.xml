@@ -159,10 +159,20 @@
 
     <!--    추천 On모임 리스트-->
     <select id="getRecommendOnMeetingList" resultType="com.metanet.metamungmung.dto.meeting.OnMeetingDTO">
-        <include refid="selectOnMeeting"/>
-        JOIN onMeetingMem mem ON meet.onMeetingIdx = mem.onMeetingIdx
-        JOIN member m ON mem.memberIdx = m.memberIdx
-        WHERE m.memberIdx != #{memberIdx}
+        SELECT distinct meet.onMeetingIdx, meet.onMeetName, meet.category, meet.introduction,
+            meet.thumbnail, meet.isPublic, meet.onMeetingAddr, (
+            SELECT memberName FROM onMeetingMem mem JOIN member m ON mem.memberIdx = m.memberIdx WHERE onMeetingIdx = meet.onMeetingIdx AND isHost = '1'
+            ) as hostname, (
+            SELECT COUNT(*) FROM onMeetingMem WHERE onMeetingIdx = meet.onMeetingIdx
+            ) as memberCnt
+        FROM onMeeting meet
+            JOIN onMeetingMem mem ON meet.onMeetingIdx = mem.onMeetingIdx
+            JOIN member m ON mem.memberIdx = m.memberIdx
+        WHERE meet.onMeetingIdx not in (SELECT meet.onMeetingIdx
+            FROM onMeeting meet
+            JOIN onMeetingMem mem ON meet.onMeetingIdx = mem.onMeetingIdx
+            JOIN member m ON mem.memberIdx = m.memberIdx
+            where m.memberIdx = #{memberIdx})
         ORDER BY DBMS_RANDOM.VALUE
     </select>
 
