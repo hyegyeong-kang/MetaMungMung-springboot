@@ -16,6 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JwtFilter extends BasicAuthenticationFilter {
 
@@ -41,6 +43,27 @@ public class JwtFilter extends BasicAuthenticationFilter {
         }
 
         if (requestURI.equals("/members/findId")) {
+            filterChain.doFilter(rq, rp); // 해당 URL은 토큰 검증을 수행하지 않음
+            return;
+        }
+
+        if (requestURI.equals("/products")) {
+            filterChain.doFilter(rq, rp); // 해당 URL은 토큰 검증을 수행하지 않음
+            return;
+        }
+
+        Pattern pattern = Pattern.compile("^/products/(?<productIdx>\\d+)$");
+        Matcher matcher = pattern.matcher(requestURI);
+
+        if (matcher.find()) {
+            filterChain.doFilter(rq, rp); // 해당 URL은 토큰 검증을 수행하지 않음
+            return;
+        }
+
+        pattern = Pattern.compile("^/products/(?<productIdx>\\d+)/reviews$");
+        matcher = pattern.matcher(requestURI);
+
+        if (matcher.find()) {
             filterChain.doFilter(rq, rp); // 해당 URL은 토큰 검증을 수행하지 않음
             return;
         }
