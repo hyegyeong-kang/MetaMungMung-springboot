@@ -43,11 +43,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/members").permitAll()
-                .antMatchers("/members/modify").hasAnyAuthority("MEMBER", "DOGOWNER")
-                .antMatchers("/members/myPage").hasAnyAuthority("MEMBER", "DOGOWNER")
-                .antMatchers("/members/pets/register").hasAnyAuthority("MEMBER", "DOGOWNER")
-                .antMatchers("/onMeetings/**").hasAnyAuthority("MEMBER", "DOGOWNER")
-                .antMatchers("/offMeetings/**").hasAnyAuthority("MEMBER", "DOGOWNER")
+                .antMatchers("/members/modify").hasAnyAuthority("MEMBER")
+                .antMatchers("/members/myPage").hasAnyAuthority("MEMBER")
+                .antMatchers("/onMeetings/*").hasAnyAuthority("MEMBER")
+                .antMatchers("/offMeetings/*").hasAnyAuthority("MEMBER")
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(getAuthenticationFilter())
@@ -55,9 +54,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .and()
-                .logout()
-                .and()
-                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
+                .logout();
+//                .and()
+//                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
 
     }
 
@@ -81,13 +80,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    public class CustomAccessDeniedHandler implements AccessDeniedHandler {
-        @Override
-        public void handle(HttpServletRequest request, HttpServletResponse response,
-                           AccessDeniedException accessDeniedException) throws IOException, ServletException {
-
-            response.sendRedirect("http://localhost:8082/404"); // 에러 페이지 경로
-        }
-    }
+//    public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+//        @Override
+//        public void handle(HttpServletRequest request, HttpServletResponse response,
+//                           AccessDeniedException accessDeniedException) throws IOException, ServletException {
+//
+//            response.sendRedirect("http://localhost:8082/404"); // 에러 페이지 경로
+//        }
+//    }
 
 }
