@@ -133,6 +133,12 @@ public class OnMeetingController {
         return service.removeOnMeetingMem(id, memberIdx);
     }
 
+    @DeleteMapping("/{id}/exile")
+    public int withdrawOnMeeting(@PathVariable("id") Long id, @RequestParam(name = "memberIdx") Long memberIdx){
+
+        return service.removeOnMeetingMem(id, memberIdx);
+    }
+
     @DeleteMapping("/{id}")
     public int removeOnMeeting(@PathVariable("id") Long id){
 
