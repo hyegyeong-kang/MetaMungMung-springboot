@@ -2,6 +2,7 @@ package com.metanet.metamungmung.controller.meeting;
 
 import com.metanet.metamungmung.dto.meeting.*;
 import com.metanet.metamungmung.dto.member.MemberDTO;
+import com.metanet.metamungmung.dto.store.ProductDTO;
 import com.metanet.metamungmung.service.meeting.OnMeetingService;
 import com.metanet.metamungmung.vo.meeting.*;
 import com.metanet.metamungmung.service.meeting.OffMeetingService;
@@ -290,5 +291,16 @@ public class OffMeetingController {
         }
 
         return result;
+    }
+
+    /**
+     * 오프 모임 검색 API
+     * [GET] /offMeetings/search/:onMeetingIdx?keyword={keyword}
+     * @return List<OffMeetingDTO>
+     **/
+    @GetMapping("/search/{onMeetingIdx}")
+    public List<OffMeetingDTO> searchOffMeetings(@PathVariable Long onMeetingIdx ,@RequestParam(name = "keyword") String keyword) {
+        List<OffMeetingDTO> offMeetingList = offMeetingService.getSearchOffMeetingList(keyword, onMeetingIdx);
+        return offMeetingList;
     }
 }
