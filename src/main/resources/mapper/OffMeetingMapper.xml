@@ -28,17 +28,17 @@
     </resultMap>
 
     <select id="getOffMeetingList" parameterType="com.metanet.metamungmung.vo.meeting.GetOffMeeting2VO" resultMap="GetOffMeeting2VO">
-        select *
+        select distinct om.*
         from
-        offMeeting om
+            offMeeting om
         left join
-        offMeetingMem omm
+            offMeetingMem omm
         on om.offMeetingIdx = omm.offMeetingIdx
         left join
-        member m
+            member m
         on omm.memberIdx = m.memberIdx
-        where
-        om.status = 'ACTIVE' or om.status = 'REACTIVE'
+        where omm.onMeetingIdx = #{onMeetingIdx}
+        and om.status = 'ACTIVE' or om.status = 'REACTIVE'
         and omm.isHost = '1'
         order by om.createDate desc
     </select>
@@ -81,6 +81,22 @@
         where om.offMeetingIdx = #{offMeetingIdx}
         and (om.status = 'ACTIVE' or om.status = 'REACTIVE')
         and omm.isHost = '1'
+    </select>
+
+
+    <!-- 나의 오프모임 목록 조회 -->
+    <select id="getMyOffMeetingList" resultType="com.metanet.metamungmung.dto.meeting.OffMeetingDTO">
+        select * from
+        offMeeting o
+        left join offMeetingMem om
+        on o.offMeetingIdx = om.offMeetingIdx
+        left join onMeetingMem onm
+        on onm.onMeetingMemIdx = om.onMeetingMemIdx
+        where onm.onMeetingIdx = #{onMeetingIdx}
+        and om.memberIdx = #{memberIdx}
+        and onm.onMeetingMemIdx = #{onMeetingMemIdx}
+        and o.status = 'ACTIVE'
+        order by o.createDate desc
     </select>
 
     <!--오프 모임 참여자 목록 조회-->

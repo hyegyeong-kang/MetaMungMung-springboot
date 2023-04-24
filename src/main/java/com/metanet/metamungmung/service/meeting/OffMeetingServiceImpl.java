@@ -18,8 +18,8 @@ public class OffMeetingServiceImpl implements OffMeetingService {
     private OffMeetingMapper offMeetingMapper;
 
     @Override
-    public List<OffMeetingDTO> getOffMeetingList() {
-        return offMeetingMapper.getOffMeetingList();
+    public List<OffMeetingDTO> getOffMeetingList(Long onMeetingIdx) {
+        return offMeetingMapper.getOffMeetingList(onMeetingIdx);
     }
 
     @Override
@@ -77,4 +77,8 @@ public class OffMeetingServiceImpl implements OffMeetingService {
         return offMeetingMapper.minusHeadcount(offMeetingIdx);
     }
 
+    @Override
+    public List<OffMeetingDTO> getMyOffMeetingList(Long onMeetingIdx, Long memberIdx, Long onMeetingMemIdx) {
+        return offMeetingMapper.getMyOffMeetingList(onMeetingIdx, memberIdx, onMeetingMemIdx);
+    }
 }
