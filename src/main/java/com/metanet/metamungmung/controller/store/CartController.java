@@ -119,7 +119,7 @@ public class CartController {
 
     @PostMapping("")
     @ResponseBody
-    public boolean addCart(HttpSession session, @RequestBody Map<String, Integer> productInfo) throws Exception {
+    public boolean addCart(@RequestBody Map<String, Integer> productInfo) throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberIdx = 0L;
