@@ -8,6 +8,7 @@ import com.metanet.metamungmung.vo.meeting.GetOnMeetingVO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -47,10 +48,12 @@ public class OnMeetingBoardServiceImpl implements OnMeetingBoardService{
         return mapper.updateBoard(board);
     }
 
-    // 게시글 삭제
+    // 한개의 게시글 삭제
     @Override
-    public String delete(Long onMeetingIdx, Long onMeetingBoardIdx) {
-        return mapper.deleteBoard(onMeetingIdx, onMeetingBoardIdx);
+    @Transactional
+    public void delete(Long onMeetingIdx, Long onMeetingBoardIdx) {
+        mapper.deleteReply(onMeetingIdx, onMeetingBoardIdx);
+        mapper.deleteBoard(onMeetingIdx, onMeetingBoardIdx);
     }
 
     // 게시글 전체 삭제

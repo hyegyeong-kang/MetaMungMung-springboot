@@ -20,8 +20,8 @@ public class OnMeetingServiceImpl implements OnMeetingService {
     @Autowired
     private OnMeetingMapper mapper;
 
-    @Override
     @Transactional
+    @Override
     public OnMeetingDTO createOnMeeting(OnMeetingDTO onMeetingDTO, OnMeetingMemDTO onMeetingMemDTO){
         mapper.createOnMeeting(onMeetingDTO);
         onMeetingMemDTO.setIsHost("1");
@@ -70,6 +70,16 @@ public class OnMeetingServiceImpl implements OnMeetingService {
         return mapper.searchOnMeeting(searchKeyword, category, address);
     }
 
+//    @Override
+//    public List<OnMeetingDTO> searchOnMeetingWithCate(String category, String address) {
+//        return mapper.searchOnMeetingWithCate(category, address);
+//    }
+//
+//    @Override
+//    public List<OnMeetingDTO> searchOnMeetingWithAddr(String address) {
+//        return mapper.searchOnMeetingWithAddr(address);
+//    }
+
     @Override
     public List<OnMeetingDTO> getRecommendOnMeetingList(Long memberIdx) {
         return mapper.getRecommendOnMeetingList(memberIdx);
@@ -109,12 +119,19 @@ public class OnMeetingServiceImpl implements OnMeetingService {
             MemberDTO memberDTO = (MemberDTO) userDetails;
             memberIdx = memberDTO.getMemberIdx();
 
-            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~"+ memberIdx);
+            System.out.println("memberIdx 나와주세요~~~~~~~~~~~~~~~~~" + memberIdx);
         }
 
         OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
         onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
         onMeetingMemDTO.setMemberIdx(memberIdx);
+
+        OnMeetingMemDTO dto = mapper.getOnMeetingMemById(onMeetingMemDTO);
+
+        if(dto != null){
+            return null;
+        }
+
         onMeetingMemDTO.setIsHost("0");
 
         mapper.joinOnMeeting(onMeetingMemDTO);
@@ -128,20 +145,22 @@ public class OnMeetingServiceImpl implements OnMeetingService {
         return mapper.getOnMeetingMemById(onMeetingMemDTO);
     }
 
-    @Override
     @Transactional
+    @Override
     public int removeOnMeetingMem(Long onMeetingIdx, Long memberIdx) {
         OnMeetingMemDTO onMeetingMemDTO = new OnMeetingMemDTO();
         onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
         onMeetingMemDTO.setMemberIdx(memberIdx);
 
-        onMeetingMemDTO = mapper.getOnMeetingMemById(onMeetingMemDTO);
+        OnMeetingMemDTO dto = mapper.getOnMeetingMemById(onMeetingMemDTO);
 
-        if(onMeetingMemDTO.getIsHost().equals("1")){
+        System.out.println("onMeetingMemDTO :::" + dto);
+
+        if(dto.getIsHost().equals("1")){
             return 0;
         }
 
-        return mapper.removeOnMeetingMem(onMeetingMemDTO);
+        return mapper.removeOnMeetingMem(dto);
     }
 
 }
