@@ -28,17 +28,17 @@
     </resultMap>
 
     <select id="getOffMeetingList" parameterType="com.metanet.metamungmung.vo.meeting.GetOffMeeting2VO" resultMap="GetOffMeeting2VO">
-        select *
+        select distinct om.*
         from
-        offMeeting om
+            offMeeting om
         left join
-        offMeetingMem omm
+            offMeetingMem omm
         on om.offMeetingIdx = omm.offMeetingIdx
         left join
-        member m
+            member m
         on omm.memberIdx = m.memberIdx
-        where
-        om.status = 'ACTIVE' or om.status = 'REACTIVE'
+        where omm.onMeetingIdx = #{onMeetingIdx}
+        and om.status = 'ACTIVE' or om.status = 'REACTIVE'
         and omm.isHost = '1'
         order by om.createDate desc
     </select>
