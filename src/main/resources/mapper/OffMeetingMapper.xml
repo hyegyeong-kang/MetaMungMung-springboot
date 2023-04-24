@@ -275,4 +275,19 @@
         headcount = headcount - 1
         where offMeetingIdx = #{offMeetingIdx}
     </update>
+
+    <!-- 내 오프미팅 검색 -->
+    <select id="getSearchOffMeetingList" resultType="com.metanet.metamungmung.dto.meeting.OffMeetingDTO">
+        select * from offMeeting ofm
+        left join offMeetingMem ofmm
+        on ofm.offMeetingIdx = ofmm.offMeetingIdx
+        left join onMeeting om
+        on ofmm.onMeetingIdx = om.onMeetingIdx
+        where (ofm.title LIKE '%'||TRIM(#{keyword})||'%'
+        or ofm.locationAddress LIKE '%'||TRIM(#{keyword})||'%')
+        and om.onMeetingIdx = #{onMeetingIdx}
+        and (ofm.status = 'ACTIVE'
+        or ofm.status = 'REACTIVE')
+        ORDER BY ofm.createDate DESC
+    </select>
 </mapper>
