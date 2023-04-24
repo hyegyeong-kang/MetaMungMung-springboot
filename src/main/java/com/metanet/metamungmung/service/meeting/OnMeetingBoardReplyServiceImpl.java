@@ -46,8 +46,8 @@ public class OnMeetingBoardReplyServiceImpl implements OnMeetingBoardReplyServic
 
     // 해당 게시물 댓글 삭제
     @Override
-    public void deleteReply(Long onMeetingIdx, Long onMeetingReplyIdx, Long memberIdx) {
-        mapper.deleteReply(onMeetingIdx, onMeetingReplyIdx, memberIdx);
+    public void deleteReply(Long onMeetingIdx, Long onMeetingReplyIdx, Long onMeetingBoardIdx) {
+        mapper.deleteReply(onMeetingIdx, onMeetingReplyIdx, onMeetingBoardIdx);
     }
 
     // 해당 게시글 댓글 전체 삭제

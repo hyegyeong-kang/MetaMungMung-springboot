@@ -107,7 +107,7 @@ public class OnMeetingBoardReplyController {
 
     // 해당 게시물 댓글 삭제
     @DeleteMapping("{onMeetingIdx}/board/reply/{onMeetingReplyIdx}")
-    public void deleteReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingReplyIdx")Long onMeetingReplyIdx){
+    public void deleteReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingReplyIdx")Long onMeetingReplyIdx, @RequestParam(name = "onMeetingBoardIdx")Long onMeetingBoardIdx){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long memberIdx = 0L;
@@ -120,7 +120,7 @@ public class OnMeetingBoardReplyController {
 
 
       //  Long memberIdx = 1L;
-        service.deleteReply(onMeetingIdx, onMeetingReplyIdx, memberIdx);
+        service.deleteReply(onMeetingIdx, onMeetingReplyIdx, onMeetingBoardIdx);
     }
 }
 

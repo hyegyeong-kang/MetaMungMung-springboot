@@ -22,7 +22,7 @@ public interface OnMeetingBoardReplyService {
     public void updateReply(Long onMeetingIdx, Long onMeetingBoardIdx, Long memberIdx);
 
     // 해당 게시물 댓글 삭제
-    public void deleteReply(Long onMeetingIdx, Long onMeetingReplyIdx, Long memberIdx);
+    public void deleteReply(Long onMeetingIdx, Long onMeetingReplyIdx, Long onMeetingBoardIdx);
 
     // 해당 게시물 댓글 전체 삭제
     public void deleteAll(Long onMeetingIdx, Long onMeetingBoardIdx);
