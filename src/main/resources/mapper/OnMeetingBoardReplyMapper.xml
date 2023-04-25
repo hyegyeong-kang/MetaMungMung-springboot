@@ -10,7 +10,7 @@
         FROM onMeetingBoard omb
         LEFT JOIN onMeetingReply omr ON omb.onMeetingBoardIdx = omr.onMeetingBoardIdx AND omb.onMeetingIdx = omr.onMeetingIdx
         WHERE omb.onMeetingBoardIdx = #{onMeetingBoardIdx} AND omb.onMeetingIdx = #{onMeetingIdx}
-        ORDER BY omr.replyCreateDate DESC
+
     </select>
 
     <resultMap id="replyResultMap" type="com.metanet.metamungmung.vo.meeting.GetOnMeetingBoard2VO">
@@ -80,7 +80,7 @@
             replyUpdateDate,
             replyWriterImg
         ) values (
-                    ONMEETIINGBOARDREPLY_SEQ.nextval,
+        ONMEETIINGBOARDREPLY_SEQ.nextval,
                      #{onMeetingBoardIdx},
                      #{onMeetingMemIdx},
                      #{onMeetingIdx},
