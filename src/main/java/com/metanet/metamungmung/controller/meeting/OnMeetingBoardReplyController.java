@@ -1,7 +1,6 @@
 package com.metanet.metamungmung.controller.meeting;
 
 
-import com.metanet.metamungmung.dto.meeting.OnMeetingBoardDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingBoardReplyDTO;
 import com.metanet.metamungmung.dto.meeting.OnMeetingMemDTO;
 import com.metanet.metamungmung.dto.member.MemberDTO;
@@ -30,7 +29,6 @@ public class OnMeetingBoardReplyController {
 
 
     // 해당 게시물 댓글 조회
-    ////onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply
     @GetMapping("{onMeetingIdx}/board/{onMeetingBoardIdx}/reply")
     public List<GetOnMeetingBoardVO> getReplyList(@PathVariable("onMeetingIdx")Long onMeetingIdx, @PathVariable("onMeetingBoardIdx")Long onMeetingBoardIdx){
 
@@ -43,7 +41,6 @@ public class OnMeetingBoardReplyController {
             memberIdx = memberDTO.getMemberIdx();
         }
 
-        //Long memberIdx = 1L;
         return service.replyList(onMeetingIdx, onMeetingBoardIdx, memberIdx);
     }
 
@@ -58,8 +55,6 @@ public class OnMeetingBoardReplyController {
             MemberDTO memberDTO = (MemberDTO) userDetails;
             memberIdx = memberDTO.getMemberIdx();
         }
-
-        //Long memberIdx = 1L;
         return service.getAllReplyList(onMeetingIdx, memberIdx);
     }
 
@@ -72,8 +67,7 @@ public class OnMeetingBoardReplyController {
         onMeetingMemDTO.setOnMeetingIdx(onMeetingIdx);
         onMeetingMemDTO.setMemberIdx(replyDTO.getMemberIdx());
 
-//        System.out.println("boarㅇㅇdINSERT::" + replyDTO.getMemberIdx());
-//
+
 //        OnMeetingMemDTO omDTO = onMeetingService.getOnMeetingMemById(onMeetingMemDTO);
 //        Long onMeetingMemIdx = omDTO.getOnMeetingMemIdx();
 
@@ -86,7 +80,6 @@ public class OnMeetingBoardReplyController {
 
 
     // 해당 게시물 댓글 수정
-    // /onMeetings/{onMeetingIdx}/board/{onMeetingBoardIdx}/reply/{onMeetingReplyIdx}
     @PatchMapping("{onMeetingIdx}/board/reply/{onMeetingReplyIdx}")
     public void updateReply(@PathVariable("onMeetingIdx")Long onMeetingIdx, @RequestBody OnMeetingBoardReplyDTO replyDTO){
 
@@ -98,10 +91,8 @@ public class OnMeetingBoardReplyController {
             MemberDTO memberDTO = (MemberDTO) userDetails;
             memberIdx = memberDTO.getMemberIdx();
         }
-
-
+        
         Long onMeetingBoardIdx = replyDTO.getOnMeetingBoardIdx();
-       // Long memberIdx = 1L;
         service.updateReply(onMeetingIdx, onMeetingBoardIdx, memberIdx);
     }
 
@@ -118,8 +109,6 @@ public class OnMeetingBoardReplyController {
             memberIdx = memberDTO.getMemberIdx();
         }
 
-
-      //  Long memberIdx = 1L;
         service.deleteReply(onMeetingIdx, onMeetingReplyIdx, onMeetingBoardIdx);
     }
 }
