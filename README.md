@@ -18,6 +18,6 @@ Git Master: 강혜경 <br/>
 <img width="797" alt="image" src="https://user-images.githubusercontent.com/106860598/235924545-1c95bc50-6953-41fa-bb7e-132b7b714e49.png">
 <img width="797" alt="image" src="https://user-images.githubusercontent.com/106860598/235924618-4f8d8bc7-e2d8-4e59-a29c-e3adf3bd3201.png">
 <img width="798" alt="image" src="https://user-images.githubusercontent.com/106860598/235924683-cc0e2b71-665b-43db-96fb-1f0715975d54.png">
-<img width="798" alt="image" src="https://user-images.githubusercontent.com/106860598/235924829-7c1db9be-9b01-450b-b38b-6d095b819739.png">
+
 
 
